@@ -9,6 +9,14 @@ func accountExists(username string) bool {
 	return err == nil
 }
 
+func getAccount(username string) (*db.Account, error) {
+	model, err := db.GetAccountModel(username)
+	if err != nil {
+		return nil, err
+	}
+	return model, nil
+}
+
 func createAccount(username, password string) error {
 	hash, err := HashPassword(password)
 	if err != nil {
@@ -26,7 +34,7 @@ func createAccount(username, password string) error {
 func updatePassword(username, oldPassword, newPassword string) error {
 	model, err := db.GetAccountModel(username)
 	if err != nil {
-		return err
+		return ErrUnknownUsername{}
 	}
 
 	if !ComparePasswordHash(oldPassword, model.PasswordHS) {
@@ -46,7 +54,7 @@ func updatePassword(username, oldPassword, newPassword string) error {
 func deleteAccount(username string) error {
 	model, err := db.GetAccountModel(username)
 	if err != nil {
-		return err
+		return ErrUnknownUsername{}
 	}
 
 	return model.Delete()

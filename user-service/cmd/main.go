@@ -34,6 +34,7 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/account", account.RegisterHandler).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/account/{username}", account.GetHandler).Methods(http.MethodGet, http.MethodOptions)
 	r.HandleFunc("/account/{username}", account.UpdateHandler).Methods(http.MethodPut, http.MethodOptions)
 	r.HandleFunc("/account/{username}", account.DeleteHandler).Methods(http.MethodDelete, http.MethodOptions)
 	log.Fatal(http.ListenAndServe(":8000", r))

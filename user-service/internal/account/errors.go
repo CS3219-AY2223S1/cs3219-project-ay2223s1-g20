@@ -17,3 +17,9 @@ type ErrIncorrectPassword struct{}
 func (e ErrIncorrectPassword) Error() string {
 	return "incorrect password"
 }
+
+type ErrInvalidToken struct{}
+
+func (e ErrInvalidToken) Error() string {
+	return "invalid token"
+}
