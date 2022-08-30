@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/cache"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/http_response"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/jwt"
 	"github.com/gorilla/mux"
@@ -86,6 +87,35 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	http_response.WriteSuccess(w, LoginResponse{JWT: token}, http.StatusOK)
 }
 
+type LogoutRequest struct {
+	Username string `json:"username"`
+	JWT      string `json:"jwt"`
+}
+
+func LogoutHandler(w http.ResponseWriter, r *http.Request) {
+	var req LogoutRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http_response.WriteError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	if ok, err := jwt.VerifyToken(req.Username, req.JWT); err != nil {
+		http_response.WriteError(w, err, http.StatusInternalServerError)
+		return
+	} else if !ok {
+		http_response.WriteError(w, ErrInvalidToken{}, http.StatusUnauthorized)
+		return
+	}
+
+	if err := cache.Set(req.JWT, 0, 24*time.Hour); err != nil {
+		http_response.WriteError(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	http_response.WriteSuccess(w, nil, http.StatusOK)
+}
+
 type GetRequest struct {
 	JWT string `json:"jwt"`
 }
@@ -114,6 +144,7 @@ func GetHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if !ok {
 		http_response.WriteError(w, ErrInvalidToken{}, http.StatusUnauthorized)
+		return
 	}
 
 	account, err := getAccount(username)
@@ -143,6 +174,11 @@ func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http_response.WriteError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	if _, err := cache.Get(req.JWT); err == nil {
+		http_response.WriteError(w, ErrInvalidToken{}, http.StatusUnauthorized)
 		return
 	}
 
@@ -183,6 +219,11 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		http_response.WriteError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	if _, err := cache.Get(req.JWT); err == nil {
+		http_response.WriteError(w, ErrInvalidToken{}, http.StatusUnauthorized)
 		return
 	}
 

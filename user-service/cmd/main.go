@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/account"
+	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/cache"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/cfg"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/db"
 	"github.com/gorilla/mux"
@@ -32,10 +33,16 @@ func main() {
 	}
 	defer db.Close()
 
+	cache.Connect()
+	defer cache.Close()
+
 	r := mux.NewRouter()
-	r.HandleFunc("/account", account.RegisterHandler).Methods(http.MethodPost, http.MethodOptions)
-	r.HandleFunc("/account/{username}", account.GetHandler).Methods(http.MethodGet, http.MethodOptions)
-	r.HandleFunc("/account/{username}", account.UpdateHandler).Methods(http.MethodPut, http.MethodOptions)
-	r.HandleFunc("/account/{username}", account.DeleteHandler).Methods(http.MethodDelete, http.MethodOptions)
+	r.HandleFunc("/accounts", account.RegisterHandler).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/accounts/{username}", account.GetHandler).Methods(http.MethodGet, http.MethodOptions)
+	r.HandleFunc("/accounts/{username}", account.UpdateHandler).Methods(http.MethodPut, http.MethodOptions)
+	r.HandleFunc("/accounts/{username}", account.DeleteHandler).Methods(http.MethodDelete, http.MethodOptions)
+
+	r.HandleFunc("/login", account.LoginHandler).Methods(http.MethodPost, http.MethodOptions)
+	r.HandleFunc("/logout", account.LogoutHandler).Methods(http.MethodPost, http.MethodOptions)
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
