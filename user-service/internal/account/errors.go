@@ -1,25 +1,11 @@
 package account
 
-type ErrDuplicateUsername struct{}
+import "errors"
 
-func (e ErrDuplicateUsername) Error() string {
-	return "duplicate username"
-}
+var ErrDuplicateUsername = errors.New("duplicate username")
 
-type ErrUnknownUsername struct{}
+var ErrUnknownUsername = errors.New("unknown username")
 
-func (e ErrUnknownUsername) Error() string {
-	return "unknown username"
-}
+var ErrIncorrectPassword = errors.New("incorrect password")
 
-type ErrIncorrectPassword struct{}
-
-func (e ErrIncorrectPassword) Error() string {
-	return "incorrect password"
-}
-
-type ErrInvalidToken struct{}
-
-func (e ErrInvalidToken) Error() string {
-	return "invalid token"
-}
+var ErrInvalidToken = errors.New("invalid token")

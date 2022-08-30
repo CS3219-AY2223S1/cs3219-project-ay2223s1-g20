@@ -11,9 +11,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type RegisterRequest struct {
+type Credentials struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+}
+
+type RegisterRequest struct {
+	Credentials `json:",inline"`
 }
 
 type RegisterResponse struct {
@@ -29,11 +33,11 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if accountExists(req.Username) {
-		http_response.WriteError(w, ErrDuplicateUsername{}, http.StatusConflict)
+		http_response.WriteError(w, ErrDuplicateUsername, http.StatusConflict)
 		return
 	}
 
-	if err := createAccount(req.Username, req.Password); err != nil {
+	if err := createAccount(req.Credentials); err != nil {
 		http_response.WriteError(w, err, http.StatusInternalServerError)
 		return
 	}
@@ -45,12 +49,11 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http_response.WriteSuccess(w, RegisterResponse{JWT: token}, http.StatusOK)
+	http_response.WriteSuccess(w, RegisterResponse{JWT: token}, http.StatusCreated)
 }
 
 type LoginRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Credentials `json:",inline"`
 }
 
 type LoginResponse struct {
@@ -66,14 +69,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !accountExists(req.Username) {
-		http_response.WriteError(w, ErrUnknownUsername{}, http.StatusNotFound)
+		http_response.WriteError(w, ErrUnknownUsername, http.StatusNotFound)
 		return
 	}
 
 	account, _ := getAccount(req.Username)
 
 	if !ComparePasswordHash(req.Password, account.PasswordHS) {
-		http_response.WriteError(w, ErrIncorrectPassword{}, http.StatusUnauthorized)
+		http_response.WriteError(w, ErrIncorrectPassword, http.StatusUnauthorized)
 		return
 	}
 
@@ -88,8 +91,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type LogoutRequest struct {
-	Username string `json:"username"`
-	JWT      string `json:"jwt"`
+	JWT string `json:"jwt"`
 }
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
@@ -100,11 +102,11 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if ok, err := jwt.VerifyToken(req.Username, req.JWT); err != nil {
+	if ok, err := jwt.VerifyAndParse(req.JWT, &jwt.Claims{}); err != nil {
 		http_response.WriteError(w, err, http.StatusInternalServerError)
 		return
 	} else if !ok {
-		http_response.WriteError(w, ErrInvalidToken{}, http.StatusUnauthorized)
+		http_response.WriteError(w, ErrInvalidToken, http.StatusUnauthorized)
 		return
 	}
 
@@ -128,7 +130,7 @@ func GetHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	username, ok := vars["username"]
 	if !ok {
-		http_response.WriteError(w, http_response.ErrMissingPathParam{}, http.StatusBadRequest)
+		http_response.WriteError(w, http_response.ErrMissingPathParam, http.StatusBadRequest)
 		return
 	}
 
@@ -139,17 +141,18 @@ func GetHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if ok, err := jwt.VerifyToken(username, req.JWT); err != nil {
+	claims := &jwt.Claims{}
+	if ok, err := jwt.VerifyAndParse(req.JWT, claims); err != nil {
 		http_response.WriteError(w, err, http.StatusInternalServerError)
 		return
-	} else if !ok {
-		http_response.WriteError(w, ErrInvalidToken{}, http.StatusUnauthorized)
+	} else if !ok || username != claims.Username {
+		http_response.WriteError(w, ErrInvalidToken, http.StatusUnauthorized)
 		return
 	}
 
 	account, err := getAccount(username)
 	if err != nil {
-		http_response.WriteError(w, ErrUnknownUsername{}, http.StatusNotFound)
+		http_response.WriteError(w, ErrUnknownUsername, http.StatusNotFound)
 		return
 	}
 
@@ -166,7 +169,7 @@ func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	username, ok := vars["username"]
 	if !ok {
-		http_response.WriteError(w, http_response.ErrMissingPathParam{}, http.StatusBadRequest)
+		http_response.WriteError(w, http_response.ErrMissingPathParam, http.StatusBadRequest)
 		return
 	}
 
@@ -178,23 +181,25 @@ func UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if _, err := cache.Get(req.JWT); err == nil {
-		http_response.WriteError(w, ErrInvalidToken{}, http.StatusUnauthorized)
+		http_response.WriteError(w, ErrInvalidToken, http.StatusUnauthorized)
 		return
 	}
 
-	if ok, err := jwt.VerifyToken(username, req.JWT); err != nil {
+	claims := &jwt.Claims{}
+	if ok, err := jwt.VerifyAndParse(req.JWT, claims); err != nil {
 		http_response.WriteError(w, err, http.StatusInternalServerError)
 		return
-	} else if !ok {
-		http_response.WriteError(w, ErrInvalidToken{}, http.StatusUnauthorized)
+	} else if !ok || username != claims.Username {
+		http_response.WriteError(w, ErrInvalidToken, http.StatusUnauthorized)
 	}
 
 	if err := updatePassword(username, req.OldPassword, req.NewPassword); err != nil {
-		if _, ok := err.(ErrUnknownUsername); ok {
+		switch err {
+		case ErrUnknownUsername:
 			http_response.WriteError(w, err, http.StatusNotFound)
-		} else if _, ok := err.(ErrIncorrectPassword); ok {
+		case ErrIncorrectPassword:
 			http_response.WriteError(w, err, http.StatusBadRequest)
-		} else {
+		default:
 			http_response.WriteError(w, err, http.StatusInternalServerError)
 		}
 		return
@@ -211,7 +216,7 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	username, ok := vars["username"]
 	if !ok {
-		http_response.WriteError(w, http_response.ErrMissingPathParam{}, http.StatusBadRequest)
+		http_response.WriteError(w, http_response.ErrMissingPathParam, http.StatusBadRequest)
 		return
 	}
 
@@ -223,20 +228,21 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if _, err := cache.Get(req.JWT); err == nil {
-		http_response.WriteError(w, ErrInvalidToken{}, http.StatusUnauthorized)
+		http_response.WriteError(w, ErrInvalidToken, http.StatusUnauthorized)
 		return
 	}
 
-	if ok, err := jwt.VerifyToken(username, req.JWT); err != nil {
+	claims := &jwt.Claims{}
+	if ok, err := jwt.VerifyAndParse(req.JWT, claims); err != nil {
 		http_response.WriteError(w, err, http.StatusInternalServerError)
 		return
-	} else if !ok {
-		http_response.WriteError(w, ErrInvalidToken{}, http.StatusUnauthorized)
+	} else if !ok || username != claims.Username {
+		http_response.WriteError(w, ErrInvalidToken, http.StatusUnauthorized)
 		return
 	}
 
 	if err := deleteAccount(username); err != nil {
-		if _, ok := err.(ErrUnknownUsername); ok {
+		if err == ErrUnknownUsername {
 			http_response.WriteError(w, err, http.StatusNotFound)
 			return
 		}

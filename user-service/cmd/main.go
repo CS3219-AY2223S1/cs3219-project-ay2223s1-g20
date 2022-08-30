@@ -14,10 +14,11 @@ import (
 )
 
 func main() {
-	if err := godotenv.Load("../.env"); err != nil {
+	if err := godotenv.Load(".env"); err != nil {
 		panic(err)
 	}
 	env := cfg.ToEnv(os.Getenv("ENV"))
+	port := os.Getenv("PORT")
 
 	var db_uri string
 
@@ -44,5 +45,6 @@ func main() {
 
 	r.HandleFunc("/login", account.LoginHandler).Methods(http.MethodPost, http.MethodOptions)
 	r.HandleFunc("/logout", account.LogoutHandler).Methods(http.MethodPost, http.MethodOptions)
-	log.Fatal(http.ListenAndServe(":8000", r))
+	log.Printf("User service listening on port %s", port)
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }

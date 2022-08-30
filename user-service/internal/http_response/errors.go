@@ -1,7 +1,5 @@
 package http_response
 
-type ErrMissingPathParam struct{}
+import "errors"
 
-func (e ErrMissingPathParam) Error() string {
-	return "missing path parameter"
-}
+var ErrMissingPathParam = errors.New("missing path parameter")

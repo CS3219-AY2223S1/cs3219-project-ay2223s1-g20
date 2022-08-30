@@ -1,12 +1,13 @@
 package jwt
 
 import (
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var jwtKey = []byte("secret")
+var jwtKey = os.Getenv("JWT_SECRET_KEY")
 
 type Claims struct {
 	jwt.RegisteredClaims
@@ -25,8 +26,7 @@ func New(username string, expirationTime time.Time) (string, error) {
 	return token.SignedString(jwtKey)
 }
 
-func VerifyToken(username, tokenString string) (bool, error) {
-	claims := &Claims{}
+func VerifyAndParse(tokenString string, claims *Claims) (bool, error) {
 	token, err := jwt.ParseWithClaims(
 		tokenString,
 		claims,
