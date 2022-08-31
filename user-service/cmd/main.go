@@ -17,24 +17,17 @@ import (
 )
 
 func main() {
-	log.SetFormatter(&log.TextFormatter{
-		DisableColors: false,
-	})
-
 	if err := godotenv.Load(".env"); err != nil {
 		logs.WithError(err).Panicln("failed to load .env file")
 	}
 	env := cfg.ToEnv(os.Getenv("ENV"))
+	setupLogging(env)
 
-	logLevel := toLogLevel(env)
-	log.SetLevel(logLevel)
-
-	if err := connectToDB(env); err != nil {
-		logs.WithError(err).Panicln("failed to connect to database")
-	}
+	connectToDB(env)
 	defer db.Close()
 
-	cache.Connect()
+	cacheAddress := os.Getenv("CACHE_ADDRESS")
+	cache.Connect(cacheAddress)
 	defer cache.Close()
 
 	jwtKey := []byte(os.Getenv("JWT_SECRET_KEY"))
@@ -56,26 +49,26 @@ func main() {
 	logs.WithError(err).Panic("service crashed")
 }
 
-func toLogLevel(env cfg.DeploymentEnvironment) log.Level {
+func setupLogging(env cfg.DeploymentEnvironment) {
 	switch env {
 	case cfg.DEV:
-		return log.DebugLevel
+		log.SetFormatter(&log.TextFormatter{
+			DisableColors: false,
+		})
+		log.SetLevel(log.InfoLevel)
 	case cfg.STAG, cfg.PROD:
-		return log.WarnLevel
+		log.SetFormatter(&log.JSONFormatter{})
+		log.SetLevel(log.WarnLevel)
 	default:
-		return log.WarnLevel
+		log.SetFormatter(&log.JSONFormatter{})
+		log.SetLevel(log.WarnLevel)
 	}
 }
 
-func connectToDB(env cfg.DeploymentEnvironment) error {
-	var db_uri string
+func connectToDB(env cfg.DeploymentEnvironment) {
+	db_uri := os.Getenv("DB_URI")
 
-	switch env {
-	case cfg.DEV:
-		db_uri = os.Getenv("DB_LOCAL_URI")
-	case cfg.STAG, cfg.PROD:
-		db_uri = os.Getenv("DB_CLOUD_URI")
+	if err := db.Connect(db_uri); err != nil {
+		logs.WithError(err).WithFields(log.Fields{"db_uri": db_uri}).Panicln("failed to connect to database")
 	}
-
-	return db.Connect(db_uri)
 }
