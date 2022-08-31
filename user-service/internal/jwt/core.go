@@ -46,7 +46,7 @@ func VerifyAndParse(tokenString string, claims *Claims) (bool, error) {
 		},
 	)
 	if err != nil {
-		return false, err
+		return false, nil
 	}
 
 	return token.Valid, nil

@@ -1,4 +1,4 @@
-APP_NAME=user_service
+APP_NAME := user_service
 
 all: build
 
