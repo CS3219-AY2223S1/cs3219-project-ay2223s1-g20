@@ -19,7 +19,8 @@ function LandingPage() {
                     <CardMedia
                         component="img"
                         image={imgUrl}
-                        height='170'
+                        height='100%'
+                        width='100%'
                         alt="Difficulty Badge"
                     />
                     <CardContent>

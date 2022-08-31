@@ -27,9 +27,16 @@ function SignupPage() {
     const [dialogTitle, setDialogTitle] = useState("")
     const [dialogMsg, setDialogMsg] = useState("")
     const [isSignupSuccess, setIsSignupSuccess] = useState(false)
+    const [showErrorMsg, setShowErrorMsg] = useState(false);
 
     const handleSignup = async () => {
         setIsSignupSuccess(false)
+        if (username.length === 0 || password.length === 0) {
+            setShowErrorMsg(true);
+            return;
+        } else {
+            setShowErrorMsg(false);
+        }
         const res = await axios.post(URL_USER_SVC, { username, password })
             .catch((err) => {
                 if (err.response.status === STATUS_CODE_CONFLICT) {
@@ -43,7 +50,7 @@ function SignupPage() {
             setIsSignupSuccess(true)
             navigate("/landing");
         }
-        navigate("/landing"); //TODO: remove later.
+        // navigate("/landing"); //TODO: remove later.
     }
 
     const closeDialog = () => setIsDialogOpen(false)
@@ -86,6 +93,10 @@ function SignupPage() {
                     <Box display={"flex"} justifyContent="center" alignItems="center">
                         <Typography variant={"h4"} class={"montserrat"}>New User? Create an account.</Typography>
                     </Box>
+
+                    {showErrorMsg && <Box display={"flex"} justifyContent="center" alignItems="left">
+                        <Typography variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Montserrat', color:'red'}}>Please fill in both fields.</Typography>
+                    </Box>}
 
                     <TextField
                         fullWidth

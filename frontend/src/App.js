@@ -4,6 +4,7 @@ import {Box} from "@mui/material";
 import LandingPage from "./components/LandingPage";
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from "@emotion/react";
+import CodingRoom from "./components/CodingRoom";
 
 function App() {
 
@@ -19,6 +20,9 @@ function App() {
             },
             h4: {
                 fontFamily: 'Montserrat'
+            },
+            body: {
+                fontSize: '20'
             }
         }
     })
@@ -31,6 +35,7 @@ function App() {
                             <Route exact path="/" element={<Navigate replace to="/signup" />}></Route>
                             <Route path="/signup" element={<SignupPage/>}/>
                             <Route path="/landing" element={<LandingPage/>}/>
+                            <Route path="/room" element={<CodingRoom/>}/>
                         </Routes>
                     </Router>
                 </Box>
