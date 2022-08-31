@@ -9,6 +9,7 @@ import (
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/cache"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/cfg"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/db"
+	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/jwt"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
@@ -36,6 +37,9 @@ func main() {
 
 	cache.Connect()
 	defer cache.Close()
+
+	jwtKey := []byte(os.Getenv("JWT_SECRET_KEY"))
+	jwt.Init(jwtKey)
 
 	r := mux.NewRouter()
 	r.HandleFunc("/accounts", account.RegisterHandler).Methods(http.MethodPost, http.MethodOptions)

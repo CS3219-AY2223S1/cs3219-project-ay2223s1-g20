@@ -4,18 +4,21 @@ all: build
 
 .PHONY: build
 build:
+	mkdir -p bin
 	cd cmd && go build -o ../bin/$(APP_NAME)
 
 .PHONY: start
 start:
-	nohup bin/user_service > logs/user_service.log 2>&1 & echo "$$!" > bin/service.pid
+	mkdir -p logs
+	nohup bin/$(APP_NAME) > logs/$(APP_NAME).log 2>&1 & echo "$$!" > bin/$(APP_NAME).pid
 
 .PHONY: stop
 stop:
-	kill -9 `cat bin/service.pid` && rm bin/service.pid
+	kill -9 `cat bin/$(APP_NAME).pid` && rm bin/$(APP_NAME).pid
 
 .PHONY: start-cache
 start-cache:
+	mkdir -p logs
 	nohup redis-server config/redis.conf > logs/cache.log 2>&1 & echo "$$!" > bin/cache.pid
 
 .PHONY: stop-cache
