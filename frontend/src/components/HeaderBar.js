@@ -24,7 +24,7 @@ function HeaderBar() {
     };
 
     const handleSignOut = (event) => {
-        navigate("/signup");
+        navigate("/login");
     }
 
     const handleCloseUserMenu = () => {

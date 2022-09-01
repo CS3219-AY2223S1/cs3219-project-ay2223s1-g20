@@ -13,24 +13,23 @@ import {
 import TextField from '@mui/material/TextField';
 import {useState} from "react";
 import axios from "axios";
-import {USER_SVC_PREFIX, REGISTER} from "../configs";
-import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../constants";
+import {USER_SVC_PREFIX, LOG_IN} from "../configs";
+import {STATUS_CODE_CONFLICT, STATUS_CODE_SUCCESS} from "../constants";
 import {Link, useNavigate} from "react-router-dom";
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from "@emotion/react";
 import { post } from "../baseApi";
+import { setJwtToken } from "../cookieApi";
 
-function SignupPage() {
+function LoginPage() {
     const navigate = useNavigate();
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [dialogTitle, setDialogTitle] = useState("")
     const [dialogMsg, setDialogMsg] = useState("")
-    const [isSignupSuccess, setIsSignupSuccess] = useState(false)
+    const [isLoginSuccess, setIsLoginSuccess] = useState(false)
     const [showErrorMsg, setShowErrorMsg] = useState(false);
-    const [showPasswordErrorMsg, setShowPasswordErrorMsg] = useState(false);
 
     const handleError = (status) => {
         if( status === STATUS_CODE_CONFLICT ) {
@@ -38,40 +37,36 @@ function SignupPage() {
         } else {
             setErrorDialog('Please try again later')
         }
+        return;
     };
 
-    const handleCookie = () => {
-
-    }
-
     const handleSignup = async () => {
-        setIsSignupSuccess(false);
+        setIsLoginSuccess(false);
 
         // ---- CHECK INPUT VALIDITY ----
-        if (username.length === 0 || password.length === 0 || confirmPassword.length === 0 ) {
+        if (username.length === 0 || password.length === 0) {
             setShowErrorMsg(true);
             return;
-        } else if (password != confirmPassword) {
-            setShowPasswordErrorMsg(true);
-            return;
         } else {
-            setShowPasswordErrorMsg(false);
             setShowErrorMsg(false);
         }
 
         // ---- SEND TO USER SERVICE ----
         const json = JSON.stringify({ username: username, password: password });
-        let response = post(USER_SVC_PREFIX + REGISTER, json);
+        let response = post(USER_SVC_PREFIX + LOG_IN, json);
 
         response
             .then((res) => {
-                if (res.status != STATUS_CODE_CREATED) {
+                if (res.status != STATUS_CODE_SUCCESS) {
                     handleError(res.status);
-                } else {
-                    setIsSignupSuccess(true)
-                    handleCookie(res.data)
-                    navigate("/landing")
                 }
+                return res;
+            })
+            .then(res => res.json())
+            .then(res => {
+                setIsLoginSuccess(true);
+                setJwtToken(res.data);
+                navigate("/landing");
             })
     }
 
@@ -106,18 +101,19 @@ function SignupPage() {
                 <Typography variant={"h1"} sx={{ fontSize: '4rem', fontFamily: 'Raleway'}}>PeerPrep</Typography>
             </Box>
 
-            <Card variant="outlined" sx={{p:4, width: '30vw'}} >
+            <Card variant="outlined" sx={{p:4, width: '30vw'}}>
                 <CardContent>
                     <Box display={"flex"} justifyContent="center" alignItems="center">
-                        <Typography variant={"h2"} class={"poppins"}>Welcome to PeerPrep.</Typography>
+                        <Typography variant={"h2"} class={"poppins"}>Log In</Typography>
+                    </Box>
+
+                    <Box display={"flex"} justifyContent="center" alignItems="center">
+                        <Typography variant={"h4"} class={"montserrat"}>New User? </Typography>
+                        <Link to="/signup" class={"montserrat"}>Create a new account.</Link>
                     </Box>
 
                     {showErrorMsg && <Box display={"flex"} justifyContent="center" alignItems="left">
-                        <Typography variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Montserrat', color:'red'}}>Please fill in all fields.</Typography>
-                    </Box>}
-
-                    {showPasswordErrorMsg && <Box display={"flex"} justifyContent="center" alignItems="left">
-                        <Typography variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Montserrat', color:'red'}}>The two passwords do not match.</Typography>
+                        <Typography variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Montserrat', color:'red'}}>Please fill in both fields.</Typography>
                     </Box>}
 
                     <TextField
@@ -144,20 +140,8 @@ function SignupPage() {
                         inputProps={{style: {fontFamily: 'Source Sans Pro'}}}
                         InputLabelProps={{style: {fontFamily: 'Source Sans Pro'}}}
                     />
-                    <TextField
-                        fullWidth
-                        size="small"
-                        label="Confirm Password"
-                        variant="outlined"
-                        margin="normal"
-                        type="password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        inputProps={{style: {fontFamily: 'Source Sans Pro'}}}
-                        InputLabelProps={{style: {fontFamily: 'Source Sans Pro'}}}
-                    />
                     <Box display={"flex"} width='100%' justifyContent="center" alignItems="center" sx={{marginTop:1}}>
-                        <Button variant={"contained"} onClick={handleSignup} fullWidth>Sign up</Button>
+                        <Button variant={"contained"} onClick={handleSignup} fullWidth>Log In</Button>
                     </Box>
                 </CardContent>
             </Card>
@@ -170,7 +154,7 @@ function SignupPage() {
                     <DialogContentText>{dialogMsg}</DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    {isSignupSuccess
+                    {isLoginSuccess
                         ? <Button component={Link} to="/login">Log in</Button>
                         : <Button onClick={closeDialog}>Done</Button>
                     }
@@ -181,4 +165,4 @@ function SignupPage() {
     )
 }
 
-export default SignupPage;
+export default LoginPage;

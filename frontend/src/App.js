@@ -5,6 +5,7 @@ import LandingPage from "./components/LandingPage";
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from "@emotion/react";
 import CodingRoom from "./components/CodingRoom";
+import LoginPage from "./components/LoginPage";
 
 function App() {
 
@@ -32,8 +33,9 @@ function App() {
                 <Box display={"flex"} flexDirection={"column"}>
                     <Router>
                         <Routes>
-                            <Route exact path="/" element={<Navigate replace to="/signup" />}></Route>
+                            <Route exact path="/" element={<Navigate replace to="/login" />}></Route>
                             <Route path="/signup" element={<SignupPage/>}/>
+                            <Route path="/login" element={<LoginPage/>}/>
                             <Route path="/landing" element={<LandingPage/>}/>
                             <Route path="/room" element={<CodingRoom/>}/>
                         </Routes>
