@@ -13,11 +13,11 @@ import {
 import TextField from '@mui/material/TextField';
 import {useState} from "react";
 import axios from "axios";
-import {URL_USER_SVC} from "../configs";
+import {REGISTER, LOG_IN} from "../configs";
 import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../constants";
 import {Link, useNavigate} from "react-router-dom";
 import { createTheme } from '@mui/material/styles';
-import { ThemeProvider } from "@emotion/react";
+import { ClassNames, ThemeProvider } from "@emotion/react";
 
 function SignupPage() {
     const navigate = useNavigate();
@@ -30,21 +30,32 @@ function SignupPage() {
     const [showErrorMsg, setShowErrorMsg] = useState(false);
 
     const handleSignup = async () => {
-        setIsSignupSuccess(false)
+        setIsSignupSuccess(false);
+        // ---- CHECK INPUT VALIDITY ----
         if (username.length === 0 || password.length === 0) {
             setShowErrorMsg(true);
             return;
         } else {
             setShowErrorMsg(false);
         }
-        const res = await axios.post(URL_USER_SVC, { username, password })
+        // ---- SEND TO USER SERVICE ----
+        const json = JSON.stringify({ username: username, password: password });
+        const res = await axios.post(LOG_IN, json, {
+            headers: {
+              // Overwrite Axios's automatically set Content-Type
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': true,
+            }
+        })
             .catch((err) => {
+                console.log(err.response);
                 if (err.response.status === STATUS_CODE_CONFLICT) {
                     setErrorDialog('This username already exists')
                 } else {
                     setErrorDialog('Please try again later')
                 }
             })
+        console.log(res);
         if (res && res.status === STATUS_CODE_CREATED) {
             setSuccessDialog('Account successfully created')
             setIsSignupSuccess(true)
