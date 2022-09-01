@@ -1,6 +1,10 @@
-const URI_USER_SVC = process.env.URI_USER_SVC || 'http://localhost:8000'
+export const USER_SVC_PREFIX = "/user"
+export const URI_USER_SVC = process.env.URI_USER_SVC || "http://localhost:8000"
 
-const REGISTER = "/accounts"
-const LOG_IN = "/login"
-const LOG_OUT = "/logout"
-const ACCOUNTS = "/accounts/"
+export const MATCHING_SVC_PREFIX = "/matching"
+export const URI_MATCHING_SVC = process.env.URI_USER_SVC || "http://localhost:4000"
+
+export const REGISTER = "/accounts"
+export const LOG_IN = "/login"
+export const LOG_OUT = "/logout"
+export const ACCOUNTS = "/accounts/"
