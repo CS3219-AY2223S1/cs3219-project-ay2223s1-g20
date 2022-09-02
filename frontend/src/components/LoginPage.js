@@ -19,7 +19,7 @@ import {Link, useNavigate} from "react-router-dom";
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from "@emotion/react";
 import { post } from "../api/baseApi";
-import { setJwtToken } from "../api/cookieApi";
+import { setJwtAndUsernameCookie } from "../api/cookieApi";
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -65,7 +65,7 @@ function LoginPage() {
             .then(res => res.json())
             .then(res => {
                 setIsLoginSuccess(true);
-                setJwtToken(res.data);
+                setJwtAndUsernameCookie(res.data, username);
                 navigate("/landing");
             })
     }

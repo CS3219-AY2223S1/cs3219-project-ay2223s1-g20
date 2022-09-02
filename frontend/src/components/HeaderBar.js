@@ -15,6 +15,9 @@ import {USER_SVC_PREFIX, LOG_OUT} from "../util/configs";
 import {STATUS_CODE_CONFLICT, STATUS_CODE_SUCCESS} from "../util/constants";
 import { post } from "../api/baseApi";
 import { getJwtToken } from "../api/cookieApi";
+import ChangePasswordDialog from "./UserActionDialogs/ChangePasswordDialog";
+import DeleteAccountDialog from "./UserActionDialogs/DeleteAccountDialog";
+import SignOutDialog from "./UserActionDialogs/SignOutDialog";
 
 const menu = ['Delete Account', 'Change Password'];
 
@@ -22,30 +25,24 @@ function HeaderBar() {
     const navigate = useNavigate();
 
     const [anchorElUser, setAnchorElUser] = useState(null);
+    const [openChangePasswordDialog, setOpenChangePasswordDialog] = useState(false);
+    const [openDeleteAccountDialog, setOpenDeleteAccountDialog] = useState(false);
+    const [openSignOutDialog, setOpenSignOutDialog] = useState(false);
 
     const handleMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleSignOut = (event) => {
-        console.log("Signing out...");
-        const json = JSON.stringify({ "jwt": getJwtToken() });
-        let response = post(USER_SVC_PREFIX + LOG_OUT, json);
 
-        response
-            .then((res) => {
-                if (res.status != STATUS_CODE_SUCCESS) {
-                    // handleError(res.status);
-                    return;
-                }
-                return res;
-            })
-            .then(res => res.json())
-            .then(res => {
-                console.log("successful signout");
-                navigate("/login");
-            })
 
+    const handleMenuAction = (action) => {
+        console.log(action + " has been clicked");
+        if (action === menu[1]) {
+            setOpenChangePasswordDialog(true);
+        } else {
+            setOpenDeleteAccountDialog(true);
+        }
+        handleCloseUserMenu();
     }
 
     const handleCloseUserMenu = () => {
@@ -83,15 +80,34 @@ function HeaderBar() {
                         open={Boolean(anchorElUser)}
                         onClose={handleCloseUserMenu}
                     >
-                        {menu.map((setting) => (
-                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                <Typography textAlign="center">{setting}</Typography>
+                        {menu.map((action) => (
+                            <MenuItem key={action} onClick={e => handleMenuAction(action)}>
+                                <Typography textAlign="center" variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro'}}>{action}</Typography>
                             </MenuItem>
                         ))}
                     </Menu>
                 </Box>
-                <Button variant={"outlined"} onClick={handleSignOut}>Sign Out</Button>
+                <Button variant={"outlined"} onClick={e => setOpenSignOutDialog(true)}>Sign Out</Button>
             </Toolbar>
+            {openChangePasswordDialog &&
+                <ChangePasswordDialog
+                    open={openChangePasswordDialog}
+                    setOpen={setOpenChangePasswordDialog}
+                />
+            }
+            {openDeleteAccountDialog &&
+                <DeleteAccountDialog
+                    open={openDeleteAccountDialog}
+                    setOpen={setOpenDeleteAccountDialog}
+                />
+            }
+            {openSignOutDialog &&
+                <SignOutDialog
+                    open={openSignOutDialog}
+                    setOpen={setOpenSignOutDialog}
+                />
+            }
+
         </AppBar>
     )
 }
