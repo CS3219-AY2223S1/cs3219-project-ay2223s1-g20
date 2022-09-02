@@ -31,8 +31,8 @@ function LoginPage(props) {
     useEffect(() => {
         if ((location.state !== null) && (location.state.error)) {
             setShowAuthorisationError(true);
+            navigate(location.pathname, { replace: true });
         }
-        navigate(location.pathname, { replace: true });
     }, [])
 
     const handleError = (status) => {
