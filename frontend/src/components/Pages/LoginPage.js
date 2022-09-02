@@ -9,12 +9,14 @@ import {
 import {useEffect, useState} from "react";
 import {USER_SVC_PREFIX, LOG_IN} from "../../util/configs";
 import {STATUS_CODE_UNAUTHORIZED, STATUS_CODE_NOT_FOUND, STATUS_CODE_SUCCESS} from "../../util/constants";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useLocation} from "react-router-dom";
 import { post } from "../../api/baseApi";
 import { setJwtAndUsernameCookie, isAuthenticated } from "../../api/cookieApi";
 
-function LoginPage() {
+function LoginPage(props) {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [showAuthorisationError, setShowAuthorisationError] = useState(false);
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [showErrorMsg, setShowErrorMsg] = useState(false);
@@ -24,6 +26,13 @@ function LoginPage() {
         if(isAuthenticated()) {
             navigate("/landing");
         }
+    }, [])
+
+    useEffect(() => {
+        if ((location.state !== null) && (location.state.error)) {
+            setShowAuthorisationError(true);
+        }
+        navigate(location.pathname, { replace: true });
     }, [])
 
     const handleError = (status) => {
@@ -81,6 +90,10 @@ function LoginPage() {
                     <Box display={"flex"} justifyContent="center" alignItems="center">
                         <Typography variant={"h2"} class={"poppins"}>Log In</Typography>
                     </Box>
+
+                    { showAuthorisationError && (<Box display={"flex"} justifyContent="center" alignItems="left">
+                        <Typography variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro', color:'red'}}>Please login again.</Typography>
+                    </Box>)}
 
                     <Box display={"flex"} justifyContent="center" alignItems="center">
                         <Typography variant={"h4"} class={"montserrat"}>New User? &nbsp;</Typography>

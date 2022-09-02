@@ -15,7 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {USER_SVC_PREFIX, ACCOUNTS} from "../../util/configs";
 import {STATUS_CODE_SUCCESS} from "../../util/constants";
 import { del } from "../../api/baseApi";
-import { getUsername, getJwtToken, removeJwtAndUsernameCookie } from '../../api/cookieApi';
+import { getUsername, getJwtToken, removeJwtAndUsernameCookie, isAuthenticated } from '../../api/cookieApi';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../common/loading';
 import Completed from '../common/completed';
@@ -35,6 +35,11 @@ export default function DeleteAccountDialog(props) {
     };
 
     const handleDeleteAccount = () => {
+
+        if (!isAuthenticated()) {
+            navigate("/login", { state: {error: true}});
+            return;
+        }
         // ---- SEND TO USER SERVICE ----
         const json = JSON.stringify(jwtToken);
 

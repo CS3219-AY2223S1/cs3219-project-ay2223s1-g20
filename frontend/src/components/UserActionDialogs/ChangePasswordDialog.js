@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     Box,
     Button,
@@ -14,12 +15,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import {USER_SVC_PREFIX, ACCOUNTS} from "../../util/configs";
 import {STATUS_CODE_SUCCESS} from "../../util/constants";
 import { put } from "../../api/baseApi";
-import { getUsername, getJwtToken } from '../../api/cookieApi';
+import { getUsername, getJwtToken, isAuthenticated } from '../../api/cookieApi';
 import Loading from '../common/loading';
 import Completed from '../common/completed';
 
 export default function ChangePasswordDialog(props) {
-
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [oldPassword, setOldPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
@@ -43,6 +44,11 @@ export default function ChangePasswordDialog(props) {
     }
 
     const handlePasswordChange = () => {
+
+        if (!isAuthenticated()) {
+            navigate("/login", { state: {error: true}});
+            return;
+        }
 
         resetErrorMsgs();
 

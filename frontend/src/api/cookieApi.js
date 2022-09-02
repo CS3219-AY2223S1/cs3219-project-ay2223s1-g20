@@ -6,7 +6,7 @@ const username = 'username'
 
 // JWT TOKEN
 export function setJwtToken(value) {
-    cookies.set(jwtToken, value, { path: '/' });
+    cookies.set(jwtToken, value, { path: '/' , maxAge: 24*60*60});
 }
 
 export function getJwtToken() {
@@ -23,7 +23,7 @@ export function hasJwtToken() {
 
 // USERNAME
 export function setUsername(value) {
-    cookies.set(username, value, { path: '/' });
+    cookies.set(username, value, { path: '/' , maxAge: 24*60*60});
 }
 
 export function getUsername() {
