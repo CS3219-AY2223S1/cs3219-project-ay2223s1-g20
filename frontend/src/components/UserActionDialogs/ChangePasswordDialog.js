@@ -63,10 +63,12 @@ export default function ChangePasswordDialog(props) {
 
         // ---- SEND TO USER SERVICE ----
         const json = JSON.stringify({
-            jwt: jwtToken,
+            ...jwtToken,
             old_password: oldPassword,
             new_password: newPassword
         });
+
+        console.log(json);
 
         setLoading(true);
         let response = put(USER_SVC_PREFIX + ACCOUNTS + username, json);
@@ -78,6 +80,7 @@ export default function ChangePasswordDialog(props) {
                     setShowNetworkErrorMsg(true);
                     return;
                 }
+                return res;
             })
             .then(res => res.json())
             .then(res => {

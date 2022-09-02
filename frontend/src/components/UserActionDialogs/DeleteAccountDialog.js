@@ -36,7 +36,7 @@ export default function DeleteAccountDialog(props) {
 
     const handleDeleteAccount = () => {
         // ---- SEND TO USER SERVICE ----
-        const json = JSON.stringify({ jwt: jwtToken });
+        const json = JSON.stringify(jwtToken);
 
         setLoading(true);
         let response = del(USER_SVC_PREFIX + ACCOUNTS + username, json);
@@ -48,12 +48,12 @@ export default function DeleteAccountDialog(props) {
                     setShowErrorMsg(true);
                     return;
                 }
+                return res;
             })
             .then(res => res.json())
             .then(res => {
                 setDeleteCompleted(true);
                 setTimeout(() => {
-                    handleClose();
                     removeJwtAndUsernameCookie();
                     navigate("/");
                 }, 3000);

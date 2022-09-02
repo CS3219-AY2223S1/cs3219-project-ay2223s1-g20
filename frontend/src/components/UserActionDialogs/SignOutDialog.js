@@ -34,7 +34,8 @@ export default function SignOutDialog(props) {
     };
 
     const handleSignOut = () => {
-        const json = JSON.stringify({ "jwt": jwtToken });
+        const json = JSON.stringify(jwtToken);
+        console.log(json);
 
         setLoading(true);
         let response = post(USER_SVC_PREFIX + LOG_OUT, json);
