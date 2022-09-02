@@ -11,6 +11,10 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import React, {useState} from "react";
 import IconButton from '@mui/material/IconButton';
 import {Link, useNavigate} from "react-router-dom";
+import {USER_SVC_PREFIX, LOG_OUT} from "../util/configs";
+import {STATUS_CODE_CONFLICT, STATUS_CODE_SUCCESS} from "../util/constants";
+import { post } from "../api/baseApi";
+import { getJwtToken } from "../api/cookieApi";
 
 const menu = ['Delete Account', 'Change Password'];
 
@@ -24,7 +28,24 @@ function HeaderBar() {
     };
 
     const handleSignOut = (event) => {
-        navigate("/login");
+        console.log("Signing out...");
+        const json = JSON.stringify({ "jwt": getJwtToken() });
+        let response = post(USER_SVC_PREFIX + LOG_OUT, json);
+
+        response
+            .then((res) => {
+                if (res.status != STATUS_CODE_SUCCESS) {
+                    // handleError(res.status);
+                    return;
+                }
+                return res;
+            })
+            .then(res => res.json())
+            .then(res => {
+                console.log("successful signout");
+                navigate("/login");
+            })
+
     }
 
     const handleCloseUserMenu = () => {
@@ -64,7 +85,7 @@ function HeaderBar() {
                     >
                         {menu.map((setting) => (
                             <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                            <Typography textAlign="center">{setting}</Typography>
+                                <Typography textAlign="center">{setting}</Typography>
                             </MenuItem>
                         ))}
                     </Menu>

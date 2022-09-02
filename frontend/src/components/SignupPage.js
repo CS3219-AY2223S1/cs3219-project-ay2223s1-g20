@@ -13,12 +13,13 @@ import {
 import TextField from '@mui/material/TextField';
 import {useState} from "react";
 import axios from "axios";
-import {USER_SVC_PREFIX, REGISTER} from "../configs";
-import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../constants";
+import {USER_SVC_PREFIX, REGISTER} from "../util/configs";
+import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../util/constants";
 import {Link, useNavigate} from "react-router-dom";
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from "@emotion/react";
-import { post } from "../baseApi";
+import { post } from "../api/baseApi";
+import { setJwtToken } from "../api/cookieApi";
 
 function SignupPage() {
     const navigate = useNavigate();
@@ -39,10 +40,6 @@ function SignupPage() {
             setErrorDialog('Please try again later')
         }
     };
-
-    const handleCookie = () => {
-
-    }
 
     const handleSignup = async () => {
         setIsSignupSuccess(false);
@@ -67,11 +64,14 @@ function SignupPage() {
             .then((res) => {
                 if (res.status != STATUS_CODE_CREATED) {
                     handleError(res.status);
-                } else {
-                    setIsSignupSuccess(true)
-                    handleCookie(res.data)
-                    navigate("/landing")
                 }
+                return res;
+            })
+            .then(res => res.json())
+            .then(res => {
+                setIsSignupSuccess(true);
+                setJwtToken(res.data);
+                navigate("/landing");
             })
     }
 
@@ -161,21 +161,6 @@ function SignupPage() {
                     </Box>
                 </CardContent>
             </Card>
-            <Dialog
-                open={isDialogOpen}
-                onClose={closeDialog}
-            >
-                <DialogTitle>{dialogTitle}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>{dialogMsg}</DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    {isSignupSuccess
-                        ? <Button component={Link} to="/login">Log in</Button>
-                        : <Button onClick={closeDialog}>Done</Button>
-                    }
-                </DialogActions>
-            </Dialog>
         </Box>
         </ThemeProvider>
     )

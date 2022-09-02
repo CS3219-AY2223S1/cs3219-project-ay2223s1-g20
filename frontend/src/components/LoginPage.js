@@ -13,13 +13,13 @@ import {
 import TextField from '@mui/material/TextField';
 import {useState} from "react";
 import axios from "axios";
-import {USER_SVC_PREFIX, LOG_IN} from "../configs";
-import {STATUS_CODE_CONFLICT, STATUS_CODE_SUCCESS} from "../constants";
+import {USER_SVC_PREFIX, LOG_IN} from "../util/configs";
+import {STATUS_CODE_CONFLICT, STATUS_CODE_SUCCESS} from "../util/constants";
 import {Link, useNavigate} from "react-router-dom";
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from "@emotion/react";
-import { post } from "../baseApi";
-import { setJwtToken } from "../cookieApi";
+import { post } from "../api/baseApi";
+import { setJwtToken } from "../api/cookieApi";
 
 function LoginPage() {
     const navigate = useNavigate();
