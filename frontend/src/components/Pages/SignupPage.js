@@ -74,7 +74,6 @@ function SignupPage() {
         <Box display={"flex"} flexDirection={"column"} justifyContent="center" alignItems="center" minHeight="100vh">
 
             <Box display={"flex"} width='100%' justifyContent="center" alignItems="center" marginBottom={4}>
-                {/* <Typography variant={"h1"} class={"raleway"}>PeerPrep</Typography> */}
                 <Typography variant={"h1"} sx={{ fontSize: '4rem', fontFamily: 'Raleway'}}>PeerPrep</Typography>
             </Box>
 
@@ -85,7 +84,7 @@ function SignupPage() {
                     </Box>
 
                     {showErrorMsg && <Box display={"flex"} justifyContent="center" alignItems="left">
-                        <Typography variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Montserrat', color:'red'}}>{errorMsg}</Typography>
+                        <Typography variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro', color:'red'}}>{errorMsg}</Typography>
                     </Box>}
 
                     <TextField

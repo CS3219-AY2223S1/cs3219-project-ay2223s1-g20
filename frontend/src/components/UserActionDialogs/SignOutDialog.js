@@ -42,14 +42,14 @@ export default function SignOutDialog(props) {
 
         response
             .then((res) => {
-                if (res.status != STATUS_CODE_SUCCESS) {
-                    console.log("failed to logout");
-                    setShowErrorMsg(true);
-                    return;
-                }
-                return res;
+                // if (res.status != STATUS_CODE_SUCCESS) {
+                //     console.log("failed to logout");
+                //     setShowErrorMsg(true);
+                //     return;
+                // }
+                // return res;
             })
-            .then(res => res.json())
+            // .then(res => res.json())
             .then(res => {
                 setSignoutCompleted(true);
                 setTimeout(() => {

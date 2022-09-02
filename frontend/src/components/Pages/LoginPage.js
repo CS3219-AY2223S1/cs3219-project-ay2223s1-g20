@@ -28,9 +28,9 @@ function LoginPage() {
 
     const handleError = (status) => {
         if( status === STATUS_CODE_UNAUTHORIZED ) {
-            setErrorMsg('Incorrect Password')
+            setErrorMsg('Incorrect Password.')
         } else if (status === STATUS_CODE_NOT_FOUND) {
-            setErrorMsg('Username does not exist')
+            setErrorMsg('Username does not exist.')
         } else {
             setErrorMsg('Something went wrong. Please try again later.')
         }
@@ -88,7 +88,7 @@ function LoginPage() {
                     </Box>
 
                     {showErrorMsg && <Box display={"flex"} justifyContent="center" alignItems="left">
-                        <Typography variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Montserrat', color:'red'}}>{errorMsg}</Typography>
+                        <Typography variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro', color:'red'}}>{errorMsg}</Typography>
                     </Box>}
 
                     <TextField
