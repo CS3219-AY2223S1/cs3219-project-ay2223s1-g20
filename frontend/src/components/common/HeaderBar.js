@@ -1,3 +1,4 @@
+import React, {useState} from "react";
 import {
     AppBar,
     Box,
@@ -8,21 +9,15 @@ import {
     Typography
 } from "@mui/material";
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import React, {useState} from "react";
 import IconButton from '@mui/material/IconButton';
-import {Link, useNavigate} from "react-router-dom";
-import {USER_SVC_PREFIX, LOG_OUT} from "../util/configs";
-import {STATUS_CODE_CONFLICT, STATUS_CODE_SUCCESS} from "../util/constants";
-import { post } from "../api/baseApi";
-import { getJwtToken } from "../api/cookieApi";
-import ChangePasswordDialog from "./UserActionDialogs/ChangePasswordDialog";
-import DeleteAccountDialog from "./UserActionDialogs/DeleteAccountDialog";
-import SignOutDialog from "./UserActionDialogs/SignOutDialog";
+
+import ChangePasswordDialog from "../UserActionDialogs/ChangePasswordDialog";
+import DeleteAccountDialog from "../UserActionDialogs/DeleteAccountDialog";
+import SignOutDialog from "../UserActionDialogs/SignOutDialog";
 
 const menu = ['Delete Account', 'Change Password'];
 
 function HeaderBar() {
-    const navigate = useNavigate();
 
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [openChangePasswordDialog, setOpenChangePasswordDialog] = useState(false);
@@ -32,8 +27,6 @@ function HeaderBar() {
     const handleMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
-
-
 
     const handleMenuAction = (action) => {
         console.log(action + " has been clicked");
@@ -48,6 +41,33 @@ function HeaderBar() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const MenuDropdown = () => {
+        return (
+            <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+            >
+                {menu.map((action) => (
+                    <MenuItem key={action} onClick={e => handleMenuAction(action)}>
+                        <Typography textAlign="center" variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro'}}>{action}</Typography>
+                    </MenuItem>
+                ))}
+            </Menu>
+        );
+    }
 
     return (
         <AppBar position="fixed" color="transparent" elevation={0} sx={{borderBottom: 0.5, borderColor: 'lightgray'}}>
@@ -64,28 +84,7 @@ function HeaderBar() {
                     >
                         <AccountCircle />
                     </IconButton>
-                    <Menu
-                        sx={{ mt: '45px' }}
-                        id="menu-appbar"
-                        anchorEl={anchorElUser}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        open={Boolean(anchorElUser)}
-                        onClose={handleCloseUserMenu}
-                    >
-                        {menu.map((action) => (
-                            <MenuItem key={action} onClick={e => handleMenuAction(action)}>
-                                <Typography textAlign="center" variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro'}}>{action}</Typography>
-                            </MenuItem>
-                        ))}
-                    </Menu>
+                    <MenuDropdown />
                 </Box>
                 <Button variant={"outlined"} onClick={e => setOpenSignOutDialog(true)}>Sign Out</Button>
             </Toolbar>

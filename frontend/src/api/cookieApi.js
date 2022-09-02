@@ -1,4 +1,5 @@
 import Cookies from 'universal-cookie';
+
 const cookies = new Cookies();
 const jwtToken = 'jwtToken'
 const username = 'username'
@@ -16,6 +17,9 @@ export function removeJwtToken() {
     cookies.remove(jwtToken, { path: '/' });
 }
 
+export function hasJwtToken() {
+    return getJwtToken() !== undefined;
+}
 
 // USERNAME
 export function setUsername(value) {
@@ -30,6 +34,10 @@ export function removeUsername() {
     cookies.remove(username, { path: '/' });
 }
 
+export function hasUsername() {
+    return getUsername() !== undefined;
+}
+
 // GENERAL FUNCTIONS
 export function setJwtAndUsernameCookie(token, username) {
     setJwtToken(token);
@@ -39,4 +47,8 @@ export function setJwtAndUsernameCookie(token, username) {
 export function removeJwtAndUsernameCookie() {
     removeJwtToken();
     removeUsername();
+}
+
+export function isAuthenticated() {
+    return hasUsername() && hasJwtToken();
 }
