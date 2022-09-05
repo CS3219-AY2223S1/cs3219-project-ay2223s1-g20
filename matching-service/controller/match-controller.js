@@ -1,12 +1,39 @@
-import { ormCreateMatch } from "../model/match-orm.js";
+import { ormCheckIsMatchAvailable, ormCheckMatchStatus, ormCreateMatch } from "../model/match-orm.js";
+import { createPendingMatch } from "../model/repository.js";
+import { MatchStatus } from "../utils.js";
 
-export async function createMatch(req) {
+export async function matchHandler(req, userID) {
     
-    const username1 = req.username1
-    const username2 = req.username2
-    const difficulty = req.difficulty
+    const username = req.username;
+    const difficulty = req.difficulty;
 
-    // TODO: implement sth to return a proper resp to socket-cli
-    await ormCreateMatch(username1, username2, difficulty);
-    return
+    const isUserMatched = ormCheckMatchStatus(username);
+    if (isUserMatched == MatchStatus.MatchExists) {
+        const matchResult = {
+            matchStatus: MatchStatus.MatchExists
+        }
+        return matchResult;
+    }
+
+    const isMatchAvailable = ormCheckIsMatchAvailable(difficulty)
+    if (isMatchAvailable == false) {
+        const pendingMatch = createPendingMatch(userID, username, difficulty);
+        const matchResult = {
+            matchStatus: MatchStatus.MatchPending,
+            userID: pendingMatch.userID,
+            username: pendingMatch.username,
+            difficulty: pendingMatch.difficulty
+        }
+        return matchResult;
+    }
+
+    const matchInfo = ormCreateMatch(userID, username, difficulty);
+    const matchResult = {
+        matchStatus: MatchStatus.MatchSuccess,
+        matchID: matchInfo.matchID,
+        matchedUserID: matchInfo.matchedUserID,
+        matchedUserName: matchInfo.matchedUsername
+    }
+
+    return matchResult;
 }

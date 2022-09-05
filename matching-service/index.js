@@ -4,9 +4,10 @@ import cors from 'cors';
 import { createServer } from 'http';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { createMatch } from './controller/match-controller.js';
+import { matchHandler } from './controller/match-controller.js';
 
 import { Sequelize, DataTypes } from "sequelize";
+import { MatchStatus } from './utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -25,16 +26,36 @@ app.get('/', (req, res) => {
 const httpServer = createServer(app)
 const io = new Server(httpServer)
 
+sockets = {}
 
 io.on('connection', (socket) => {
-    console.log(socket.id);
-    
-    socket.on("message", (data) => {
-        console.log(data)
-    });
+    const userID = socket.id;
+    sockets[userID] = socket;
+    console.log("Connection established, socketID: ", socket.id);
 
-    socket.on("match", (matchReq) => {
-        createMatch(matchReq);
+    socket.on("match", (req) => {
+        const matchResult = matchHandler(req, userID);
+
+        if (matchResult.matchStatus == MatchStatus.MatchSuccess) {
+            const matchID = matchResult.matchID;
+            const matchedUserID = matchResult.matchedUserID;
+            const matchedUsername = matchResult.matchedUsername;
+
+            socket.join(matchID);
+            sockets[matchedUserID].join(matchID);
+
+            resp = {
+                matchedUsername: matchedUsername
+            }
+
+            io.to(matchID).emit("matchSuccess", resp);
+        } else if (matchResult.matchStatus == MatchStatus.MatchPending) {
+            socket.emit("matchPending");
+        } else if (matchResult.matchStatus == MatchStatus.MatchExists) {
+            socket.emit("matchExists");
+        } else {
+            socket.emit("pending");
+        }
     })
 
 })

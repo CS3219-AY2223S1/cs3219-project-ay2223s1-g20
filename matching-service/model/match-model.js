@@ -2,6 +2,11 @@ import { DataTypes } from "sequelize";
 
 export function createMatchModel(sequelize) {
     const Match = sequelize.define('Matches', {
+        matchID: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            primarykey: true
+        },
         username1: {
             type: DataTypes.STRING,
             allowNull: false,
