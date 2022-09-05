@@ -7,7 +7,7 @@ import {
     Grid,
     Typography
 } from "@mui/material";
-import HeaderBar from "./HeaderBar";
+import HeaderBar from "../common/HeaderBar";
 
 function LandingPage() {
 

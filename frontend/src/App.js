@@ -1,10 +1,13 @@
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
-import SignupPage from './components/SignupPage';
 import {Box} from "@mui/material";
-import LandingPage from "./components/LandingPage";
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from "@emotion/react";
-import CodingRoom from "./components/CodingRoom";
+
+import SignupPage from './components/Pages/SignupPage';
+import LandingPage from "./components/Pages/LandingPage";
+import CodingRoom from "./components/Pages/CodingRoom";
+import LoginPage from "./components/Pages/LoginPage";
+import {PrivateRoute} from "./components/PrivateRoute";
 
 function App() {
 
@@ -26,16 +29,23 @@ function App() {
             }
         }
     })
+
     return (
         <ThemeProvider theme={theme}>
             <div className="App">
                 <Box display={"flex"} flexDirection={"column"}>
                     <Router>
                         <Routes>
-                            <Route exact path="/" element={<Navigate replace to="/signup" />}></Route>
+                            <Route exact path="/" element={<Navigate replace to="/login" />}></Route>
                             <Route path="/signup" element={<SignupPage/>}/>
-                            <Route path="/landing" element={<LandingPage/>}/>
-                            <Route path="/room" element={<CodingRoom/>}/>
+                            <Route path="/login" element={<LoginPage/>}/>
+
+                            <Route exact path='/landing' element={<PrivateRoute/>}>
+                                <Route exact path='/landing' element={<LandingPage/>}/>
+                            </Route>
+                            <Route exact path='/room' element={<PrivateRoute/>}>
+                                <Route exact path='/room' element={<CodingRoom/>}/>
+                            </Route>
                         </Routes>
                     </Router>
                 </Box>

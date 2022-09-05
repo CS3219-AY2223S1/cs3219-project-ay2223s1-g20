@@ -4,8 +4,8 @@ import {
     Modal,
     Typography
 } from "@mui/material";
-import React, {useState} from "react";
-import HeaderBar from "./HeaderBar";
+import React from "react";
+import HeaderBar from "../common/HeaderBar";
 import {useNavigate} from "react-router-dom";
 
 function CodingRoom() {
