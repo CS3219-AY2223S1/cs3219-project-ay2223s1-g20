@@ -2,12 +2,14 @@ import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom
 import {Box} from "@mui/material";
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from "@emotion/react";
+import React, { useState, useEffect } from 'react';
 
 import SignupPage from './components/Pages/SignupPage';
 import LandingPage from "./components/Pages/LandingPage";
 import CodingRoom from "./components/Pages/CodingRoom";
 import LoginPage from "./components/Pages/LoginPage";
 import {PrivateRoute} from "./components/PrivateRoute";
+import { socket } from "./api/socketApi";
 
 function App() {
 
@@ -29,6 +31,20 @@ function App() {
             }
         }
     })
+
+    useEffect(() => {
+        socket.on('connect', () => {
+          console.log('connect to socket.io');
+        });
+
+        socket.on('disconnect', () => {
+          console.log('disconnect from socket.io');
+        });
+
+        socket.emit('hello', () => {
+            console.log('emit hello');
+        })
+    });
 
     return (
         <ThemeProvider theme={theme}>

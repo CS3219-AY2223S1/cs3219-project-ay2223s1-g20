@@ -8,14 +8,20 @@ import {
     Typography
 } from "@mui/material";
 import HeaderBar from "../common/HeaderBar";
+import { socket } from "../../api/socketApi";
 
 function LandingPage() {
+
+    const match = () => {
+        console.log("match");
+
+    }
 
     const difficultyCard = (level) => {
         const imgUrl = "./static/" + level + ".png"
         return (
             <Card variant="outlined">
-                <CardActionArea sx={{p:3}}>
+                <CardActionArea sx={{p:3}} onClick={match}>
                     <CardMedia
                         component="img"
                         image={imgUrl}
