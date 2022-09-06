@@ -31,6 +31,7 @@ io.on('connection', (socket) => {
     console.log("Connection established, socketID: ", socket.id);
 
     socket.on("match", (req) => {
+        socket.emit("connected");
         const resp = matchHandler(req, userID);
 
         if (resp.event == "matchSuccess") {

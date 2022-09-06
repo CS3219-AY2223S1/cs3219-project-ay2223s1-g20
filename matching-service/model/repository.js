@@ -34,43 +34,42 @@ export async function createMatch(username1, username2, userID1, userID2, diffic
 
 // INPUT: matchID of a match (aka roomID for socket)
 // DO: remove target match from db
+// OUTPUT: return true if removed successfully, false otherwise
 export async function removeMatch(matchID) {
 
 }
 
 // INPUT: username and difficulty level of current user
 // DO: create new PendingMatch in database
+// OUTPUT: the pendingMatch object being created
 export async function createPendingMatch(userID, username, difficulty) {
 
 }
 
 // INPUT: difficulty level
-// DO: check if there exists an entry in PendingMatch table that has the input difficulty
-export async function checkIsMatchAvailable(difficulty) {
-
-}
-
-// INPUT: difficulty level
-// DO: return the pendingMatch entry where the difficulty level matches the input
+// DO: return a pendingMatch with the same difficulty level as the input
+// OUTPUT: a pendingMatch instance, return null if such a match does not exist
 export async function findPendingMatch(difficulty) {
     
 }
 
 // INPUT: username of the pendingMatch to be removed
 // DO: remove the entry from PendingMatch table
+// OUTPUT: return true if removed successfully, false otherwise
 export async function removePendingMatch(username) {
 
 }
 
 // INPUT: current user's username
 // DO: check if the username exists in any row of the Match table
+// OUTPUT: boolen
 export async function checkIsMatched(username) {
 
 }
 
-
-// INPUT: matchID
-// DO: check if the matchID exists for any entry of the Match table
-export async function checkMatchExist(matchID) {
+// INPUT: current user's username
+// DO: check if the username exists in any row of the PendingMatch table
+// OUTPUT: boolean
+export async function checkIsPending(username) {
 
 }
