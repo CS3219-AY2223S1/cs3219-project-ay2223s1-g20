@@ -8,20 +8,22 @@ import {
     Typography
 } from "@mui/material";
 import HeaderBar from "../common/HeaderBar";
-import { socket } from "../../api/socketApi";
+import { io_socket } from "../../api/socketApi";
+import { getUsername } from "../../api/cookieApi";
 
 function LandingPage() {
 
-    const match = () => {
-        console.log("match");
-
+    const match = (level) => {
+        console.log('match');
+        console.log({username: getUsername(), difficulty: level});
+        io_socket.emit('match', {username: getUsername(), difficulty: level});
     }
 
     const difficultyCard = (level) => {
         const imgUrl = "./static/" + level + ".png"
         return (
             <Card variant="outlined">
-                <CardActionArea sx={{p:3}} onClick={match}>
+                <CardActionArea sx={{p:3}} onClick={e => match(level)}>
                     <CardMedia
                         component="img"
                         image={imgUrl}

@@ -15,7 +15,7 @@ module.exports = function (app) {
   );
   app.use(
     createProxyMiddleware('/matching', {
-      target: 'http://localhost:4000', // Matching Service
+      target: 'http://localhost:8001', // Matching Service
       changeOrigin: true,
       pathRewrite: {
         "^/matching": "",
