@@ -4,15 +4,13 @@ import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from "@emotion/react";
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
-import socketIOClient from "socket.io-client";
 
 import SignupPage from './components/Pages/SignupPage';
 import LandingPage from "./components/Pages/LandingPage";
 import CodingRoom from "./components/Pages/CodingRoom";
 import LoginPage from "./components/Pages/LoginPage";
 import {PrivateRoute} from "./components/PrivateRoute";
-import { MATCHING_SVC_PREFIX, URI_MATCHING_SVC } from './util/configs';
-import { socket, setSocket } from "./api/socketApi";
+import { setSocket } from "./api/socketApi";
 
 function App() {
 
@@ -34,8 +32,6 @@ function App() {
             }
         }
     })
-
-    // const [socket, setSocket] = useState(null);
 
     useEffect(() => {
         const socket = io("localhost:8001", { transports: ["websocket"] });
