@@ -1,5 +1,5 @@
-export function genMatchId(username1, username2, difficulty) {
-    return "RoomID_" + username1 + "_" + username2 + "_" + difficulty;
+export function genMatchId(userID1, userID2, difficulty) {
+    return "MatchID_" + userID1 + "_" + userID2 + "_" + difficulty;
 }
 
 export const MatchStatus = {

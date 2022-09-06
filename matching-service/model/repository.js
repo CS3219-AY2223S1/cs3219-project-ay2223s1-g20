@@ -20,11 +20,13 @@ const PendingMatch = createPendingMatchModel(sequelize);
 
 await sequelize.sync({force: true}).then((result) => console.log("Database successfully initialized"));
 
-export async function createMatch(username1, username2, difficulty) {
+export async function createMatch(username1, username2, userID1, userID2, difficulty) {
     const newMatch = await Match.create({
-        matchID: genMatchId(),
+        matchID: genMatchId(userID1, userID2, difficulty),
         username1: username1,
         username2: username2,
+        userID1: userID1,
+        userID2: userID2,
         difficulty: difficulty
     });
     return newMatch

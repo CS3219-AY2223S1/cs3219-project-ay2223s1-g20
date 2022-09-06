@@ -15,6 +15,14 @@ export function createMatchModel(sequelize) {
             type: DataTypes.STRING,
             allowNull: false
         },
+        userID1: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        userID2: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         difficulty: {
             type: DataTypes.STRING,
             allowNull: false
