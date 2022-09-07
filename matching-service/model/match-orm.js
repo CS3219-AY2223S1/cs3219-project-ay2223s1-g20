@@ -1,51 +1,49 @@
 import { MatchStatus } from "../utils.js";
-import { checkIsMatchAvailable, checkIsMatched, createMatch, createPendingMatch, findPendingMatch, removePendingMatch } from "./repository.js";
+import { checkIsMatched, createMatch, createPendingMatch, findPendingMatch, removePendingMatch, checkIsPending } from "./repository.js";
 
-export async function ormCreateMatch(username, difficulty) {
+export async function ormCreateMatch(username, userID, difficulty) {
+    var matchResult = {}
 
-    // now we found a potential match user, what to do?
-    // -> check if this match exists
-    // -> remove this pending match
-    // -> create a new match
-    // --> add db entry of this new match
-    // --> add both ID into the same room on socketIO
-    // --> emit matchSuccess for both fella
+    // check if user has already being matched
+    const isUserMatched = await checkIsMatched(username);
+    if (isUserMatched == true) {
+        matchResult.matchStatus = MatchStatus.MatchExists;
+        return matchResult;
+    }
 
-    try {
-        const matchedUser = findPendingMatch(difficulty);
+    // check if user is already waiting to be matched
+    const isUserPending = await checkIsPending(username); // implement
+    if (isUserPending == true) {
+        matchResult.matchStatus = MatchStatus.MatchPending;
+        return matchResult
+    }
+
+    // find a suitable match from pending, if none, create your own pending entry
+    const matchedUser = await findPendingMatch(difficulty);
+    if (matchedUser == null) {
+        await ormCreatePendingMatch(userID, username, difficulty);
+        matchResult.matchStatus = MatchStatus.MatchPending;
+        matchResult.userID = userID;
+        matchResult.username = username;
+        matchResult.difficulty = difficulty;
+        return matchResult;
+    } else {
         const match = await createMatch(username, matchedUser.username, difficulty);
         console.log('New Match created: ', match);
-
-        removePendingMatch(matchedUser.username)
-
-        const matchInfo = {
-            matchID: match.matchID,
-            matchedUsername: matchedUser.username,
-            matchedUserID: matchedUser.userID
-        }
-
-        return matchInfo;
-    } catch (err) {
-        console.log('ERROR: Could not create new Match, ', err);
-        return {};
+        await removePendingMatch(matchedUser.username);
+        matchResult.matchStatus = MatchStatus.MatchSuccess;
+        matchResult.matchID = match.matchID;
+        matchResult.myUsername1 = username;
+        matchResult.matchedUsername = matchedUser.username;
+        matchResult.myUserID = userID;
+        matchResult.matchedUserID = matchedUser.userID;
+        matchResult.difficulty = difficulty;
+        return matchResult;
     }
 }
 
 export async function ormCreatePendingMatch(userID, username, difficulty) {
-    const matchedUser = findPendingMatch(difficulty);
-    const pendingMatch = createPendingMatch(userID, username, difficulty);
+    const pendingMatch = await createPendingMatch(userID, username, difficulty);
+    console.log('New PendingMatch created: ', pendingMatch);
     return pendingMatch;
-}
-
-export async function ormCheckMatchStatus(username) {
-    const isUserMatched = await checkIsMatched(username);
-    if (isUserMatched == true) {
-        // request invalid, user has already being matched
-        return MatchStatus.MatchExists;
-    }
-}
-
-export async function ormCheckIsMatchAvailable(difficulty) {
-    const isMatchAvailable = await checkIsMatchAvailable(difficulty);
-    return isMatchAvailable;
 }

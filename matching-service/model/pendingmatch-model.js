@@ -5,17 +5,17 @@ export function createPendingMatchModel(sequelize) {
         userID: {
             type: DataTypes.STRING,
             allowNull: false,
-            
+            primaryKey: true
         },
         username: {
             type: DataTypes.STRING,
             allowNull: false,
-            primaryKey: true
         },
         difficulty: {
             type: DataTypes.STRING,
             allowNull: false
         }
     });
+    console.log("SUCCESS: PendingMatch Model initialized");
     return PendingMatch;
 }
