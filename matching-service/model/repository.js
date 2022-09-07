@@ -2,6 +2,7 @@ import { Sequelize, DataTypes } from "sequelize";
 import { createMatchModel } from "./match-model.js";
 import { genMatchId } from "../utils.js";
 import { createPendingMatchModel } from "./pendingmatch-model.js";
+import { Op } from "sequelize";
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -36,40 +37,68 @@ export async function createMatch(username1, username2, userID1, userID2, diffic
 // DO: remove target match from db
 // OUTPUT: return true if removed successfully, false otherwise
 export async function removeMatch(matchID) {
-
+    await Match.destory({
+        where: { matchID: matchID }
+    });
+    return
 }
 
 // INPUT: username and difficulty level of current user
 // DO: create new PendingMatch in database
 // OUTPUT: the pendingMatch object being created
 export async function createPendingMatch(userID, username, difficulty) {
-
+    const newPendingMatch = await PendingMatch.create({
+        userID: userID,
+        username: username,
+        difficulty: difficulty
+    });
+    return newPendingMatch;
 }
 
 // INPUT: difficulty level
 // DO: return a pendingMatch with the same difficulty level as the input
 // OUTPUT: a pendingMatch instance, return null if such a match does not exist
 export async function findPendingMatch(difficulty) {
-    
+    const pendingMatch = await PendingMatch.findOne({where: {difficulty: difficulty}});
+    return pendingMatch;
 }
 
 // INPUT: username of the pendingMatch to be removed
 // DO: remove the entry from PendingMatch table
 // OUTPUT: return true if removed successfully, false otherwise
 export async function removePendingMatch(username) {
-
+    await PendingMatch.destory({
+        where: { username: username }
+    });
+    return;
 }
 
 // INPUT: current user's username
 // DO: check if the username exists in any row of the Match table
 // OUTPUT: boolen
 export async function checkIsMatched(username) {
-
+    const match = await Match.findAll({
+        where: {
+            [Op.or]: [
+                { username1: username },
+                { username2: username }
+            ]
+        }
+    });
+    if (match == null) {
+        return false;
+    } else {
+        return true;
+    }
 }
-
 // INPUT: current user's username
 // DO: check if the username exists in any row of the PendingMatch table
 // OUTPUT: boolean
 export async function checkIsPending(username) {
-
+    const pendingMatch = await PendingMatch.findOne({where: {username: username}});
+    if (pendingMatch == null) {
+        return false;
+    } else {
+        return true;
+    }
 }

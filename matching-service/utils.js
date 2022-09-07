@@ -6,5 +6,5 @@ export const MatchStatus = {
     MatchSuccess: 0,
     MatchFailed: 1,
     MatchExists: 2,
-    MatchPending: 3
+    MatchPending: 3,
 }

@@ -16,5 +16,6 @@ export function createPendingMatchModel(sequelize) {
             allowNull: false
         }
     });
+    console.log("SUCCESS: PendingMatch Model initialized");
     return PendingMatch;
 }

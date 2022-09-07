@@ -1,5 +1,5 @@
 import { MatchStatus } from "../utils.js";
-import { checkIsMatched, createMatch, createPendingMatch, findPendingMatch, removePendingMatch } from "./repository.js";
+import { checkIsMatched, createMatch, createPendingMatch, findPendingMatch, removePendingMatch, checkIsPending } from "./repository.js";
 
 export async function ormCreateMatch(username, userID, difficulty) {
     var matchResult = {}
@@ -19,7 +19,7 @@ export async function ormCreateMatch(username, userID, difficulty) {
     }
 
     // find a suitable match from pending, if none, create your own pending entry
-    const matchedUser = findPendingMatch(difficulty);
+    const matchedUser = await findPendingMatch(difficulty);
     if (matchedUser == null) {
         await ormCreatePendingMatch(userID, username, difficulty);
         matchResult.matchStatus = MatchStatus.MatchPending;
