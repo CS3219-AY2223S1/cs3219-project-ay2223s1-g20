@@ -2,7 +2,7 @@ import { ormCreateMatch } from "../model/match-orm.js";
 import { MatchStatus } from "../utils.js";
 
 export async function matchHandler(req, userID) {
-    
+
     const username = req.username;
     const difficulty = req.difficulty;
 
@@ -27,6 +27,5 @@ export async function matchHandler(req, userID) {
         resp.event = "matchFail";
         resp.message = "Matching failed."
     }
-
     return resp;
 }

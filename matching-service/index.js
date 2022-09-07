@@ -30,19 +30,22 @@ io.on('connection', (socket) => {
     sockets[userID] = socket;
     console.log("Connection established, socketID: ", socket.id);
 
-    socket.on("match", (req) => {
+    socket.on("match", (req, callback) => {
+        console.log("received event");
         socket.emit("connected");
-        const resp = matchHandler(req, userID);
-
-        if (resp.event == "matchSuccess") {
-            socket.join(resp.matchID);
-            sockets[resp.matchedUserID].join(resp.matchID);
-            io.to(resp.matchID).emit(resp.event, resp.message);
-        } else {
-            socket.emit(resp.event, resp.message);
-        }
+        matchHandler(req, userID)
+            .then((resp) => {
+                if (resp.event == "matchSuccess") {
+                    socket.join(resp.matchID);
+                    sockets[resp.matchedUserID].join(resp.matchID);
+                    io.to(resp.matchID).emit(resp.event, resp.message);
+                } else {
+                    console.log('Match Result: ' + JSON.stringify(resp));
+                    // socket.emit(resp.event, resp.message);
+                    callback(resp);
+                }
+            })
     })
-
 })
 
 httpServer.listen(8001);

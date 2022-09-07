@@ -8,22 +8,24 @@ import {
     Typography
 } from "@mui/material";
 import HeaderBar from "../common/HeaderBar";
-import { io_socket } from "../../api/socketApi";
-import { getUsername } from "../../api/cookieApi";
+import MatchingDialog from "../Dialogs/MatchingDialog";
+import React, { useState } from 'react';
 
 function LandingPage() {
 
-    const match = (level) => {
-        console.log('match');
-        console.log({username: getUsername(), difficulty: level});
-        io_socket.emit('match', {username: getUsername(), difficulty: level});
+    const [showMatchingDialog, setShowMatchingDialog] = useState(false);
+    const [level, setLevel] = useState('');
+
+    const handleCardSelect = (difficulty) => {
+        setLevel(difficulty);
+        setShowMatchingDialog(true);
     }
 
     const difficultyCard = (level) => {
         const imgUrl = "./static/" + level + ".png"
         return (
             <Card variant="outlined">
-                <CardActionArea sx={{p:3}} onClick={e => match(level)}>
+                <CardActionArea sx={{p:3}} onClick={e => handleCardSelect(level)}>
                     <CardMedia
                         component="img"
                         image={imgUrl}
@@ -61,6 +63,7 @@ function LandingPage() {
         <Box>
             <HeaderBar />
             {difficultySelection()}
+            {showMatchingDialog && <MatchingDialog open={showMatchingDialog} setOpen={setShowMatchingDialog} difficulty={level}/>}
         </Box>
 
     )
