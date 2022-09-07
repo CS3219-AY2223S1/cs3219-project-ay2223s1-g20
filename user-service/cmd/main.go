@@ -12,22 +12,24 @@ import (
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/db"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/jwt"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/logs"
-	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	if err := godotenv.Load(".env"); err != nil {
-		logs.WithError(err).Panicln("failed to load .env file")
+	envString, ok := os.LookupEnv("ENV")
+	if !ok {
+		if err := godotenv.Load(".env"); err != nil {
+			logs.WithError(err).Panicln("failed to load .env file")
+		}
 	}
-	env := cfg.ToEnv(os.Getenv("ENV"))
+
+	env := cfg.ToEnv(envString)
 	setupLogging(env)
 
-	connectToDB(env)
+	connectToDB()
 	defer db.Close()
 
-	cacheAddress := os.Getenv("CACHE_ADDRESS")
-	cache.Connect(cacheAddress)
+	connectToCache()
 	defer cache.Close()
 
 	jwtKey := []byte(os.Getenv("JWT_SECRET_KEY"))
@@ -35,17 +37,10 @@ func main() {
 
 	port := os.Getenv("PORT")
 
-	r := mux.NewRouter()
-	r.HandleFunc("/accounts", account.RegisterHandler).Methods(http.MethodPost, http.MethodOptions)
-	r.HandleFunc("/accounts/{username}", account.GetHandler).Methods(http.MethodGet, http.MethodOptions)
-	r.HandleFunc("/accounts/{username}", account.UpdateHandler).Methods(http.MethodPut, http.MethodOptions)
-	r.HandleFunc("/accounts/{username}", account.DeleteHandler).Methods(http.MethodDelete, http.MethodOptions)
-
-	r.HandleFunc("/login", account.LoginHandler).Methods(http.MethodPost, http.MethodOptions)
-	r.HandleFunc("/logout", account.LogoutHandler).Methods(http.MethodPost, http.MethodOptions)
+	router := account.NewRouter()
 	log.WithFields(log.Fields{"port": port}).Infof("service starting")
 
-	err := http.ListenAndServe(":"+port, r)
+	err := http.ListenAndServe(":"+port, router)
 	logs.WithError(err).Panic("service crashed")
 }
 
@@ -65,10 +60,16 @@ func setupLogging(env cfg.DeploymentEnvironment) {
 	}
 }
 
-func connectToDB(env cfg.DeploymentEnvironment) {
+func connectToDB() {
 	db_uri := os.Getenv("DB_URI")
+	db_name := os.Getenv("DB_NAME")
 
-	if err := db.Connect(db_uri); err != nil {
+	if err := db.Connect(db_uri, db_name); err != nil {
 		logs.WithError(err).WithFields(log.Fields{"db_uri": db_uri}).Panicln("failed to connect to database")
 	}
+}
+
+func connectToCache() {
+	cacheAddress := os.Getenv("CACHE_ADDRESS")
+	cache.Connect(cacheAddress)
 }
