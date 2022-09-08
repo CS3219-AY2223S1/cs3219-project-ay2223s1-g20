@@ -13,7 +13,7 @@ type Claims struct {
 
 var jwtKey []byte
 
-func Init(key []byte) {
+func SetKey(key []byte) {
 	jwtKey = key
 }
 

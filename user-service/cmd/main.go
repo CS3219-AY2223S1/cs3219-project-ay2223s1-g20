@@ -33,7 +33,7 @@ func main() {
 	defer cache.Close()
 
 	jwtKey := []byte(os.Getenv("JWT_SECRET_KEY"))
-	jwt.Init(jwtKey)
+	jwt.SetKey(jwtKey)
 
 	port := os.Getenv("PORT")
 
