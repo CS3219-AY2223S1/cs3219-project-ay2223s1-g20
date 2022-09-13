@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
     Box,
     Button,
@@ -20,19 +20,36 @@ import { MATCH_SUCCESS, MATCH_PENDING, MATCH_FAILED } from '../../util/constants
 export default function MatchingDialog(props) {
     const navigate = useNavigate();
 
-    const [matchStatus, setMatchStatus] = useState('');
+    const [matchStatus, setMatchStatus] = useState(MATCH_PENDING);
     const [description, setDescription] = useState('');
 
     const handleClose = () => {
         props.setOpen(false);
     };
 
+    const handleMatchFail = useCallback((message) => {
+        setMatchStatus(MATCH_FAILED);
+        setDescription(message);
+        console.log(MATCH_FAILED + ': ' + message);
+    }, []);
+
+    const handleMatchPending = useCallback((message) => {
+        setMatchStatus(MATCH_PENDING);
+        setDescription(message);
+        console.log(MATCH_PENDING + ': ' + message);
+    }, []);
+
+    const handleMatchSuccess = useCallback((message) => {
+        setMatchStatus(MATCH_SUCCESS);
+        setDescription(message);
+        console.log(MATCH_SUCCESS + ': ' + message);
+    }, []);
+
     const match = (level) => {
-        io_socket.emit('match', {username: getUsername(), difficulty: level}, function (response) {
-            console.log(response);
-            setMatchStatus(MATCH_SUCCESS);
-            setDescription(response.message);
-        });
+        io_socket.emit('match', {username: getUsername(), difficulty: level});
+        io_socket.on(MATCH_FAILED, handleMatchFail);
+        io_socket.on(MATCH_PENDING, handleMatchPending);
+        io_socket.on(MATCH_SUCCESS, handleMatchSuccess)
     }
 
     useEffect(() => {
