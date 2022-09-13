@@ -37,9 +37,10 @@ export async function createMatch(username1, username2, userID1, userID2, diffic
 // DO: remove target match from db
 // OUTPUT: return true if removed successfully, false otherwise
 export async function removeMatch(matchID) {
-    await Match.destory({
+    Match.destroy({
         where: { matchID: matchID }
-    });
+    }).catch()
+    console.log("[removeMatch] Match removed for Match of matchID=", matchID)
     return
 }
 
@@ -66,10 +67,11 @@ export async function findPendingMatch(difficulty) {
 // INPUT: username of the pendingMatch to be removed
 // DO: remove the entry from PendingMatch table
 // OUTPUT: return true if removed successfully, false otherwise
-export async function removePendingMatch(username) {
-    await PendingMatch.destory({
-        where: { username: username }
+export async function removePendingMatch(userID) {
+    await PendingMatch.destroy({
+        where: { userID: userID }
     });
+    console.log("[removePendingMatch] PendingMatch removed for username=", username)
     return;
 }
 
@@ -85,7 +87,8 @@ export async function checkIsMatched(username) {
             ]
         }
     });
-    if (match == null) {
+    console.log("[checkIsMatched] Query result=", match)
+    if (match.length == 0) {
         return false;
     } else {
         return true;
@@ -96,9 +99,23 @@ export async function checkIsMatched(username) {
 // OUTPUT: boolean
 export async function checkIsPending(username) {
     const pendingMatch = await PendingMatch.findOne({where: {username: username}});
+    console.log("[checkIsPending] Query result=", pendingMatch)
     if (pendingMatch == null) {
         return false;
     } else {
         return true;
     }
+}
+
+export async function findMatchFromUserID(userID) {
+    const match = await Match.findOne({
+        where: {
+            [Op.or]: [
+                { userID1: userID },
+                { userID2: userID }
+            ]
+        }
+    });
+    console.log("[findMatchFromUserID] res=", match)
+    return match;
 }
