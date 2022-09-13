@@ -2,12 +2,9 @@ import express from 'express';
 import { Server } from 'socket.io'
 import cors from 'cors';
 import { createServer } from 'http';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import { closeMatchHandler, matchHandler } from './controller/match-controller.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { matchHandler } from './controller/match-controller.js';
+import { instrument } from '@socket.io/admin-ui'
+import { handleLeaveEvent } from './controller/socket-controller.js';
 
 const app = express();
 app.use(express.urlencoded({ extended: true }))
@@ -21,57 +18,52 @@ app.get('/', (req, res) => {
 });
 
 const httpServer = createServer(app)
-const io = new Server(httpServer)
+const io = new Server(httpServer, {
+    cors: {
+        origin: ["https://admin.socket.io"],
+        credentials: true
+    }
+})
 
 
 io.on('connection', (socket) => {
     const userID = socket.id;
-    console.log("[socketIO] Connection established, socketID: ", socket.id);
+    console.log("[socketIO] Connection established, userID=", socket.id);
 
     socket.on("match", (req, callback) => {
-        console.log("[socketIO] Event received, event=match, req=", req);
+        console.log(`[socketIO] userID=${socket.id} requesting to match`);
         matchHandler(req, userID)
             .then((resp) => {
                 if (resp.event == "matchSuccess") {
                     socket.join(resp.matchID);
                     io.sockets.sockets.get(resp.matchedUserID).join(resp.matchID);
                     io.to(resp.matchID).emit(resp.event, resp.message);
-                    console.log("[matchSuccess] username1=", resp.username, " username2=", resp.matchedUsername, " have joined roomID= ", resp.matchID)
                 } else {
-                    console.log('Match Result: ' + JSON.stringify(resp));
-                    // socket.emit(resp.event, resp.message);
-                    callback(resp);
+                    socket.emit(resp.event, resp.message);
                 }
+                console.log(`[socketIO] matchResult=${resp.event}, resp=`, resp)
             })
     });
 
-    socket.on("leaveRoom", () => {
-        console.log("[socketIO] Event received, event=leaveRoom");
-        closeMatchHandler(socket.rooms);
-        for (roomID in socket.rooms) {
-            if (roomID != socket.id) {
-                io.socketsLeave(roomID);
-                // emit sth to tell them they have left
-            }
-        }
-        console.log(`[socketIO] All rooms of ${socket.id} have been closed.`);
+    socket.on("leave", () => {
+        console.log(`[socketIO] userID=${socket.id} requesting to leave, roomInfo=${socket.rooms}`);
+        handleLeaveEvent(io, socket);
+        console.log(`[socketIO] Rooms of ${socket.id} have been closed.`);
     })
 
     socket.on("disconnecting", () => {
-        
-        console.log("[socketIO] Event received, event=leaveRoom");
-        closeMatchHandler(socket.rooms);
-        for (roomID in socket.rooms) {
-            if (roomID != socket.id) {
-                io.socketsLeave(roomID);
-            }
-        }
-        console.log(`[] All rooms of ${socket.id} have been closed.`);
+        console.log(`[socketIO] userID=${socket.id} disconnecting, roomInfo=`, socket.rooms);
+        handleLeaveEvent(io, socket);
+        console.log(`[socketIO] userID=${socket.id} disconnecting, all relevant rooms closed`);
     })
 
     socket.on("disconnect", () => {
-        console.log(`[disconnect] ${socket.id} has disconnected.`);
+        console.log(`[socketIO] userID=${socket.id} disconnected.`);
     })
+})
+
+instrument(io, {
+    auth: false
 })
 
 httpServer.listen(8001);

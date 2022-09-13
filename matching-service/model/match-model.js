@@ -28,6 +28,6 @@ export function createMatchModel(sequelize) {
             allowNull: false
         }
     });
-    console.log("SUCCESS: Match Model initialized");
+    console.log("[Database] Match Model initialized");
     return Match;
 }

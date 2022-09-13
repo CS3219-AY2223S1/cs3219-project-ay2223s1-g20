@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes } from "sequelize";
+import { Sequelize } from "sequelize";
 import { createMatchModel } from "./match-model.js";
 import { genMatchId } from "../utils.js";
 import { createPendingMatchModel } from "./pendingmatch-model.js";
@@ -11,48 +11,61 @@ const sequelize = new Sequelize({
 
 try {
     await sequelize.authenticate();
-    console.log('Sequelize connection has been established successfully.');
+    console.log('[Database] Sequelize connection has been established successfully.');
 } catch (error) {
-    console.error('Unable to connect to sequelize:', error);
+    console.error('[Database] Unable to connect to sequelize:', error);
 }
 
 const Match = createMatchModel(sequelize);
 const PendingMatch = createPendingMatchModel(sequelize);
 
-await sequelize.sync({force: true}).then((result) => console.log("Database successfully initialized"));
+await sequelize.sync({force: true}).then((result) => console.log("[Database] Database successfully initialized"));
 
 export async function createMatch(username1, username2, userID1, userID2, difficulty) {
-    const newMatch = await Match.create({
-        matchID: genMatchId(userID1, userID2, difficulty),
-        username1: username1,
-        username2: username2,
-        userID1: userID1,
-        userID2: userID2,
-        difficulty: difficulty
-    });
-    return newMatch
+    var newMatch;
+    try {
+        newMatch = await Match.create({
+            matchID: genMatchId(userID1, userID2, difficulty),
+            username1: username1,
+            username2: username2,
+            userID1: userID1,
+            userID2: userID2,
+            difficulty: difficulty
+        });
+    } catch (err) {
+        console.log(`[createMatch] Create match failed for username1=${username1}, username2=${username2}, err=`, err)
+    } finally {
+        return newMatch;
+    }
 }
 
 // INPUT: matchID of a match (aka roomID for socket)
 // DO: remove target match from db
 // OUTPUT: return true if removed successfully, false otherwise
-export async function removeMatch(matchID) {
-    Match.destroy({
-        where: { matchID: matchID }
-    }).catch()
-    console.log("[removeMatch] Match removed for Match of matchID=", matchID)
-    return
+export function removeMatch(matchID) {
+    try {
+        Match.destroy({
+            where: { matchID: matchID }
+        });
+    } catch (err) {
+        console.log(`[removeMatch] Removal failed for matchID=${matchID}, err=`, err);
+    }
 }
 
 // INPUT: username and difficulty level of current user
 // DO: create new PendingMatch in database
 // OUTPUT: the pendingMatch object being created
 export async function createPendingMatch(userID, username, difficulty) {
-    const newPendingMatch = await PendingMatch.create({
-        userID: userID,
-        username: username,
-        difficulty: difficulty
-    });
+    var newPendingMatch;
+    try {
+        newPendingMatch = await PendingMatch.create({
+            userID: userID,
+            username: username,
+            difficulty: difficulty
+        });
+    } catch (err) {
+        console.log(`[createPendingMatch] Create pending match failed for username=${username}, err=`, err);
+    }
     return newPendingMatch;
 }
 
@@ -71,7 +84,6 @@ export async function removePendingMatch(userID) {
     await PendingMatch.destroy({
         where: { userID: userID }
     });
-    console.log("[removePendingMatch] PendingMatch removed for username=", username)
     return;
 }
 
@@ -87,7 +99,6 @@ export async function checkIsMatched(username) {
             ]
         }
     });
-    console.log("[checkIsMatched] Query result=", match)
     if (match.length == 0) {
         return false;
     } else {
@@ -99,7 +110,6 @@ export async function checkIsMatched(username) {
 // OUTPUT: boolean
 export async function checkIsPending(username) {
     const pendingMatch = await PendingMatch.findOne({where: {username: username}});
-    console.log("[checkIsPending] Query result=", pendingMatch)
     if (pendingMatch == null) {
         return false;
     } else {
@@ -116,6 +126,5 @@ export async function findMatchFromUserID(userID) {
             ]
         }
     });
-    console.log("[findMatchFromUserID] res=", match)
     return match;
 }

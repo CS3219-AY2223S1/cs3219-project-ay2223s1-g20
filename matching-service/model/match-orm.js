@@ -1,8 +1,13 @@
 import { MatchStatus } from "../utils.js";
 import { checkIsMatched, createMatch, createPendingMatch, findPendingMatch, removePendingMatch, checkIsPending, removeMatch, findMatchFromUserID } from "./repository.js";
+import { Mutex, withTimeout } from 'async-mutex'
+
+const matchMutex = new Mutex()
 
 export async function ormCreateMatch(username, userID, difficulty) {
     var matchResult = {}
+
+    const release = await matchMutex.acquire(); //prevent concurrent read and write operations to Match and PendingMatch
 
     // check if user has already being matched
     const isUserMatched = await checkIsMatched(username);
@@ -10,14 +15,17 @@ export async function ormCreateMatch(username, userID, difficulty) {
     if (isUserMatched == true) {
         matchResult.matchStatus = MatchStatus.MatchExists;
         console.log("[ormCreateMatch] Match exists for username=", username)
+        
+        release();
         return matchResult;
     }
 
     // check if user is already waiting to be matched
-    const isUserPending = await checkIsPending(username); // implement
+    const isUserPending = await checkIsPending(username);
     if (isUserPending == true) {
         matchResult.matchStatus = MatchStatus.MatchPending;
         console.log("[ormCreateMatch] PendingMatch exists for username=", username)
+        release();
         return matchResult
     }
 
@@ -30,12 +38,13 @@ export async function ormCreateMatch(username, userID, difficulty) {
         matchResult.userID = userID;
         matchResult.username = username;
         matchResult.difficulty = difficulty;
+        release();
         return matchResult;
     } else {
         console.log("[ormCreateMatch] Suitable match found, matchedUser=", matchedUser)
+        await removePendingMatch(matchedUser.userID);
         const match = await createMatch(username, matchedUser.username, userID, matchedUser.userID, difficulty);
         console.log('[ormCreateMatch] New Match created: ', match);
-        await removePendingMatch(matchedUser.userID);
         matchResult.matchStatus = MatchStatus.MatchSuccess;
         matchResult.matchID = match.matchID;
         matchResult.username = username;
@@ -43,6 +52,7 @@ export async function ormCreateMatch(username, userID, difficulty) {
         matchResult.userID = userID;
         matchResult.matchedUserID = matchedUser.userID;
         matchResult.difficulty = difficulty;
+        release();
         return matchResult;
     }
 }
@@ -61,7 +71,10 @@ export async function ormRemovePendingMatch(userID) {
 export async function ormCloseMatch(userID) {
     const match = await findMatchFromUserID(userID);
     if (match != null) {
-        await removeMatch(res.matchID);
+        const matchID = match.matchID;
+        await removeMatch(matchID);
+        console.log(`[ormCloseMatch] Match closed for matchID=${matchID}`)
     }
+    
     return;
 }

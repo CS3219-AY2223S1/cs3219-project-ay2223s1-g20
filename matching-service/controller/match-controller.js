@@ -37,16 +37,14 @@ export async function matchHandler(req, userID) {
     return resp;
 }
 
-export async function closeMatchHandler(userID, roomIDs) {
+export function closeMatchHandler(userID, roomIDs) {
     // close all related rooms. by right there should only be one roomID per user
     for (roomID in roomIDs) {
         if (roomID != userID) { // by default under socketio, a user joins a room with roomID=socketID
-            await ormCloseMatch(roomIDs);
+            ormCloseMatch(roomIDs);
         }
     }
-    
     // close all related pendingmatches if there is
-    await ormRemovePendingMatch(userID);
-
+    ormRemovePendingMatch(userID);
     return;
 }
