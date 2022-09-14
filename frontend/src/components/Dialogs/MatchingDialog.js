@@ -41,7 +41,9 @@ export default function MatchingDialog(props) {
 
     const handleMatchSuccess = useCallback((message) => {
         setMatchStatus(MATCH_SUCCESS);
-        setDescription(message);
+        setDescription(message.message);
+        // TODO: perform some action to store the room info
+        //...
         console.log(MATCH_SUCCESS + ': ' + message);
     }, []);
 

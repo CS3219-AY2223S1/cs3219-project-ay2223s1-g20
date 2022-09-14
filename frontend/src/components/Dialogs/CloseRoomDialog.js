@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import Loading from '../common/loading';
 import Completed from '../common/completed';
 
-export default function LeaveRoomDialog(props) {
+export default function CloseRoomDialog(props) {
     const navigate = useNavigate();
 
     const jwtToken = getJwtToken();
@@ -32,11 +32,11 @@ export default function LeaveRoomDialog(props) {
         props.setOpen(false);
     };
 
-    const LeaveRoomDialogContent = () => {
+    const CloseRoomDialogContent = () => {
         return (
             <>
                 <DialogTitle>
-                    <Typography variant={"h3"} class={"poppins"}>Leave Room</Typography>
+                    <Typography variant={"h3"} class={"poppins"}>Your partner left :&#40;</Typography>
                     <IconButton
                         aria-label="close"
                         onClick={handleClose}
@@ -52,13 +52,12 @@ export default function LeaveRoomDialog(props) {
                 </DialogTitle>
                 <DialogContent sx={{width:'30vw'}}>
                     <DialogContentText>
-                        <Typography variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro'}}>Are you sure you want to leave your room?</Typography>
-                        <Typography variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro'}}>This action cannot be undone.</Typography>
+                        <Typography variant={"body"} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro'}}>Do you want to continue working in this room?</Typography>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button variant={"contained"} onClick={props.handleLeaveRoom}>Leave Room</Button>
+                    <Button onClick={props.handleLeaveRoom}>Leave Room</Button>
+                    <Button variant={"contained"} onClick={handleClose}>Continue</Button>
                 </DialogActions>
             </>
         )
@@ -67,7 +66,7 @@ export default function LeaveRoomDialog(props) {
     return (
         <Dialog open={props.open} onClose={handleClose} sx={{minWidth:'30vw'}}>
             { loading && <Loading />}
-            { (!loading && !signoutCompleted) && <LeaveRoomDialogContent /> }
+            { (!loading && !signoutCompleted) && <CloseRoomDialogContent /> }
             { signoutCompleted && <Completed text={"You have been signed out. You will be redirected soon..."} />}
         </Dialog>
     );
