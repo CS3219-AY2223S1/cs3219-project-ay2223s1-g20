@@ -16,7 +16,11 @@
     "nodemon": "^2.0.19"
   },
   "dependencies": {
+    "@socket.io/admin-ui": "^0.4.0",
+    "async-mutex": "^0.4.0",
+    "bcrypt": "^5.0.1",
     "express": "^4.18.1",
+    "node": "^18.8.0",
     "sequelize": "^6.21.4",
     "socket.io": "^4.5.1",
     "sqlite3": "^5.0.11",
