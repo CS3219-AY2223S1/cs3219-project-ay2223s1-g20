@@ -49,7 +49,7 @@ export default function MatchingDialog(props) {
         io_socket.emit('match', {username: getUsername(), difficulty: level});
         io_socket.on(MATCH_FAILED, handleMatchFail);
         io_socket.on(MATCH_PENDING, handleMatchPending);
-        io_socket.on(MATCH_SUCCESS, handleMatchSuccess)
+        io_socket.on(MATCH_SUCCESS, handleMatchSuccess);
     }
 
     useEffect(() => {
@@ -153,7 +153,6 @@ export default function MatchingDialog(props) {
 
     return (
         <Dialog open={props.open} onClose={handleClose} sx={{minWidth:'30vw'}}>
-            { (matchStatus === '') && <Loading /> }
             { (matchStatus === MATCH_SUCCESS) && <MatchSuccessContent /> }
             { (matchStatus === MATCH_PENDING) && <MatchPendingContent /> }
             { (matchStatus === MATCH_FAILED) && <MatchFailedContent />}
