@@ -12,6 +12,7 @@ import LeaveRoomDialog from "../Dialogs/LeaveRoomDialog";
 import CloseRoomDialog from "../Dialogs/CloseRoomDialog";
 import { io_socket } from "../../api/socketApi";
 import { CLOSE_ROOM } from '../../util/constants';
+import { removeMatchID } from "../../api/localStorageApi";
 
 function CodingRoom() {
     const navigate = useNavigate();
@@ -23,7 +24,6 @@ function CodingRoom() {
 
     // ------- HANDLE LEAVE ROOM ------
     useEffect(() => {
-        console.log(location);
         if (location.pathname != '/room') {
             handleLeaveRoom();
         }
@@ -40,6 +40,7 @@ function CodingRoom() {
             console.log('emit leave event');
             io_socket.emit('leave');
         }
+        removeMatchID();
         navigate('/landing');
     }
 
@@ -70,7 +71,6 @@ function CodingRoom() {
 
     useEffect(() => {
         io_socket.on(CLOSE_ROOM, handleCloseRoom);
-        handleCloseRoom();
     }, [])
 
     const CodingRoomContent = () => {

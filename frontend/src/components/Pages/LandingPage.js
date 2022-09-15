@@ -63,7 +63,13 @@ function LandingPage() {
         <Box>
             <HeaderBar />
             {difficultySelection()}
-            {showMatchingDialog && <MatchingDialog open={showMatchingDialog} setOpen={setShowMatchingDialog} difficulty={level}/>}
+            {showMatchingDialog &&
+                <MatchingDialog
+                    open={showMatchingDialog}
+                    setOpen={setShowMatchingDialog}
+                    difficulty={level}
+                />
+            }
         </Box>
 
     )

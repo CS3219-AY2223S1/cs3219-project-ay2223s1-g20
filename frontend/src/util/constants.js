@@ -10,3 +10,6 @@ export const MATCH_SUCCESS = "matchSuccess"
 export const MATCH_PENDING = "matchPending"
 export const MATCH_FAILED = "matchFail"
 export const CLOSE_ROOM = "closeRoom"
+
+// ---- LOCAL STORAGE KEYS ----
+export const MATCH_ID = "matchID"
