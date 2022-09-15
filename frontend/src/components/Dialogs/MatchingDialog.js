@@ -29,6 +29,8 @@ export default function MatchingDialog(props) {
 
     const handleClose = () => {
         props.setOpen(false);
+        console.log('emit leave event');
+        io_socket.emit('leave');
     };
 
     const handleMatchFail = useCallback((message) => {
@@ -43,9 +45,9 @@ export default function MatchingDialog(props) {
         // console.log(MATCH_PENDING + ': ' + message);
     }, []);
 
-    const handleMatchSuccess = useCallback((response) => {
+    const handleMatchSuccess = useCallback((response, matchID) => {
         setMatchStatus(MATCH_SUCCESS);
-        // console.log(response);
+        console.log('here: ', response);
         setDescription(response.message);
         // TODO: perform some action to store the room info
         // setStorageValue(MATCH_ID, message.matchID);
@@ -56,7 +58,7 @@ export default function MatchingDialog(props) {
         io_socket.emit('match', {username: getUsername(), difficulty: level});
         io_socket.on(MATCH_FAILED, handleMatchFail);
         io_socket.on(MATCH_PENDING, handleMatchPending);
-        io_socket.on(MATCH_SUCCESS, (response) => handleMatchSuccess(response));
+        io_socket.on(MATCH_SUCCESS, ({response, matchID}) => handleMatchSuccess(response, matchID));
     }
 
     useEffect(() => {
