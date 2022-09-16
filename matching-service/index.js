@@ -38,6 +38,7 @@ io.on('connection', (socket) => {
                     socket.join(resp.matchID);
                     io.sockets.sockets.get(resp.matchedUserID).join(resp.matchID);
                     io.to(resp.matchID).emit(resp.event, resp.message);
+                    console.log(`[socketIO] MATCHSUCCESS, matchID=${resp.matchID}`)
                 } else {
                     socket.emit(resp.event, resp.message);
                 }
@@ -46,7 +47,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on("leave", () => {
-        console.log(`[socketIO] userID=${socket.id} requesting to leave, roomInfo=${socket.rooms}`);
+        console.log(`[socketIO] userID=${socket.id} requesting to leave, roomInfo=`, socket.rooms);
         handleLeaveEvent(io, socket);
         console.log(`[socketIO] Rooms of ${socket.id} have been closed.`);
     })

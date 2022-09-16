@@ -68,13 +68,9 @@ export async function ormRemovePendingMatch(userID) {
     return;
 }
 
-export async function ormCloseMatch(userID) {
-    const match = await findMatchFromUserID(userID);
-    if (match != null) {
-        const matchID = match.matchID;
-        await removeMatch(matchID);
-        console.log(`[ormCloseMatch] Match closed for matchID=${matchID}`)
-    }
-    
+export async function ormCloseMatch(matchID) {
+    console.log(`[ormCloseMatch] Removing match for matchID=${matchID}`);
+    await removeMatch(matchID);
+    console.log(`[ormCloseMatch] Match closed for matchID=${matchID}`);
     return;
 }
