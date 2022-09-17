@@ -17,13 +17,14 @@ import { useNavigate } from 'react-router-dom';
 import Loading from '../common/loading';
 import CircularProgress from '@mui/material/CircularProgress';
 import { MATCH_SUCCESS, MATCH_PENDING, MATCH_FAILED, MATCH_ID } from '../../util/constants';
-import { setStorageValue } from "../../api/localStorageApi";
+// import { setStorageValue } from "../../api/localStorageApi";
 
 export default function MatchingDialog(props) {
     const navigate = useNavigate();
 
     const [matchStatus, setMatchStatus] = useState(MATCH_PENDING);
     const [description, setDescription] = useState('');
+    const [matchID, setMatchID] = useState('');
     const [timer, setTimer] = useState(30);
     let countdown = null;
 
@@ -33,8 +34,7 @@ export default function MatchingDialog(props) {
         getSocket().emit('leave');
     };
 
-    const handleMatchFail = useCallback((event, message) => {
-        console.log(event, message);
+    const handleMatchFail = useCallback((message) => {
         setMatchStatus(MATCH_FAILED);
         setDescription(message);
         // console.log(MATCH_FAILED + ': ' + message);
@@ -46,13 +46,15 @@ export default function MatchingDialog(props) {
         // console.log(MATCH_PENDING + ': ' + message);
     }, []);
 
-    const handleMatchSuccess = useCallback((response, matchID) => {
+    const handleMatchSuccess = useCallback((response) => {
         setMatchStatus(MATCH_SUCCESS);
-        console.log('here: ', response);
         setDescription(response.message);
         // TODO: perform some action to store the room info
-        // setStorageValue(MATCH_ID, message.matchID);
-        // console.log(MATCH_SUCCESS + ': ' + response.message);
+        // setStorageValue(MATCH_ID, response.matchID);
+        // setMatchId(response.matchID);
+        setMatchID(response.matchID);
+        console.log(matchID);
+        console.log(MATCH_SUCCESS + ': ' + response.message);
     }, []);
 
     const match = (level) => {
@@ -86,7 +88,7 @@ export default function MatchingDialog(props) {
     useEffect(() => {
         if (matchStatus === MATCH_SUCCESS) {
             setTimeout(() => {
-                navigate("/room");
+                navigate("/room", {state:{matchID: matchID}})
             }, 3000)
         }
     }, [matchStatus])

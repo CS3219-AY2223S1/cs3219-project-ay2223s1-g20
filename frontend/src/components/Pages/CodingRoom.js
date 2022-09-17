@@ -10,9 +10,10 @@ import HeaderBar from "../common/HeaderBar";
 import {useNavigate} from "react-router-dom";
 import LeaveRoomDialog from "../Dialogs/LeaveRoomDialog";
 import CloseRoomDialog from "../Dialogs/CloseRoomDialog";
-import { getSocket, io_socket } from "../../api/socketApi";
+import { getSocket } from "../../api/socketApi";
 import { CLOSE_ROOM } from '../../util/constants';
-import { removeMatchID } from "../../api/localStorageApi";
+// import { removeMatchId, setMatchId } from "../../api/localStorageApi";
+import { isInRoom, removeMatchId, setMatchId }from "../../api/cookieApi"
 
 function CodingRoom() {
     const navigate = useNavigate();
@@ -40,7 +41,7 @@ function CodingRoom() {
             console.log('emit leave event');
             getSocket().emit('leave');
         }
-        removeMatchID();
+        removeMatchId();
         navigate('/landing');
     }
 
@@ -60,7 +61,7 @@ function CodingRoom() {
           window.removeEventListener('unload', handleLocationChange);
           window.removeEventListener('beforeunload', handleLocationChange);
         };
-      }, []);
+    }, []);
 
     // ----- HANDLE CLOSE ROOM -----
     const handleCloseRoom = () => {
@@ -73,13 +74,27 @@ function CodingRoom() {
         getSocket().on(CLOSE_ROOM, handleCloseRoom);
     }, [])
 
+    useEffect(() => {
+        if (location.state == null) {
+            if (!isInRoom()) {
+                navigate("/landing");
+            }
+        } else {
+            setMatchId(location.state.matchID);
+        }
+    })
+
+    const handleOnClick = () => {
+        setShowLeaveRoomDialog(true)
+    }
+
     const CodingRoomContent = () => {
         return (
             <Box display={"flex"} flexDirection={"column"} justifyContent="center" alignItems="center" minHeight="100vh">
                 <Box display={"flex"} flexDirection={"column"} justifyContent="center" alignItems="center" width="80vw">
                     <Typography variant={"h1"} class={"poppins"}>Let's start coding!</Typography>
                     <Box display={"flex"} width='100%' justifyContent="center" alignItems="center" sx={{marginTop:1}}>
-                        <Button variant={"contained"} onClick={(e) => {setShowLeaveRoomDialog(true)}} fullWidth>Leave Room</Button>
+                        <Button variant={"contained"} onClick={(e) => handleOnClick()} fullWidth>Leave Room</Button>
                     </Box>
                 </Box>
             </Box>
