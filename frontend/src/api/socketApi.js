@@ -6,9 +6,19 @@ export let io_socket = null;
 
 export const setSocket = (socket) => {
     io_socket = socket;
-    console.log(io_socket);
 }
 
 export const haveSocket = () => {
     return io_socket != null;
+}
+
+export const getSocket = () => {
+    if (!haveSocket()) {
+        console.log('socket connecting');
+        const socket = io(URI_MATCHING_SVC, { transports: ["websocket"] });
+        socket.connect();
+        setSocket(socket);
+    }
+    console.log(io_socket);
+    return io_socket;
 }

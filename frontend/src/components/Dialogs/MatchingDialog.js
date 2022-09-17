@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { getUsername } from '../../api/cookieApi';
-import { io_socket } from "../../api/socketApi";
+import { getSocket } from "../../api/socketApi";
 import { useNavigate } from 'react-router-dom';
 import Loading from '../common/loading';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -30,10 +30,11 @@ export default function MatchingDialog(props) {
     const handleClose = () => {
         props.setOpen(false);
         console.log('emit leave event');
-        io_socket.emit('leave');
+        getSocket().emit('leave');
     };
 
-    const handleMatchFail = useCallback((message) => {
+    const handleMatchFail = useCallback((event, message) => {
+        console.log(event, message);
         setMatchStatus(MATCH_FAILED);
         setDescription(message);
         // console.log(MATCH_FAILED + ': ' + message);
@@ -55,10 +56,11 @@ export default function MatchingDialog(props) {
     }, []);
 
     const match = (level) => {
+        const io_socket = getSocket();
         io_socket.emit('match', {username: getUsername(), difficulty: level});
         io_socket.on(MATCH_FAILED, handleMatchFail);
         io_socket.on(MATCH_PENDING, handleMatchPending);
-        io_socket.on(MATCH_SUCCESS, ({response, matchID}) => handleMatchSuccess(response, matchID));
+        io_socket.on(MATCH_SUCCESS, handleMatchSuccess);
     }
 
     useEffect(() => {
@@ -77,7 +79,7 @@ export default function MatchingDialog(props) {
             clearInterval(countdown);
             setMatchStatus(MATCH_FAILED);
             setDescription("Please try again later.");
-            io_socket.emit('leave');
+            getSocket().emit('leave');
         }
     }, [timer])
 

@@ -10,7 +10,7 @@ import LandingPage from "./components/Pages/LandingPage";
 import CodingRoom from "./components/Pages/CodingRoom";
 import LoginPage from "./components/Pages/LoginPage";
 import {PrivateRoute} from "./components/PrivateRoute";
-import { io_socket, haveSocket, setSocket } from "./api/socketApi";
+import { io_socket, getSocket } from "./api/socketApi";
 import { URI_MATCHING_SVC } from "./util/configs";
 
 function App() {
@@ -35,12 +35,11 @@ function App() {
     })
 
     useEffect(() => {
-        if (!haveSocket()) {
-            const socket = io(URI_MATCHING_SVC, { transports: ["websocket"] });
-            socket.connect();
-            setSocket(socket);
-        }
-        return () => io_socket.disconnect(); // end the connection with the app closes.
+        const io_socket = getSocket();
+        return () => {
+            console.log("disconnecting...");
+            io_socket.disconnect();
+        } // end the connection with the app closes.
     }, []);
 
     return (
