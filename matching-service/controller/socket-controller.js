@@ -9,8 +9,9 @@ export function handleLeaveEvent(io, socket) {
             }
             io.to(roomID).emit("closeRoom", resp);
             io.socketsLeave(roomID);
+            closeMatchHandler(socket.id, roomID);
             console.log(`[socketIO] Room closed for roomID=${roomID}`);
         }
     }) 
-    closeMatchHandler(socket.id, socket.rooms);
+    
 }
