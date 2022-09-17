@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
                 if (resp.event == "matchSuccess") {
                     socket.join(resp.matchID);
                     io.sockets.sockets.get(resp.matchedUserID).join(resp.matchID);
-                    io.to(resp.matchID).emit(resp.event, resp.message);
+                    io.to(resp.matchID).emit(resp.event, resp);
                     console.log(`[socketIO] MATCHSUCCESS, matchID=${resp.matchID}`)
                 } else {
                     socket.emit(resp.event, resp.message);
