@@ -37,9 +37,11 @@ export async function matchHandler(req, userID) {
     return resp;
 }
 
-export function closeMatchHandler(userID, matchID) {
+export function closeMatchHandler(userID, matchIDs) {
     // close all related rooms. by right there should only be one roomID per user
-    ormCloseMatch(matchID);
+    matchIDs.forEach(matchID => {
+        ormCloseMatch(matchID);
+    });
     // close all related pendingmatches if there is
     ormRemovePendingMatch(userID);
     return;

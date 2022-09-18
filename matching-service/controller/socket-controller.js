@@ -1,6 +1,7 @@
 import { closeMatchHandler } from "./match-controller.js";
 
 export function handleLeaveEvent(io, socket) {
+    closeMatchHandler(socket.id, socket.rooms);
     socket.rooms.forEach((roomID) => {
         if (roomID != socket.id) {
             var resp = {
@@ -9,7 +10,6 @@ export function handleLeaveEvent(io, socket) {
             }
             io.to(roomID).emit("closeRoom", resp);
             io.socketsLeave(roomID);
-            closeMatchHandler(socket.id, roomID);
             console.log(`[socketIO] Room closed for roomID=${roomID}`);
         }
     }) 
