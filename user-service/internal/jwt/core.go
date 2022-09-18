@@ -1,20 +1,27 @@
 package jwt
 
 import (
-	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
-
-var jwtKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 
 type Claims struct {
 	jwt.RegisteredClaims
 	Username string `json:"username"`
 }
 
+var jwtKey []byte
+
+func SetKey(key []byte) {
+	jwtKey = key
+}
+
 func New(username string, expirationTime time.Time) (string, error) {
+	if jwtKey == nil {
+		return "", ErrInvalidKey
+	}
+
 	claims := &Claims{
 		Username: username,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -27,6 +34,10 @@ func New(username string, expirationTime time.Time) (string, error) {
 }
 
 func VerifyAndParse(tokenString string, claims *Claims) (bool, error) {
+	if jwtKey == nil {
+		return false, ErrInvalidKey
+	}
+
 	token, err := jwt.ParseWithClaims(
 		tokenString,
 		claims,
@@ -35,7 +46,7 @@ func VerifyAndParse(tokenString string, claims *Claims) (bool, error) {
 		},
 	)
 	if err != nil {
-		return false, err
+		return false, nil
 	}
 
 	return token.Valid, nil

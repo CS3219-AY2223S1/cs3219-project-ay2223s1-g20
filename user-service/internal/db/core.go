@@ -10,11 +10,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func Connect(uri string) error {
+func Connect(uri, db_name string) error {
 	serverOptions := options.ServerAPI(options.ServerAPIVersion1)
 	clientOptions := options.Client().ApplyURI(uri).SetServerAPIOptions(serverOptions)
 	conf := &mgm.Config{CtxTimeout: 10 * time.Second}
-	if err := mgm.SetDefaultConfig(conf, "user_service", clientOptions); err != nil {
+	if err := mgm.SetDefaultConfig(conf, db_name, clientOptions); err != nil {
 		return err
 	}
 	return createCollections()

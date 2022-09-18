@@ -11,9 +11,9 @@ import (
 var rdb *redis.Client
 var c *cache.Cache
 
-func Connect() {
+func Connect(address string) {
 	rdb = redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr: address,
 	})
 
 	c = cache.New(&cache.Options{

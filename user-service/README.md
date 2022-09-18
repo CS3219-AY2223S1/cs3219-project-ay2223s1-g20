@@ -2,6 +2,10 @@
 
 The user service is responsible for maintaining information and authentication of users of PeerPrep.
 
+## API Specification
+
+See the [documentation](docs/api.md)
+
 ## Setup Guide for Local Deployment
 
 ### Prerequisites
@@ -11,14 +15,14 @@ The user service is responsible for maintaining information and authentication o
 3. [Redis](https://redis.io/docs/getting-started/installation/)
 4. `make`
 
-### Setup
+### Instructions
 
 1. Go to the user service directory
 ```shell
 cd user-service
 ```
 
-2. Duplicate the `.env.example` file and rename it to `.env`. Fill in the environment variables accordingly.
+2. Duplicate the `.env.dev` file and rename it to `.env`. Fill in the environment variables accordingly.
 
 3. Start MongoDB with
 ``` shell
@@ -51,6 +55,18 @@ make stop
 make stop-cache
 ```
 
-## API Specification
+## Deployment to Staging Environment
 
-See the [documentation](docs/api.md)
+### Prerequisites
+
+1. [Docker](https://www.docker.com/get-started/)
+2. [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Instructions
+
+1. Go to the project root directory
+
+2. Start the application with
+```shell
+docker-compose up -d
+```

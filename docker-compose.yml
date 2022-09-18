@@ -1,0 +1,29 @@
+services:
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user-service
+    ports:
+      - 8000:8000
+    links:
+    - mongodb
+    - redis
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    ports:
+    - 27017:27017
+    volumes:
+    - mongo:/data/db
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+    ports:
+    - 6379:6379
+    volumes:
+    - redis:/data
+    - ./user-service/config/redis.conf:/usr/local/etc/redis/redis.conf
+
+volumes:
+  mongo:
+  redis:

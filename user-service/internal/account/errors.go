@@ -2,10 +2,10 @@ package account
 
 import "errors"
 
-var ErrDuplicateUsername = errors.New("duplicate username")
+var errDuplicateUsername = errors.New("duplicate username")
 
-var ErrUnknownUsername = errors.New("unknown username")
+var errUnknownUsername = errors.New("unknown username")
 
-var ErrIncorrectPassword = errors.New("incorrect password")
+var errIncorrectPassword = errors.New("incorrect password")
 
-var ErrInvalidToken = errors.New("invalid token")
+var errInvalidToken = errors.New("invalid token")
