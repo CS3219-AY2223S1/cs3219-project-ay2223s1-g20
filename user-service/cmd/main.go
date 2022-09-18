@@ -1,50 +1,75 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"os"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/account"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/cache"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/cfg"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/db"
-	"github.com/gorilla/mux"
+	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/jwt"
+	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/logs"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	if err := godotenv.Load(".env"); err != nil {
-		panic(err)
-	}
-	env := cfg.ToEnv(os.Getenv("ENV"))
-	port := os.Getenv("PORT")
-
-	var db_uri string
-
-	switch env {
-	case cfg.DEV:
-		db_uri = os.Getenv("DB_LOCAL_URI")
-	case cfg.STAG, cfg.PROD:
-		db_uri = os.Getenv("DB_CLOUD_URI")
+	envString, ok := os.LookupEnv("ENV")
+	if !ok {
+		if err := godotenv.Load(".env"); err != nil {
+			logs.WithError(err).Panicln("failed to load .env file")
+		}
 	}
 
-	if err := db.Connect(db_uri); err != nil {
-		panic(err)
-	}
+	env := cfg.ToEnv(envString)
+	setupLogging(env)
+
+	connectToDB()
 	defer db.Close()
 
-	cache.Connect()
+	connectToCache()
 	defer cache.Close()
 
-	r := mux.NewRouter()
-	r.HandleFunc("/accounts", account.RegisterHandler).Methods(http.MethodPost, http.MethodOptions)
-	r.HandleFunc("/accounts/{username}", account.GetHandler).Methods(http.MethodGet, http.MethodOptions)
-	r.HandleFunc("/accounts/{username}", account.UpdateHandler).Methods(http.MethodPut, http.MethodOptions)
-	r.HandleFunc("/accounts/{username}", account.DeleteHandler).Methods(http.MethodDelete, http.MethodOptions)
+	jwtKey := []byte(os.Getenv("JWT_SECRET_KEY"))
+	jwt.SetKey(jwtKey)
 
-	r.HandleFunc("/login", account.LoginHandler).Methods(http.MethodPost, http.MethodOptions)
-	r.HandleFunc("/logout", account.LogoutHandler).Methods(http.MethodPost, http.MethodOptions)
-	log.Printf("User service listening on port %s", port)
-	log.Fatal(http.ListenAndServe(":"+port, r))
+	port := os.Getenv("PORT")
+
+	router := account.NewRouter()
+	log.WithFields(log.Fields{"port": port}).Infof("service starting")
+
+	err := http.ListenAndServe(":"+port, router)
+	logs.WithError(err).Panic("service crashed")
+}
+
+func setupLogging(env cfg.DeploymentEnvironment) {
+	switch env {
+	case cfg.DEV:
+		log.SetFormatter(&log.TextFormatter{
+			DisableColors: false,
+		})
+		log.SetLevel(log.InfoLevel)
+	case cfg.STAG, cfg.PROD:
+		log.SetFormatter(&log.JSONFormatter{})
+		log.SetLevel(log.WarnLevel)
+	default:
+		log.SetFormatter(&log.JSONFormatter{})
+		log.SetLevel(log.WarnLevel)
+	}
+}
+
+func connectToDB() {
+	db_uri := os.Getenv("DB_URI")
+	db_name := os.Getenv("DB_NAME")
+
+	if err := db.Connect(db_uri, db_name); err != nil {
+		logs.WithError(err).WithFields(log.Fields{"db_uri": db_uri}).Panicln("failed to connect to database")
+	}
+}
+
+func connectToCache() {
+	cacheAddress := os.Getenv("CACHE_ADDRESS")
+	cache.Connect(cacheAddress)
 }
