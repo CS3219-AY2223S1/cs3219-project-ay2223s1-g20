@@ -11,9 +11,10 @@ import {
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import IconButton from '@mui/material/IconButton';
 
-import ChangePasswordDialog from "../UserActionDialogs/ChangePasswordDialog";
-import DeleteAccountDialog from "../UserActionDialogs/DeleteAccountDialog";
-import SignOutDialog from "../UserActionDialogs/SignOutDialog";
+import ChangePasswordDialog from "../Dialogs/ChangePasswordDialog";
+import DeleteAccountDialog from "../Dialogs/DeleteAccountDialog";
+import SignOutDialog from "../Dialogs/SignOutDialog";
+import MatchingDialog from "../Dialogs/MatchingDialog";
 
 const menu = ['Delete Account', 'Change Password'];
 
