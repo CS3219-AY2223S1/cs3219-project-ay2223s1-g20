@@ -27,7 +27,6 @@ export default function ChangePasswordDialog (props) {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const [showErrorMsg, setShowErrorMsg] = useState(false)
-  // const [showPasswordNotSameErrorMsg, setPasswordNotSameErrorMsg] = useState(false)
   const [showNetworkErrorMsg, setShowNetworkErrorMsg] = useState(false)
   const [completedChangePassword, setCompletedChangePassword] = useState(false)
 
@@ -40,7 +39,6 @@ export default function ChangePasswordDialog (props) {
 
   const resetErrorMsgs = () => {
     setShowErrorMsg(false)
-    // setPasswordNotSameErrorMsg(false)
     setShowNetworkErrorMsg(false)
   }
 
@@ -66,7 +64,6 @@ export default function ChangePasswordDialog (props) {
       return
     } else {
       setShowErrorMsg(false)
-      // setPasswordNotSameErrorMsg(false)
     }
 
     // ---- SEND TO USER SERVICE ----
@@ -115,11 +112,6 @@ export default function ChangePasswordDialog (props) {
                     </IconButton>
                 </DialogTitle>
                 <DialogContent sx={{ width: '30vw' }}>
-                    {/* {showPasswordNotSameErrorMsg && (
-                        <Box display={'flex'} alignItems="left">
-                            <Typography variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro', color: 'red' }}>The two passwords do not match.</Typography>
-                        </Box>
-                    )} */}
                     {showErrorMsg && (
                         <Box display={'flex'} alignItems="left">
                             <Typography variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro', color: 'red' }}>{errorMsg}</Typography>
