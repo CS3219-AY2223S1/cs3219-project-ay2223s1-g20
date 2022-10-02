@@ -6,12 +6,12 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import HeaderBar from '../common/HeaderBar'
 import LeaveRoomDialog from '../Dialogs/LeaveRoomDialog'
 import CloseRoomDialog from '../Dialogs/CloseRoomDialog'
-import QuestionDrawer from '../Drawers/QuestionDrawer'
-import Editor from '../common/CodeEditor'
+import QuestionDrawer from '../CodingRoomComponents/QuestionDrawer'
+import ChatDrawer from '../CodingRoomComponents/ChatDrawer'
+import Editor from '../CodingRoomComponents/CodeEditor'
 import { getSocket } from '../../api/socketApi'
 import { CLOSE_ROOM } from '../../util/constants'
 import { isInRoom, removeMatchId, setMatchId } from '../../api/cookieApi'
-import ChatDrawer from '../Drawers/ChatDrawer'
 
 function CodingRoom () {
   const navigate = useNavigate()
