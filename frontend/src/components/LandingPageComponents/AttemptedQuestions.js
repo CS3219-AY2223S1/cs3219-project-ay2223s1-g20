@@ -51,7 +51,7 @@ function AttemptedQuestions () {
   }
 
   return (
-    <Box display={'flex'} flexDirection={'row'} justifyContent="center" alignItems="flex-start" minHeight="100vh" mt={8}>
+    <Box display={'flex'} flexDirection={'row'} justifyContent="center" alignItems="flex-start" minHeight="80vh" mt={8}>
         <Box display={'flex'} flexDirection={'column'} justifyContent="center" alignItems="center" width="40vw">
             <Typography variant={'h2'} class={'poppins'}>Attempted Questions</Typography>
             <QuestionTable />
