@@ -30,7 +30,7 @@ function QuestionDrawer () {
 
   const BottomBar = () => {
     return (
-        <Box sx={{ position: 'fixed', left: 0, bottom: 0, right: 0 }} display={'flex'} justifyContent="center" alignItems="center" mb={1} width={drawerWidth}>
+        <Box sx={{ position: 'fixed', left: 0, bottom: 0, right: 0 }} bgcolor="white" display={'flex'} justifyContent="center" alignItems="center" m={1} width={'22vw'}>
           <Button variant={'outlined'}>Change Question</Button>
         </Box>
     )
@@ -38,7 +38,7 @@ function QuestionDrawer () {
 
   const QuestionContent = () => {
     return (
-      <Box display={'flex'} flexDirection={'column'} px={2}>
+      <Box display={'flex'} flexDirection={'column'} px={2} mb={10}>
         <Typography variant={'h2'} class={'poppins'}>{questionTitle}</Typography>
         <Typography variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Poppins', color: 'MediumSeaGreen' }}>{difficulty}</Typography>
         <Divider sx={{ paddingY: 1 }}/>

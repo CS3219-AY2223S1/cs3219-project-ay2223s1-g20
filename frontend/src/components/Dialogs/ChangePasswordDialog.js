@@ -114,7 +114,7 @@ export default function ChangePasswordDialog (props) {
                         <CloseIcon />
                     </IconButton>
                 </DialogTitle>
-                <DialogContent sx={{ width: '30vw' }}>
+                <DialogContent sx={{ width: '40vw' }}>
                     {showPasswordNotSameErrorMsg && (
                         <Box display={'flex'} alignItems="left">
                             <Typography variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro', color: 'red' }}>The two passwords do not match.</Typography>
@@ -177,7 +177,7 @@ export default function ChangePasswordDialog (props) {
   }
 
   return (
-        <Dialog open={props.open} onClose={handleClose} sx={{ minWidth: '40vw' }} alignItems="center" justifyContent="center">
+        <Dialog open={props.open} onClose={handleClose} sx={{ minWidth: '50vw' }} alignItems="center" justifyContent="center">
             { loading && Loading() }
             { (!loading && !completedChangePassword) && ChangePasswordDialogContent()}
             { completedChangePassword && <Completed text={'Your password has been changed.'} />}
