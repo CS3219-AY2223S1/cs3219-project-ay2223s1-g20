@@ -24,26 +24,26 @@ jobs:
       - name: Install dependencies
         run: cd frontend && npm install
 
-      - name: Start
-        run: cd frontend && npm run start
+      - name: Build
+        run: cd frontend && npm run build
 
-  matching-service:
-    name: Matching Service
-    runs-on: ubuntu-latest
+  # matching-service:
+  #   name: Matching Service
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - name: Set up Node.js 
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16.x'
+  #     - name: Set up Node.js 
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.x'
 
-      - name: Install dependencies
-        run: cd matching-service && npm install
+  #     - name: Install dependencies
+  #       run: cd matching-service && npm install
 
-      - name: Start
-        run: cd matching-service && npm run start
+  #     - name: Start
+  #       run: cd matching-service && npm run start
 
   user-service:
     name: User Service
