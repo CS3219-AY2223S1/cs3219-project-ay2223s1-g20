@@ -22,10 +22,10 @@ jobs:
           node-version: '12.x'
 
       - name: Install dependencies
-        run: npm install
+        run: cd frontend && npm install
 
       - name: Start
-        run: npm run start
+        run: cd frontend && npm run start
 
   matching-service:
     name: Matching Service
@@ -40,10 +40,10 @@ jobs:
           node-version: '16.x'
 
       - name: Install dependencies
-        run: npm install
+        run: cd matching-service && npm install
 
       - name: Start
-        run: npm run start
+        run: cd matching-service && npm run start
 
   user-service:
     name: User Service
@@ -71,7 +71,7 @@ jobs:
           redis-version: '6.0'
 
       - name: Test
-        run: cd user-service/cmd && go test -v ./...
+        run: cd user-service && go test -v ./...
         env:
           DB_URI: "mongodb://localhost:27017"
           DB_NAME: "user_service_test"
