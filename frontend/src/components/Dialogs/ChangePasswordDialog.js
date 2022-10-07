@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { USER_SVC_PREFIX, ACCOUNTS } from '../../util/configs'
-import { STATUS_CODE_SUCCESS } from '../../util/constants'
+import { STATUS_CODE_SUCCESS, ERR_INCORRECT_PASSWORD, ERR_UNKNOWN_USERNAME } from '../../util/constants'
 import { put } from '../../api/baseApi'
 import { getUsername, getJwtToken, isAuthenticated } from '../../api/cookieApi'
 import Loading from '../common/loading'
@@ -40,6 +40,16 @@ export default function ChangePasswordDialog (props) {
   const resetErrorMsgs = () => {
     setShowErrorMsg(false)
     setShowNetworkErrorMsg(false)
+  }
+
+  const getErrorMsgToDisplay = (err) => {
+    if (err === ERR_INCORRECT_PASSWORD) {
+      return 'The old password is incorrect.'
+    } else if (err === ERR_UNKNOWN_USERNAME) {
+      return 'Username is incorrect.'
+    } else {
+      return 'Something went wrong.'
+    }
   }
 
   const handlePasswordChange = async () => {
@@ -79,8 +89,6 @@ export default function ChangePasswordDialog (props) {
     const response = await put(USER_SVC_PREFIX + ACCOUNTS + username, json)
     const data = await response.json()
     setLoading(false)
-    console.log(response)
-    console.log(data)
 
     if (response.status === STATUS_CODE_SUCCESS) {
       setCompletedChangePassword(true)
@@ -88,7 +96,7 @@ export default function ChangePasswordDialog (props) {
         handleClose()
       }, 3000)
     } else {
-      setErrorMsg(data.err)
+      setErrorMsg(getErrorMsgToDisplay(data.err))
       setShowErrorMsg(true)
     }
   }
