@@ -31,8 +31,8 @@ export async function deleteUser(socketId) {
     await client.del(`SocketId:${socketId}`)
 }
 
-export async function saveSession(sessionId, username1, username2, difficulty) {
-    await client.hSet(sessionId, {username1, username2, difficulty})
+export async function saveSession(sessionId, socketId1, socketId2, difficulty) {
+    await client.hSet(sessionId, {socketId1, socketId2, difficulty})
 }
 
 export async function getSession(sessionId) {
