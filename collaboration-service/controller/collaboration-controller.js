@@ -20,16 +20,19 @@ export async function handleCollaborationEvents(io) {
         })
 
         socket.on('sendChanges', async (code) => {
+            console.log(`[socketIO] socketId=${socket.id} sending changes`)
             const sessionId = await getSessionId(socket.id)
             io.to(sessionId).emit('updateChanges', code)
         })
 
         socket.on('changeQuestion', async () => {
+            console.log(`[socketIO] socketId=${socket.id} requesting to change question`)
             const matchSocketId = await getMatchSocketId(socket.id)
             io.sockets.sockets.get(matchSocketId).emit('changeQuestionReq')
         })
 
         socket.on('changeQuestionRsp', async (result) => {
+            console.log(`[socketIO] socketId=${socket.id} responding to change question`)
             socket.emit('changeQuestionRes', result)
             if (result == true) {
                 // 1. Select new question with difficulty level
@@ -42,6 +45,7 @@ export async function handleCollaborationEvents(io) {
         })
 
         socket.on('leaveRoom', async () => {
+            console.log(`[socketIO] socketId=${socket.id} requesting to leave`)
             // 1. get sessionId, close room for socket
             const sessionId = await getSessionId(socket.id)
             io.socketsLeave(sessionId)
@@ -54,6 +58,7 @@ export async function handleCollaborationEvents(io) {
         })
 
         socket.on('disconnecting', async () => {
+            console.log(`[socketIO] socketId=${socket.id} disconnecting`)
             // 1. get sessionId, close room for socket
             const sessionId = await getSessionId(socket.id)
             io.socketsLeave(sessionId)
@@ -66,7 +71,7 @@ export async function handleCollaborationEvents(io) {
         })
 
         socket.on('disconnect', () => {
-
+            console.log(`[socketIO] socketId=${socket.id} disconnected`)
         })
     })
 }

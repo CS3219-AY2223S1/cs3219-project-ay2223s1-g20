@@ -11,8 +11,11 @@ export async function initSession(socketId, roomId, username, difficulty) {
         await saveSession(sessionId, socketId, sessionReq.socketId, difficulty)
         res.matchSocketId = sessionReq.socketId
         res.sessionId = sessionId
+
+        console.log(`[initSession] Session created for sessionId=${sessionId}, socketId1=${socketId}, socketId2=${sessionReq.socketId}, diffculty=${difficulty}`)
     } else {
         await saveSessionRequest(socketId, roomId, username)
+        console.log(`[initSession] SessionReq save for socketId=${socketId}, roomId=${roomId}, username=${username}`)
     }
     res.isSessionReqExist = isSessionReqExist
     return res
