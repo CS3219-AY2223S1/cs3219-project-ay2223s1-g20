@@ -1,23 +1,16 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   Box,
   Button,
   Paper
 } from '@mui/material'
-import CodeMirror from 'codemirror'
+import CodeMirror from '@uiw/react-codemirror'
+import { javascript } from '@codemirror/lang-javascript'
 
 function Editor (props) {
-  useEffect(() => {
-    const editor = CodeMirror.fromTextArea(document.getElementById('ds'), {
-      lineNumbers: true,
-      keyMap: 'sublime',
-      theme: 'material-ocean',
-      mode: 'javascript'
-    })
-
-    editor.on('cursorActivity', (instance) => {
-      console.log(instance.cursorCoords())
-    })
+  const onChange = React.useCallback((value, viewUpdate) => {
+    console.log('value changed')
+    // add code to send to collab service here
   }, [])
 
   const BottomBar = () => {
@@ -32,21 +25,13 @@ function Editor (props) {
 
   return (
     <Box height={'100%'} width={'100%'}>
-      <textarea id="ds" />
-      {/* <CodeEditor
-        value={code}
-        language="js"
-        placeholder="Please enter JS code."
-        onChange={(evn) => setCode(evn.target.value)}
-        padding={10}
-        style={{
-          height: '100%',
-          width: '100%',
-          fontSize: 12,
-          backgroundColor: '#f5f5f5',
-          fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace'
-        }}
-      /> */}
+      <CodeMirror
+        value="console.log('hello world!');"
+        height="85vh"
+        extensions={[javascript({ jsx: true })]}
+        onChange={onChange}
+      />
+
       <BottomBar />
     </Box>
 
