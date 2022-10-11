@@ -20,6 +20,7 @@ function Editor (props) {
   }
 
   const handleUpdateCode = useCallback((code) => {
+    console.log('code updating...')
     console.log(code)
     // update local code
     setCode(code)
