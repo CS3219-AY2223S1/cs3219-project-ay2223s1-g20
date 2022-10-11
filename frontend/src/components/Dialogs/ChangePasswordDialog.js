@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { USER_SVC_PREFIX, ACCOUNTS } from '../../util/configs'
-import { STATUS_CODE_SUCCESS } from '../../util/constants'
+import { STATUS_CODE_SUCCESS, ERR_INCORRECT_PASSWORD, ERR_UNKNOWN_USERNAME } from '../../util/constants'
 import { put } from '../../api/baseApi'
 import { getUsername, getJwtToken, isAuthenticated } from '../../api/cookieApi'
 import Loading from '../common/loading'
@@ -25,8 +25,8 @@ export default function ChangePasswordDialog (props) {
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [errorMsg, setErrorMsg] = useState('')
   const [showErrorMsg, setShowErrorMsg] = useState(false)
-  const [showPasswordNotSameErrorMsg, setPasswordNotSameErrorMsg] = useState(false)
   const [showNetworkErrorMsg, setShowNetworkErrorMsg] = useState(false)
   const [completedChangePassword, setCompletedChangePassword] = useState(false)
 
@@ -39,11 +39,20 @@ export default function ChangePasswordDialog (props) {
 
   const resetErrorMsgs = () => {
     setShowErrorMsg(false)
-    setPasswordNotSameErrorMsg(false)
     setShowNetworkErrorMsg(false)
   }
 
-  const handlePasswordChange = () => {
+  const getErrorMsgToDisplay = (err) => {
+    if (err === ERR_INCORRECT_PASSWORD) {
+      return 'The old password is incorrect.'
+    } else if (err === ERR_UNKNOWN_USERNAME) {
+      return 'Username is incorrect.'
+    } else {
+      return 'Something went wrong.'
+    }
+  }
+
+  const handlePasswordChange = async () => {
     if (!isAuthenticated()) {
       navigate('/login', { state: { error: true } })
       return
@@ -56,14 +65,15 @@ export default function ChangePasswordDialog (props) {
     const passwordNotSame = newPassword !== confirmPassword
 
     if (anyFieldNotFilled) {
+      setErrorMsg('Please fill in all fields.')
       setShowErrorMsg(true)
       return
     } else if (passwordNotSame) {
-      setPasswordNotSameErrorMsg(true)
+      setErrorMsg('The two passwords do not match.')
+      setShowErrorMsg(true)
       return
     } else {
       setShowErrorMsg(false)
-      setPasswordNotSameErrorMsg(false)
     }
 
     // ---- SEND TO USER SERVICE ----
@@ -76,24 +86,19 @@ export default function ChangePasswordDialog (props) {
     console.log(json)
 
     setLoading(true)
-    const response = put(USER_SVC_PREFIX + ACCOUNTS + username, json)
+    const response = await put(USER_SVC_PREFIX + ACCOUNTS + username, json)
+    const data = await response.json()
     setLoading(false)
 
-    response
-      .then((res) => {
-        if (res.status !== STATUS_CODE_SUCCESS) {
-          setShowNetworkErrorMsg(true)
-          return
-        }
-        return res
-      })
-      .then(res => res.json())
-      .then(res => {
-        setCompletedChangePassword(true)
-        setTimeout(() => {
-          handleClose()
-        }, 3000)
-      })
+    if (response.status === STATUS_CODE_SUCCESS) {
+      setCompletedChangePassword(true)
+      setTimeout(() => {
+        handleClose()
+      }, 3000)
+    } else {
+      setErrorMsg(getErrorMsgToDisplay(data.err))
+      setShowErrorMsg(true)
+    }
   }
 
   const ChangePasswordDialogContent = () => {
@@ -114,15 +119,10 @@ export default function ChangePasswordDialog (props) {
                         <CloseIcon />
                     </IconButton>
                 </DialogTitle>
-                <DialogContent sx={{ width: '40vw' }}>
-                    {showPasswordNotSameErrorMsg && (
-                        <Box display={'flex'} alignItems="left">
-                            <Typography variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro', color: 'red' }}>The two passwords do not match.</Typography>
-                        </Box>
-                    )}
+                <DialogContent sx={{ width: '30vw' }}>
                     {showErrorMsg && (
                         <Box display={'flex'} alignItems="left">
-                            <Typography variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro', color: 'red' }}>Please fill in all fields.</Typography>
+                            <Typography variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro', color: 'red' }}>{errorMsg}</Typography>
                         </Box>
                     )}
                     <TextField
@@ -177,8 +177,8 @@ export default function ChangePasswordDialog (props) {
   }
 
   return (
-        <Dialog open={props.open} onClose={handleClose} sx={{ minWidth: '50vw' }} alignItems="center" justifyContent="center">
-            { loading && Loading() }
+        <Dialog open={props.open} onClose={handleClose} sx={{ minWidth: '40vw' }} alignItems="center" justifyContent="center">
+            { loading && <Loading /> }
             { (!loading && !completedChangePassword) && ChangePasswordDialogContent()}
             { completedChangePassword && <Completed text={'Your password has been changed.'} />}
         </Dialog>
