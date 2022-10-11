@@ -1,15 +1,24 @@
-import CodeEditor from '@uiw/react-textarea-code-editor'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   Box,
   Button,
   Paper
 } from '@mui/material'
+import CodeMirror from 'codemirror'
 
 function Editor (props) {
-  const [code, setCode] = React.useState(
-    'function add(a, b) {\n  return a + b;\n}'
-  )
+  useEffect(() => {
+    const editor = CodeMirror.fromTextArea(document.getElementById('ds'), {
+      lineNumbers: true,
+      keyMap: 'sublime',
+      theme: 'material-ocean',
+      mode: 'javascript'
+    })
+
+    editor.on('cursorActivity', (instance) => {
+      console.log(instance.cursorCoords())
+    })
+  }, [])
 
   const BottomBar = () => {
     return (
@@ -23,7 +32,8 @@ function Editor (props) {
 
   return (
     <Box height={'100%'} width={'100%'}>
-      <CodeEditor
+      <textarea id="ds" />
+      {/* <CodeEditor
         value={code}
         language="js"
         placeholder="Please enter JS code."
@@ -36,7 +46,7 @@ function Editor (props) {
           backgroundColor: '#f5f5f5',
           fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace'
         }}
-      />
+      /> */}
       <BottomBar />
     </Box>
 
