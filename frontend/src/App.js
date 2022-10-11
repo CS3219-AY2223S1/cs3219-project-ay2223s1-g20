@@ -9,7 +9,7 @@ import LandingPage from './components/Pages/LandingPage'
 import CodingRoom from './components/Pages/CodingRoom'
 import LoginPage from './components/Pages/LoginPage'
 import { PrivateRoute } from './components/PrivateRoute'
-import { getSocket } from './api/socketApi'
+import { getCollabSocket, getMatchingSocket } from './api/socketApi'
 
 function App () {
   const theme = createTheme({
@@ -33,10 +33,12 @@ function App () {
   })
 
   useEffect(() => {
-    const ioSocket = getSocket()
+    const matchingSocket = getMatchingSocket()
+    const collabSocket = getCollabSocket()
     return () => {
       console.log('disconnecting...')
-      ioSocket.disconnect()
+      matchingSocket.disconnect()
+      collabSocket.disconnect()
     } // end the connection with the app closes.
   }, [])
 

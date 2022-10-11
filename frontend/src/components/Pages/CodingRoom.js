@@ -9,7 +9,7 @@ import CloseRoomDialog from '../Dialogs/CloseRoomDialog'
 import QuestionDrawer from '../CodingRoomComponents/QuestionDrawer'
 import ChatDrawer from '../CodingRoomComponents/ChatDrawer'
 import Editor from '../CodingRoomComponents/CodeEditor'
-import { getSocket } from '../../api/socketApi'
+import { getMatchingSocket } from '../../api/socketApi'
 import { CLOSE_ROOM } from '../../util/constants'
 import { isInRoom, removeMatchId, setMatchId } from '../../api/cookieApi'
 
@@ -37,7 +37,7 @@ function CodingRoom () {
   const handleLeaveRoom = () => {
     if (isInPair) {
       console.log('emit leave event')
-      getSocket().emit('leave')
+      getMatchingSocket().emit('leave')
     }
     removeMatchId()
     navigate('/landing')
@@ -69,7 +69,7 @@ function CodingRoom () {
   }
 
   useEffect(() => {
-    getSocket().on(CLOSE_ROOM, handleCloseRoom)
+    getMatchingSocket().on(CLOSE_ROOM, handleCloseRoom)
   }, [])
 
   useEffect(() => {

@@ -25,4 +25,16 @@ module.exports = function (app) {
       }
     })
   )
+  app.use(
+    createProxyMiddleware('/collab', {
+      target: 'http://localhost:8002', // Collaboration Service
+      changeOrigin: true,
+      pathRewrite: {
+        '^/collab': ''
+      },
+      headers: {
+        Connection: 'keep-alive'
+      }
+    })
+  )
 }

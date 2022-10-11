@@ -8,7 +8,7 @@ import {
   Typography
 } from '@mui/material'
 import { getUsername } from '../../api/cookieApi'
-import { getSocket } from '../../api/socketApi'
+import { getMatchingSocket } from '../../api/socketApi'
 import { useNavigate } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
 import { MATCH_SUCCESS, MATCH_PENDING, MATCH_FAILED } from '../../util/constants'
@@ -26,7 +26,7 @@ export default function MatchingDialog (props) {
   const handleClose = () => {
     props.setOpen(false)
     console.log('emit leave event')
-    getSocket().emit('leave')
+    getMatchingSocket().emit('leave')
   }
 
   const handleMatchFail = useCallback((message) => {
@@ -53,11 +53,11 @@ export default function MatchingDialog (props) {
   }, [])
 
   const match = (level) => {
-    const ioSocket = getSocket()
-    ioSocket.emit('match', { username: getUsername(), difficulty: level })
-    ioSocket.on(MATCH_FAILED, handleMatchFail)
-    ioSocket.on(MATCH_PENDING, handleMatchPending)
-    ioSocket.on(MATCH_SUCCESS, handleMatchSuccess)
+    const matchingSocket = getMatchingSocket()
+    matchingSocket.emit('match', { username: getUsername(), difficulty: level })
+    matchingSocket.on(MATCH_FAILED, handleMatchFail)
+    matchingSocket.on(MATCH_PENDING, handleMatchPending)
+    matchingSocket.on(MATCH_SUCCESS, handleMatchSuccess)
   }
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function MatchingDialog (props) {
       clearInterval(countdown)
       setMatchStatus(MATCH_FAILED)
       setDescription('Please try again later.')
-      getSocket().emit('leave')
+      getMatchingSocket().emit('leave')
     }
   }, [timer])
 
