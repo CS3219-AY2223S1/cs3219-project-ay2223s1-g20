@@ -23,7 +23,8 @@ function App () {
         fontFamily: 'Raleway'
       },
       h4: {
-        fontFamily: 'Montserrat'
+        fontFamily: 'Montserrat',
+        fontSize: '1.2rem'
       },
       body: {
         fontSize: '20'
