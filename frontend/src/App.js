@@ -9,7 +9,7 @@ import LandingPage from './components/Pages/LandingPage'
 import CodingRoom from './components/Pages/CodingRoom'
 import LoginPage from './components/Pages/LoginPage'
 import { PrivateRoute } from './components/PrivateRoute'
-import { getCollabSocket, getMatchingSocket } from './api/socketApi'
+import { getMatchingSocket, getCollabSocket } from './api/socketApi'
 
 function App () {
   const theme = createTheme({

@@ -1,7 +1,7 @@
 import {
   Box
 } from '@mui/material'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import HeaderBar from '../common/HeaderBar'
 import LeaveRoomDialog from '../Dialogs/LeaveRoomDialog'
@@ -9,17 +9,34 @@ import CloseRoomDialog from '../Dialogs/CloseRoomDialog'
 import QuestionDrawer from '../CodingRoomComponents/QuestionDrawer'
 import ChatDrawer from '../CodingRoomComponents/ChatDrawer'
 import Editor from '../CodingRoomComponents/CodeEditor'
-import { getMatchingSocket } from '../../api/socketApi'
+import { getCollabSocket, getMatchingSocket } from '../../api/socketApi'
 import { CLOSE_ROOM } from '../../util/constants'
-import { isInRoom, removeMatchId, setMatchId } from '../../api/cookieApi'
+import { isInRoom, removeMatchId, setMatchId, getUsername } from '../../api/cookieApi'
 
 function CodingRoom () {
   const navigate = useNavigate()
   const location = useLocation()
+  const matchId = location.state.matchID
+  const difficulty = location.state.difficulty
 
   const [showLeaveRoomDialog, setShowLeaveRoomDialog] = useState(false)
   const [showCloseRoomDialog, setShowCloseRoomDialog] = useState(false)
   const [isInPair, setIsInPair] = useState(true)
+
+  // ------- HANDLE COLLAB START SESSION ------
+  useEffect(() => {
+    startCollabSession()
+  }, [])
+
+  const startCollabSession = () => {
+    const collabSocket = getCollabSocket()
+    collabSocket.emit('startSession', { roomId: matchId, username: getUsername(), difficulty: difficulty })
+    collabSocket.on('sessionSuccess', handleSessionStartSuccess)
+  }
+
+  const handleSessionStartSuccess = useCallback((message) => {
+    console.log(message)
+  }, [])
 
   // ------- HANDLE LEAVE ROOM ------
   useEffect(() => {

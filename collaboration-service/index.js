@@ -3,7 +3,7 @@ import { Server } from 'socket.io'
 import cors from 'cors';
 import { createServer } from 'http';
 import { instrument } from '@socket.io/admin-ui'
-//import { handleCollaborationEvents } from './controller/collaboration-controller';
+import { handleCollaborationEvents } from './controller/collaboration-controller.js';
 import { deleteSession, getSession, saveSession } from './model/repository.js';
 
 const app = express();
@@ -28,7 +28,7 @@ instrument(io, {
     auth: false
 })
 
-//handleCollaborationEvents(io)
+handleCollaborationEvents(io)
 // await saveSession("room1", "xuanqi1", "xuanqi2", "tough")
 // const res = await getSession("room1")
 // console.log("Result from redis: ", res)

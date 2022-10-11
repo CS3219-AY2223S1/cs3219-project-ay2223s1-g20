@@ -1,12 +1,13 @@
-import { getDifficultyLevelForUser, getMatchSocketId, getSessionId, initSession } from "../model/collaboration-model";
+import { getDifficultyLevelForUser, getMatchSocketId, getSessionId, initSession } from "../model/collaboration-model.js";
 import { Server } from 'socket.io'
-import { deleteSession, deleteUser, getSession } from "../model/repository";
+import { deleteSession, deleteUser, getSession } from "../model/repository.js";
 
 export async function handleCollaborationEvents(io) {
     io.on('connection', (socket) => {
         console.log("[socketIO] Connection established, socketId=", socket.id)
 
         socket.on('startSession', async (roomId, username, difficulty) => {
+            console.log(roomId)
             console.log(`[socketIO] socketId=${socket.id} requesting to start session`)
             const res = await initSession(socket.id, roomId, username, difficulty)
             // res = {isSessionReqExist: true, otherSocketId: 123, sessionId: 123, questionNumber: 1}
@@ -22,6 +23,7 @@ export async function handleCollaborationEvents(io) {
         socket.on('sendChanges', async (code) => {
             console.log(`[socketIO] socketId=${socket.id} sending changes`)
             const sessionId = await getSessionId(socket.id)
+            console.log(sessionId) // returning undefined
             io.to(sessionId).emit('updateChanges', code)
         })
 

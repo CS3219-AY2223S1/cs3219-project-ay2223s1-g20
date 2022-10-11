@@ -1,16 +1,34 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   Box,
   Button,
   Paper
 } from '@mui/material'
 import CodeMirror from '@uiw/react-codemirror'
+import { getCollabSocket } from '../../api/socketApi'
 import { javascript } from '@codemirror/lang-javascript'
 
 function Editor (props) {
+  const [code, setCode] = useState('console.log(\'hello world!\');')
+  useEffect(() => {
+    startCollabSession()
+  }, [])
+
+  const startCollabSession = () => {
+    const collabSocket = getCollabSocket()
+    collabSocket.on('updateChanges', handleUpdateCode)
+  }
+
+  const handleUpdateCode = useCallback((code) => {
+    console.log(code)
+    // update local code
+    setCode(code)
+  }, [])
+
   const onChange = React.useCallback((value, viewUpdate) => {
-    console.log('value changed')
+    console.log('value changed, sending event...')
     // add code to send to collab service here
+    getCollabSocket().emit('sendChanges', code)
   }, [])
 
   const BottomBar = () => {
@@ -26,7 +44,7 @@ function Editor (props) {
   return (
     <Box height={'100%'} width={'100%'}>
       <CodeMirror
-        value="console.log('hello world!');"
+        value={code}
         height="85vh"
         extensions={[javascript({ jsx: true })]}
         onChange={onChange}
