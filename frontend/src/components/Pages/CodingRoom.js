@@ -55,6 +55,7 @@ function CodingRoom () {
     if (isInPair) {
       console.log('emit leave event')
       getMatchingSocket().emit('leave')
+      getCollabSocket().emit('leaveRoom')
     }
     removeMatchId()
     navigate('/landing')
