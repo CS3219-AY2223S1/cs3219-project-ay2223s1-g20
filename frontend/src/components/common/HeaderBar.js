@@ -69,7 +69,7 @@ function HeaderBar () {
   }
 
   return (
-        <AppBar position="fixed" color="transparent" elevation={0} sx={{ borderBottom: 0.5, borderColor: 'lightgray' }}>
+        <AppBar position="fixed" color="inherit" elevation={0} sx={{ borderBottom: 0.5, borderColor: 'lightgray', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Toolbar>
                 <Typography variant={'h1'} sx={{ flexGrow: 1, fontSize: '64', fontFamily: 'Raleway' }}>PeerPrep</Typography>
                 <Box sx={{ flexGrow: 0 }}>

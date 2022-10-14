@@ -1,17 +1,16 @@
 import {
-  Box,
-  Button,
-  Typography
+  Box
 } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import HeaderBar from '../common/HeaderBar'
-
 import LeaveRoomDialog from '../Dialogs/LeaveRoomDialog'
 import CloseRoomDialog from '../Dialogs/CloseRoomDialog'
+import QuestionDrawer from '../CodingRoomComponents/QuestionDrawer'
+import ChatDrawer from '../CodingRoomComponents/ChatDrawer'
+import Editor from '../CodingRoomComponents/CodeEditor'
 import { getSocket } from '../../api/socketApi'
 import { CLOSE_ROOM } from '../../util/constants'
-// import { removeMatchId, setMatchId } from "../../api/localStorageApi";
 import { isInRoom, removeMatchId, setMatchId } from '../../api/cookieApi'
 
 function CodingRoom () {
@@ -89,14 +88,15 @@ function CodingRoom () {
 
   const CodingRoomContent = () => {
     return (
-            <Box display={'flex'} flexDirection={'column'} justifyContent="center" alignItems="center" minHeight="100vh">
-                <Box display={'flex'} flexDirection={'column'} justifyContent="center" alignItems="center" width="80vw">
-                    <Typography variant={'h1'} class={'poppins'}>{"Let's start coding!"}</Typography>
-                    <Box display={'flex'} width='100%' justifyContent="center" alignItems="center" sx={{ marginTop: 1 }}>
-                        <Button variant={'contained'} onClick={(e) => handleOnClick()} fullWidth>Leave Room</Button>
-                    </Box>
-                </Box>
-            </Box>
+      <Box display={'flex'} flexDirection={'horizontal'}>
+          <QuestionDrawer />
+
+          <Box display={'flex'} justifyContent="center" alignItems="center" width="50vw" sx={{ mt: '65px', height: 'calc(100vh - 65px)' }}>
+            <Editor handleOnClick={handleOnClick}/>
+          </Box>
+
+          <ChatDrawer />
+      </Box>
     )
   }
 
