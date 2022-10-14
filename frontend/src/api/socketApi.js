@@ -1,8 +1,9 @@
-import { URI_MATCHING_SVC, URI_COLLAB_SVC } from '../util/configs'
+import { URI_MATCHING_SVC, URI_COLLAB_SVC, URI_QUESTION_SVC } from '../util/configs'
 import io from 'socket.io-client'
 
 export let matchingSocket = null
 export let collabSocket = null
+export let questionSocket = null
 
 // ----- MATCHING SOCKET -----
 export const setMatchingSocket = (socket) => {
@@ -42,4 +43,24 @@ export const getCollabSocket = () => {
   }
   console.log('collabsocket: ', collabSocket)
   return collabSocket
+}
+
+// ----- QUESTION SOCKET -----
+export const setQuestionSocket = (socket) => {
+  questionSocket = socket
+}
+
+export const haveQuestionSocket = () => {
+  return questionSocket != null
+}
+
+export const getQuestionSocket = () => {
+  if (!haveQuestionSocket()) {
+    console.log('questionSocket connecting')
+    const questionSocket = io(URI_QUESTION_SVC, { transports: ['websocket'] })
+    questionSocket.connect()
+    setQuestionSocket(questionSocket)
+  }
+  console.log('questionsocket: ', questionSocket)
+  return questionSocket
 }

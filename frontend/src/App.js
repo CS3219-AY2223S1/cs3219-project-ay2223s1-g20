@@ -35,10 +35,12 @@ function App () {
   useEffect(() => {
     const matchingSocket = getMatchingSocket()
     const collabSocket = getCollabSocket()
+    // const questionSocket = getQuestionSocket()
     return () => {
       console.log('disconnecting...')
       matchingSocket.disconnect()
       collabSocket.disconnect()
+      // questionSocket.disconnect()
     } // end the connection with the app closes.
   }, [])
 

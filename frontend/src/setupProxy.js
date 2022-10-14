@@ -37,4 +37,16 @@ module.exports = function (app) {
       }
     })
   )
+  app.use(
+    createProxyMiddleware('/question', {
+      target: 'http://localhost:8003', // Question Service
+      changeOrigin: true,
+      pathRewrite: {
+        '^/question': ''
+      },
+      headers: {
+        Connection: 'keep-alive'
+      }
+    })
+  )
 }

@@ -7,6 +7,8 @@ import {
   Toolbar,
   Typography
 } from '@mui/material'
+import ChangeQuestionDialog from '../Dialogs/ChangeQuestionDialog'
+import { getCollabSocket } from '../../api/socketApi'
 
 function QuestionDrawer () {
   const drawerWidth = '25vw'
@@ -14,6 +16,8 @@ function QuestionDrawer () {
   const [difficulty, setDifficulty] = useState('')
   const [questionDescription, setQuestionDescription] = useState('')
   const [questionExamples, setQuestionExamples] = useState([])
+  const [openQuestionDialog, setOpenQuestionDialog] = useState(false)
+  const [questionDialogType, setQuestionDialogType] = useState('request')
 
   useEffect(() => {
     setQuestionTitle('Two Sum')
@@ -28,10 +32,20 @@ function QuestionDrawer () {
     setQuestionExamples(examples)
   }, [])
 
+  useEffect(() => {
+    const collabSocket = getCollabSocket()
+    collabSocket.on('changeQuestionReq', () => openDialog('receive'))
+  }, [])
+
+  const openDialog = (type) => {
+    setQuestionDialogType(type)
+    setOpenQuestionDialog(true)
+  }
+
   const BottomBar = () => {
     return (
         <Box sx={{ position: 'fixed', left: 0, bottom: 0, right: 0 }} bgcolor="white" display={'flex'} justifyContent="center" alignItems="center" m={1} width={'22vw'}>
-          <Button variant={'outlined'}>Change Question</Button>
+          <Button variant={'outlined'} onClick={() => openDialog('request')}>Change Question</Button>
         </Box>
     )
   }
@@ -48,14 +62,14 @@ function QuestionDrawer () {
         </Box>
 
         {
-            questionExamples.map((example, index) => (
-                <Box key={index}>
-                    <Typography variant={'body'} class={'source'} style={{ fontWeight: 600 }}>Example {index + 1}</Typography>
-                    <Box component="span" sx={{ display: 'block', bgcolor: 'WhiteSmoke', borderRadius: '2px' }} p={1} my={0.5}>
-                        <Typography style={{ whiteSpace: 'pre-line' }} class={'code'}>{example}</Typography>
-                    </Box>
-                </Box>
-            ))
+          questionExamples.map((example, index) => (
+              <Box key={index}>
+                  <Typography variant={'body'} class={'source'} style={{ fontWeight: 600 }}>Example {index + 1}</Typography>
+                  <Box component="span" sx={{ display: 'block', bgcolor: 'WhiteSmoke', borderRadius: '2px' }} p={1} my={0.5}>
+                      <Typography style={{ whiteSpace: 'pre-line' }} class={'code'}>{example}</Typography>
+                  </Box>
+              </Box>
+          ))
         }
       </Box>
     )
@@ -71,6 +85,7 @@ function QuestionDrawer () {
     }}
     >
         <Box flexDirection={'column'}>
+            { openQuestionDialog && <ChangeQuestionDialog open={openQuestionDialog} setOpen={setOpenQuestionDialog} type={questionDialogType}/>}
             <Toolbar />
             <QuestionContent />
             <BottomBar />

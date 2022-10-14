@@ -7,6 +7,9 @@ export const URI_MATCHING_SVC = process.env.URI_MATCHING_SVC || 'http://localhos
 export const COLLAB_SVC_PREFIX = '/collab'
 export const URI_COLLAB_SVC = process.env.URI_COLLAB_SVC || 'http://localhost:8002'
 
+export const QUESTION_SVC_PREFIX = '/question'
+export const URI_QUESTION_SVC = process.env.URI_QUESTION_SVC || 'http://localhost:8003'
+
 export const REGISTER = '/accounts'
 export const LOG_IN = '/login'
 export const LOG_OUT = '/logout'
