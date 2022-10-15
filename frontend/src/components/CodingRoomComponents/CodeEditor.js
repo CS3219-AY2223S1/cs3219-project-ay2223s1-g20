@@ -20,16 +20,11 @@ function Editor (props) {
   }
 
   const handleUpdateCode = useCallback((code) => {
-    console.log('code updating...')
-    console.log(code)
-    // update local code
     setCode(code)
   }, [])
 
   const onChange = React.useCallback((value, viewUpdate) => {
-    console.log('value changed, sending event...')
-    // add code to send to collab service here
-    getCollabSocket().emit('sendChanges', code)
+    getCollabSocket().emit('sendChanges', value)
   }, [])
 
   const BottomBar = () => {

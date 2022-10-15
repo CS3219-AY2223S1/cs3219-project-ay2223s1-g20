@@ -16,8 +16,7 @@ import { getCollabSocket } from '../../api/socketApi'
 import Completed from '../common/completed'
 
 export default function ChangeQuestionDialog (props) {
-  const [awaitingUserRsp, setawaitingUserRsp] = useState(false)
-  const [awaitingNewQn, setAwaitingNewQn] = useState(false)
+  const [dialogToShow, setDialogToShow] = useState(props.type)
 
   useEffect(() => {
     const collabSocket = getCollabSocket()
@@ -34,12 +33,12 @@ export default function ChangeQuestionDialog (props) {
   const requestQuestionChange = () => {
     console.log('requested question change')
     getCollabSocket().emit('changeQuestion')
-    setawaitingUserRsp(true)
+    setDialogToShow('waitingPartner')
   }
 
   const handleResponse = useCallback((rsp) => {
     console.log('Response from second user: ', rsp)
-    setAwaitingNewQn(rsp)
+    setDialogToShow(rsp ? 'waitingQuestion' : 'rejected')
   }, [])
 
   const rejectQuestionChange = () => {
@@ -51,7 +50,7 @@ export default function ChangeQuestionDialog (props) {
   const acceptQuestionChange = () => {
     console.log('accept question change')
     getCollabSocket().emit('changeQuestionRsp', true)
-    setAwaitingNewQn(true)
+    setDialogToShow('waitingQuestion')
   }
 
   const RequestChangeDialogContent = () => {
@@ -121,6 +120,7 @@ export default function ChangeQuestionDialog (props) {
   }
 
   const AwaitingResponseDialogContent = (text) => {
+    console.log(text)
     return (
       <Box display={'flex'} justifyContent="center" alignItems="center" flexDirection="column" sx={{ width: '30vw', height: '20vh' }}>
         <DialogContent sx={{ width: '30vw', height: '20vh' }}>
@@ -129,7 +129,7 @@ export default function ChangeQuestionDialog (props) {
             </Box>
             <DialogTitle>
                 <Box display={'flex'} justifyContent="center" alignItems="center">
-                    <Typography variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro' }}>{text}</Typography>
+                    <Typography variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro' }}>{text.text}</Typography>
                 </Box>
             </DialogTitle>
         </DialogContent>
@@ -139,12 +139,12 @@ export default function ChangeQuestionDialog (props) {
 
   return (
         <Dialog open={props.open} onClose={handleClose} sx={{ minWidth: '30vw' }}>
-          { props.type === 'request' && !awaitingUserRsp && <RequestChangeDialogContent /> }
-          { props.type === 'receive' && !awaitingUserRsp && <ReceiveChangeDialogContent /> }
+          { dialogToShow === 'request' && <RequestChangeDialogContent /> }
+          { dialogToShow === 'receive' && <ReceiveChangeDialogContent /> }
 
-          { awaitingUserRsp && < AwaitingResponseDialogContent text={'Waiting for your partner to respond...'}/> }
-          { awaitingNewQn && < AwaitingResponseDialogContent text={'Waiting for new question...'}/> }
-          { !awaitingNewQn && <Completed text={'Your partner does not want to change the question!'} />}
+          { dialogToShow === 'waitingPartner' && <AwaitingResponseDialogContent text='Waiting for your partner...' /> }
+          { dialogToShow === 'waitingQuestion' && <AwaitingResponseDialogContent text='Waiting for new question...' /> }
+          { dialogToShow === 'rejected' && <Completed text='Your partner does not want to change the question!' />}
         </Dialog>
   )
 }
