@@ -3,16 +3,11 @@ import { Server } from 'socket.io'
 import cors from 'cors';
 import { createServer } from 'http';
 import { instrument } from '@socket.io/admin-ui'
-<<<<<<< HEAD
-import { handleCollaborationEvents } from './controller/collaboration-controller.js';
-import { deleteSession, getSession, saveSession } from './model/repository.js';
-=======
 //import { handleCollaborationEvents } from './controller/collaboration-controller';
 import { checkSessionExists, checkSessionReqExists, checkUserExists, deleteSession, deleteUser, getSession, getSessionRequest, getUser, saveSession, saveSessionRequest, saveUser } from './model/repository.js';
 import { generateSessionId, getDifficultyLevelForUser, getMatchSocketId, getSessionId, initSession } from './model/collaboration-model.js';
 import assert from 'assert';
 import { handleCollaborationEvents } from './controller/collaboration-controller.js';
->>>>>>> origin/collab/backend
 
 const app = express();
 app.use(express.urlencoded({ extended: true }))
@@ -37,14 +32,6 @@ instrument(io, {
 })
 
 handleCollaborationEvents(io)
-<<<<<<< HEAD
-// await saveSession("room1", "xuanqi1", "xuanqi2", "tough")
-// const res = await getSession("room1")
-// console.log("Result from redis: ", res)
-// deleteSession("room1")
-=======
-
->>>>>>> origin/collab/backend
 httpServer.listen(8002);
 
 // // Test for session functionalities
