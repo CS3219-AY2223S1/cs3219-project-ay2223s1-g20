@@ -35,7 +35,10 @@ export async function handleCollaborationEvents(io) {
 
         socket.on('changeQuestionRsp', async (result) => {
             console.log(`[socketIO, changeQuestionRsp] socketId=${socket.id} responding to change question`)
-            socket.emit('changeQuestionRes', result)
+
+            const matchSocketId = await getMatchSocketId(socket.id)
+            io.sockets.sockets.get(matchSocketId).emit('changeQuestionRes', result)
+
             if (result == true) {
                 // 1. Select new question with difficulty level
                 const difficulty = await getDifficultyLevelForUser(socket.id)
