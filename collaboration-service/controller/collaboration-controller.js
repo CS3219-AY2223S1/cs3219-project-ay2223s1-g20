@@ -1,15 +1,14 @@
-import { getDifficultyLevelForUser, getMatchSocketId, getSessionId, initSession } from "../model/collaboration-model";
-import { Server } from 'socket.io'
-import { deleteSession, deleteUser, getSession } from "../model/repository";
+import { getDifficultyLevelForUser, getMatchSocketId, getSessionId, initSession } from "../model/collaboration-model.js";
+import { deleteSession, deleteUser, getSession } from "../model/repository.js";
 
 export async function handleCollaborationEvents(io) {
     io.on('connection', (socket) => {
         console.log("[socketIO] Connection established, socketId=", socket.id)
 
         socket.on('startSession', async (roomId, username, difficulty) => {
-            console.log(`[socketIO] socketId=${socket.id} requesting to start session`)
+            console.log(`[socketIO] socketId=${socket.id} requesting to start session, roomId=${roomId}, username=${username}, difficulty=${difficulty}`)
             const res = await initSession(socket.id, roomId, username, difficulty)
-            // res = {isSessionReqExist: true, otherSocketId: 123, sessionId: 123, questionNumber: 1}
+            // res = {isSessionReqExist: true, otherSocketId: 123, sessionId: 123}
             if (res.isSessionReqExist == true) {
                 const questionNumber = selectQuestion(difficulty) // change to async after API is done
                 socket.join(res.sessionId)
@@ -46,28 +45,32 @@ export async function handleCollaborationEvents(io) {
 
         socket.on('leaveRoom', async () => {
             console.log(`[socketIO] socketId=${socket.id} requesting to leave`)
-            // 1. get sessionId, close room for socket
             const sessionId = await getSessionId(socket.id)
-            io.socketsLeave(sessionId)
-            // 2. get userInfo for both users, remove both users from redis
-            const {socketId1, socketId2, difficulty} = await getSession(sessionId)
-            deleteUser(socketId1)
-            deleteUser(socketId2)
-            // 3. get sessionInfo, remove session from redis
-            deleteSession(sessionId)
+            if (sessionId != null) {
+                io.socketsLeave(sessionId)
+                // 2. get userInfo for both users, remove both users from redis
+                const {socketId1, socketId2, difficulty} = await getSession(sessionId)
+                deleteUser(socketId1)
+                deleteUser(socketId2)
+                // 3. get sessionInfo, remove session from redis
+                deleteSession(sessionId)
+            }
         })
 
         socket.on('disconnecting', async () => {
             console.log(`[socketIO] socketId=${socket.id} disconnecting`)
             // 1. get sessionId, close room for socket
             const sessionId = await getSessionId(socket.id)
-            io.socketsLeave(sessionId)
-            // 2. get userInfo for both users, remove both users from redis
-            const {socketId1, socketId2, difficulty} = await getSession(sessionId)
-            deleteUser(socketId1)
-            deleteUser(socketId2)
-            // 3. get sessionInfo, remove session from redis
-            deleteSession(sessionId)
+            if (sessionId != null) {
+                io.socketsLeave(sessionId)
+                // 2. get userInfo for both users, remove both users from redis
+                const {socketId1, socketId2, difficulty} = await getSession(sessionId)
+                deleteUser(socketId1)
+                deleteUser(socketId2)
+                // 3. get sessionInfo, remove session from redis
+                deleteSession(sessionId)
+            }
+            console.log(`[socketIO] socketId=${socket.id} disconnecting done`)
         })
 
         socket.on('disconnect', () => {
