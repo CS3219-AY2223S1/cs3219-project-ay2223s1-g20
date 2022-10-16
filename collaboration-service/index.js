@@ -33,7 +33,9 @@ instrument(io, {
 
 handleCollaborationEvents(io)
 
-httpServer.listen(8002);
+const port = process.env.PORT || 8002;
+
+httpServer.listen(port);
 
 // // Test for session functionalities
 // const SOCKETID1 = "xuanqi123243243"

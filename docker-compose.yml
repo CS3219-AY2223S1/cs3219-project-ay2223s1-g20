@@ -8,9 +8,11 @@ services:
     links:
     - user-service
     - matching-service
+    - collaboration-service
     environment:
     - URI_USER_SVC=http://user-service:8000
     - URI_MATCHING_SVC=http://matching-service:8001
+    - URI_COLLAB_SVC=http://collaboration-service:8002
   user-service:
     container_name: user-service
     build:
@@ -26,6 +28,16 @@ services:
       context: ./matching-service
     ports:
       - 8001:8001
+  collaboration-service:
+    container_name: collaboration-service
+    build:
+      context: ./collaboration-service
+    ports:
+      - 8002:8002
+    links:
+    - redis
+    environment:
+    - REDIS_URL=redis://redis:6379
   mongodb:
     container_name: mongodb
     image: mongo
