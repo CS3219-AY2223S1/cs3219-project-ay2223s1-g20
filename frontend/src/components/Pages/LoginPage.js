@@ -6,6 +6,8 @@ import {
   TextField,
   Typography
 } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import React, { useEffect, useState } from 'react'
 import { USER_SVC_PREFIX, LOG_IN } from '../../util/configs'
 import { STATUS_CODE_UNAUTHORIZED, STATUS_CODE_NOT_FOUND, STATUS_CODE_SUCCESS } from '../../util/constants'
@@ -16,11 +18,15 @@ import { setJwtAndUsernameCookie, isAuthenticated } from '../../api/cookieApi'
 function LoginPage (props) {
   const navigate = useNavigate()
   const location = useLocation()
+  const theme = useTheme()
   const [showAuthorisationError, setShowAuthorisationError] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showErrorMsg, setShowErrorMsg] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+
+  const largeScreen = useMediaQuery(theme.breakpoints.up('md'))
+  const smallScreen = useMediaQuery(theme.breakpoints.up('xs'))
 
   useEffect(() => {
     if (isAuthenticated()) {
@@ -83,7 +89,7 @@ function LoginPage (props) {
                 <Typography variant={'h1'} sx={{ fontSize: '4rem', fontFamily: 'Raleway' }}>PeerPrep</Typography>
             </Box>
 
-            <Card variant="outlined" sx={{ p: 4, width: '30vw' }}>
+            <Card variant="outlined" sx={{ p: 4, width: largeScreen ? '30vw' : '50vw' }}>
                 <CardContent>
                     <Box display={'flex'} justifyContent="center" alignItems="center">
                         <Typography variant={'h2'} class={'poppins'}>Log In</Typography>
@@ -93,7 +99,7 @@ function LoginPage (props) {
                         <Typography variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro', color: 'red' }}>Please login again.</Typography>
                     </Box>)}
 
-                    <Box display={'flex'} justifyContent="center" alignItems="center">
+                    <Box display={'flex'} flexDirection={smallScreen ? 'row' : 'column'} justifyContent="center" alignItems="center">
                         <Typography variant={'h4'} class={'montserrat'}>New User? &nbsp;</Typography>
                         <Link to="/signup" variant={'h4'} class={'montserrat'}>Create a new account.</Link>
                     </Box>
