@@ -1,6 +1,7 @@
 import { getDifficultyLevelForUser, getMatchSocketId, getSessionId, initSession } from "../model/collaboration-model.js";
 import { Server } from 'socket.io'
 import { deleteSession, deleteUser, getSession } from "../model/repository.js";
+import fetch from 'node-fetch';
 
 export async function handleCollaborationEvents(io) {
     io.on('connection', (socket) => {
@@ -78,6 +79,22 @@ export async function handleCollaborationEvents(io) {
     })
 }
 
-function selectQuestion(difficulty) { //TODO: wait for implementation from Question Service
-    return 1
+// function selectQuestion(difficulty) { //TODO: wait for implementation from Question Service
+//     return 1
+// }
+
+function selectQuestion(difficulty) {
+    return fetch('http://localhost:8383/question/difficulty/'+difficulty, { 
+        method: 'get',
+        headers: { 'Content-Type': 'text/plain' },
+    }).then(res => res.text())
+        .then((response)=>{
+            console.log("fetch from question service")
+            console.log(response)
+            return {
+                data: response
+            }
+        }).catch((error) => {
+            throw new Error("Unable to retrieve question")
+        })
 }
