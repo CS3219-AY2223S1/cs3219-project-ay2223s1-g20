@@ -22,6 +22,11 @@ code {
   font-size: small;
 }
 
+.code {
+  font-family: 'Fira Mono', monospace;
+  font-size: small;
+}
+
 .montserrat {
   font-family: 'Montserrat', sans-serif;
   font-size: small;

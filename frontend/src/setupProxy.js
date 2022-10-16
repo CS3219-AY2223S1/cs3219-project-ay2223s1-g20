@@ -3,7 +3,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware')
 module.exports = function (app) {
   app.use(
     createProxyMiddleware('/user', {
-      target: 'http://localhost:8000', // User Service
+      target: process.env.URI_USER_SVC || 'http://localhost:8000', // User Service
       changeOrigin: true,
       pathRewrite: {
         '^/user': ''
@@ -15,7 +15,7 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/matching', {
-      target: 'http://localhost:8001', // Matching Service
+      target: process.env.URI_MATCHING_SVC || 'http://localhost:8001', // Matching Service
       changeOrigin: true,
       pathRewrite: {
         '^/matching': ''
