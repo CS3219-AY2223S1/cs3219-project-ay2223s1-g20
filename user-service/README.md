@@ -39,8 +39,9 @@ You should see a `mongodb-community` service with status `started`
 make start-cache
 ```
 
-5. Build the app with
+5. In another terminal, go to the user service directory and build the app with
 ```shell
+cd user-service
 make
 ```
 
@@ -49,11 +50,7 @@ make
 make start
 ```
 
-7. Stop the app and cache with 
-```shell
-make stop
-make stop-cache
-```
+7. Stop the app and cache using `CTRL+C`.
 
 ## Deployment to Staging Environment
 
