@@ -105,7 +105,7 @@ export async function handleCollaborationEvents(io) {
 }
 
 async function selectQuestion(difficulty) {
-    return fetch('http://localhost:8383/question/difficulty/'+difficulty, { 
+    return fetch('http://localhost:8383/question/difficulty/'+difficulty, {
         method: 'get',
         headers: { 'Content-Type': 'text/plain' },
     }).then(res => res.text())
