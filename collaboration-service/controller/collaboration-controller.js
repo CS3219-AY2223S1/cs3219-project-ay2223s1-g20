@@ -13,7 +13,7 @@ export async function handleCollaborationEvents(io) {
             const res = await initSession(socket.id, roomId, username, difficulty)
             // res = {isSessionReqExist: true, matchSocketId: 123, sessionId: 123}
             if (res.isSessionReqExist == true) {
-                const questionNumber = selectQuestion(difficulty) // change to async after API is done
+                const questionNumber = await selectQuestion(difficulty)
                 socket.join(res.sessionId)
                 io.sockets.sockets.get(res.matchSocketId).join(res.sessionId);
                 const resp = {sessionId: res.sessionId, questionNumber: questionNumber}
@@ -42,7 +42,7 @@ export async function handleCollaborationEvents(io) {
             if (result == true) {
                 // 1. Select new question with difficulty level
                 const difficulty = await getDifficultyLevelForUser(socket.id)
-                const newQnNum = selectQuestion(difficulty)
+                const newQnNum = await selectQuestion(difficulty)
                 // 2. Emit new question to both users
                 const sessionId = await getSessionId(socket.id)
                 io.to(sessionId).emit('newQuestion', newQnNum)
@@ -104,8 +104,20 @@ export async function handleCollaborationEvents(io) {
     })
 }
 
-function selectQuestion(difficulty) { //TODO: wait for implementation from Question Service
-    return 1
+async function selectQuestion(difficulty) {
+    return fetch('http://localhost:8383/question/difficulty/'+difficulty, { 
+        method: 'get',
+        headers: { 'Content-Type': 'text/plain' },
+    }).then(res => res.text())
+        .then((response)=>{
+            console.log("fetch from question service")
+            console.log(response)
+            return {
+                data: response
+            }
+        }).catch((error) => {
+            throw new Error("Unable to retrieve question")
+        })
 }
 
 async function verifySessionClosed(sessionId, socketId1, socketId2) {
