@@ -1,4 +1,18 @@
 services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    ports:
+      - 3000:3000
+    links:
+    - user-service
+    - matching-service
+    - question-service
+    environment:
+    - URI_USER_SVC=http://user-service:8000
+    - URI_MATCHING_SVC=http://matching-service:8001
+    - URI_QUESTION_SVC=http://question-service:8003
   user-service:
     container_name: user-service
     build:
@@ -8,6 +22,18 @@ services:
     links:
     - mongodb
     - redis
+  matching-service:
+    container_name: matching-service
+    build:
+      context: ./matching-service
+    ports:
+      - 8001:8001
+  question-service:
+    container_name: question-service
+    build:
+      context: ./question-service
+    ports:
+      - 8003:8003
   mongodb:
     container_name: mongodb
     image: mongo
