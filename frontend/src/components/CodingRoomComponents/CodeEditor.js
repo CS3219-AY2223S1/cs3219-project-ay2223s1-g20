@@ -27,6 +27,10 @@ function Editor (props) {
     getCollabSocket().emit('sendChanges', value)
   }, [])
 
+  const onStatistics = React.useCallback((data) => {
+    console.log(data)
+  }, [])
+
   const BottomBar = () => {
     return (
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: (theme) => theme.zIndex.drawer - 1 }}>
@@ -40,10 +44,12 @@ function Editor (props) {
   return (
     <Box height={'100%'} width={'100%'}>
       <CodeMirror
+        id={'editor'}
         value={code}
         height="85vh"
         extensions={[javascript({ jsx: true })]}
         onChange={onChange}
+        onStatistics={onStatistics}
       />
 
       <BottomBar />

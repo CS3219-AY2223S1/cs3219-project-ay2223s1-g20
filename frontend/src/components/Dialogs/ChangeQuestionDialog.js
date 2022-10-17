@@ -23,6 +23,16 @@ export default function ChangeQuestionDialog (props) {
     collabSocket.on('changeQuestionRes', handleResponse)
   }, [])
 
+  useEffect(() => {
+    console.log(dialogToShow)
+    if (dialogToShow === 'rejected') {
+      setTimeout(() => {
+        setDialogToShow('request')
+        handleClose()
+      }, 2000)
+    }
+  }, [dialogToShow])
+
   const handleClose = (event, reason) => {
     if (reason && reason === 'backdropClick') {
       return
@@ -144,7 +154,7 @@ export default function ChangeQuestionDialog (props) {
 
           { dialogToShow === 'waitingPartner' && <AwaitingResponseDialogContent text='Waiting for your partner...' /> }
           { dialogToShow === 'waitingQuestion' && <AwaitingResponseDialogContent text='Waiting for new question...' /> }
-          { dialogToShow === 'rejected' && <Completed text='Your partner does not want to change the question!' />}
+          { dialogToShow === 'rejected' && <Completed type={'failed'} text='Your partner does not want to change the question!' />}
         </Dialog>
   )
 }

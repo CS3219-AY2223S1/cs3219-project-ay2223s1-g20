@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   Box,
   Button,
@@ -35,12 +35,17 @@ function QuestionDrawer () {
   useEffect(() => {
     const collabSocket = getCollabSocket()
     collabSocket.on('changeQuestionReq', () => openDialog('receive'))
+    collabSocket.on('newQuestion', handleNewQuestion)
   }, [])
 
   const openDialog = (type) => {
     setQuestionDialogType(type)
     setOpenQuestionDialog(true)
   }
+
+  const handleNewQuestion = useCallback((code) => {
+    console.log('received newQuestion event')
+  }, [])
 
   const BottomBar = () => {
     return (
