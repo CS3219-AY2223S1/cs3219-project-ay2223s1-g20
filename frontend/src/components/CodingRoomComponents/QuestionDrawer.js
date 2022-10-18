@@ -44,7 +44,7 @@ function QuestionDrawer (props) {
   const updateQuestionStates = (data) => {
     setQuestionTitle(data.questionTitle)
     setDifficulty(data.difficulty)
-    setQuestionDescription(data.questionDescription.slice(1, -1))
+    setQuestionDescription(data.questionDescription)
     setQuestionExamples(data.examples)
   }
 
@@ -91,7 +91,7 @@ function QuestionDrawer (props) {
                   <Typography variant={'body'} class={'source'} style={{ fontWeight: 600 }}>Example {index + 1}</Typography>
                   <Box component="span" sx={{ display: 'block', bgcolor: 'WhiteSmoke', borderRadius: '2px' }} p={1} my={0.5}>
                       <Typography style={{ whiteSpace: 'pre-line' }} class={'code'}>
-                        {example.slice(1, -1).split('\\n').map((i, key) => {
+                        {example.split('\\n').map((i, key) => {
                           return <div key={key}>{i}{'\n'}</div>
                         })}
                       </Typography>

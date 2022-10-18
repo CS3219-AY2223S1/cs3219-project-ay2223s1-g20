@@ -92,6 +92,7 @@ app.get('/question/difficulty/:difficulty', async (req, res) => {
 // get question with a particular ID
 app.get('/question/id/:id', async (req, res) => {
     const { id } = req.params
+    console.log('[Retrieve by Id] ', id)
     const docRef = db.collection('questions').doc(id);
     const snapshot = await docRef.get();
 
