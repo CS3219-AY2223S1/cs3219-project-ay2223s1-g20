@@ -39,7 +39,7 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/question', {
-      target: 'http://localhost:8003', // Question Service
+      target: 'http://localhost:8383', // Question Service
       changeOrigin: true,
       pathRewrite: {
         '^/question': ''

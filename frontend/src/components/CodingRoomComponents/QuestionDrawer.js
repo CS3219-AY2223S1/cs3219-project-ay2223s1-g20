@@ -9,6 +9,7 @@ import {
 } from '@mui/material'
 import ChangeQuestionDialog from '../Dialogs/ChangeQuestionDialog'
 import { getCollabSocket } from '../../api/socketApi'
+import { getQuestionFromQuestionNum } from '../../api/questionApi'
 
 function QuestionDrawer () {
   const drawerWidth = '25vw'
@@ -43,8 +44,22 @@ function QuestionDrawer () {
     setOpenQuestionDialog(true)
   }
 
-  const handleNewQuestion = useCallback((code) => {
-    console.log('received newQuestion event')
+  const updateQuestionStates = (data) => {
+    setQuestionTitle(data.questionTitle)
+    setDifficulty(data.difficulty)
+    setQuestionDescription(data.questionDescription.slice(1, -1))
+    setQuestionExamples(data.examples)
+  }
+
+  const handleNewQuestion = useCallback(({ data }) => {
+    const qnNum = data
+    const response = getQuestionFromQuestionNum(qnNum)
+    response
+      .then(res => res.json())
+      .then(res => {
+        updateQuestionStates(res)
+        setOpenQuestionDialog(false)
+      })
   }, [])
 
   const BottomBar = () => {
@@ -63,7 +78,11 @@ function QuestionDrawer () {
         <Divider sx={{ paddingY: 1 }}/>
 
         <Box py={3}>
-            <Typography style={{ whiteSpace: 'pre-line' }} variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro' }}>{questionDescription}</Typography>
+            <Typography style={{ whiteSpace: 'pre-line' }} variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro' }}>
+              {questionDescription.split('\\n\\n').map((i, key) => {
+                return <div key={key}>{i}{'\n\n'}</div>
+              })}
+            </Typography>
         </Box>
 
         {
@@ -71,7 +90,11 @@ function QuestionDrawer () {
               <Box key={index}>
                   <Typography variant={'body'} class={'source'} style={{ fontWeight: 600 }}>Example {index + 1}</Typography>
                   <Box component="span" sx={{ display: 'block', bgcolor: 'WhiteSmoke', borderRadius: '2px' }} p={1} my={0.5}>
-                      <Typography style={{ whiteSpace: 'pre-line' }} class={'code'}>{example}</Typography>
+                      <Typography style={{ whiteSpace: 'pre-line' }} class={'code'}>
+                        {example.slice(1, -1).split('\\n').map((i, key) => {
+                          return <div key={key}>{i}{'\n'}</div>
+                        })}
+                      </Typography>
                   </Box>
               </Box>
           ))
