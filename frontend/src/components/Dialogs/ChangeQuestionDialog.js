@@ -132,7 +132,7 @@ export default function ChangeQuestionDialog (props) {
   const AwaitingResponseDialogContent = (text) => {
     console.log(text)
     return (
-      <Box display={'flex'} justifyContent="center" alignItems="center" flexDirection="column" sx={{ width: '30vw', height: '20vh' }}>
+      <Box display={'flex'} justifyContent="center" alignItems="center" flexDirection="column" sx={{ width: '35vw', height: '23vh' }}>
         <DialogContent sx={{ width: '30vw', height: '20vh' }}>
             <Box display={'flex'} justifyContent="center" alignItems="center">
                 <CircularProgress size={80}/>
