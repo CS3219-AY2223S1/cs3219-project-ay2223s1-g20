@@ -1,5 +1,6 @@
 import { getDifficultyLevelForUser, getMatchSocketId, getSessionId, initSession } from "../model/collaboration-model.js";
 import { checkSessionExists, checkUserExists, deleteSession, deleteUser, getSession } from "../model/repository.js";
+import fetch from 'node-fetch';
 
 export async function handleCollaborationEvents(io) {
     io.on('connection', (socket) => {

@@ -27,7 +27,7 @@ app.get('/questions', async (req, res) => {
         // qnsArray.push(doc.data());
         qnsArray.push(doc.id);
     });
-    
+
     res.status(200).send(qnsArray);
 })
 
@@ -37,7 +37,7 @@ app.get('/questions', async (req, res) => {
 //     const qnsRef = db.collection('questions');
 //     const snapshot = await qnsRef.where('title', '==', title).get();
 
-//     if (!title || snapshot.empty) { 
+//     if (!title || snapshot.empty) {
 //         return res.sendStatus(404)
 //     }
 
@@ -63,7 +63,7 @@ app.get('/questions/difficulty/:difficulty', async (req, res) => {
         // qnsArray.push(doc.data());
         qnsArray.push(doc.id);
     });
-    
+
     res.status(200).send(qnsArray);
 })
 
@@ -95,7 +95,7 @@ app.get('/question/id/:id', async (req, res) => {
     const docRef = db.collection('questions').doc(id);
     const snapshot = await docRef.get();
 
-    if (!id || snapshot.empty) { 
+    if (!id || snapshot.empty) {
         return res.sendStatus(404)
     }
 
