@@ -27,23 +27,23 @@ jobs:
       - name: Build
         run: cd frontend && npm run build
 
-  # matching-service:
-  #   name: Matching Service
-  #   runs-on: ubuntu-latest
+  matching-service:
+    name: Matching Service
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-  #     - name: Set up Node.js 
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: '16.x'
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
 
-  #     - name: Install dependencies
-  #       run: cd matching-service && npm install
+      - name: Install dependencies
+        run: cd matching-service && npm install
 
-  #     - name: Start
-  #       run: cd matching-service && npm run start
+      - name: Test
+        run: cd matching-service && npm run test
 
   user-service:
     name: User Service
@@ -76,3 +76,21 @@ jobs:
           DB_URI: "mongodb://localhost:27017"
           DB_NAME: "user_service_test"
           CACHE_ADDRESS: "localhost:6379"
+
+  collaboration-service:
+    name: Collaboration Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: cd collaboration-service && npm install
+
+      - name: Test
+        run: cd collaboration-service && npm run test
