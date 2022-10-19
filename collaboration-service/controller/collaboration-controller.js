@@ -111,8 +111,6 @@ async function selectQuestion(difficulty) {
         headers: { 'Content-Type': 'text/plain' },
     }).then(res => res.text())
         .then((response)=>{
-            console.log("fetch from question service")
-            console.log(response)
             return {
                 data: response
             }
