@@ -104,7 +104,7 @@ export default function SignOutDialog (props) {
         <Dialog open={props.open} onClose={handleClose} sx={{ minWidth: '30vw' }}>
             { loading && <Loading />}
             { (!loading && !signoutCompleted) && <SignOutDialogContent /> }
-            { signoutCompleted && <Completed text={'You have been signed out. You will be redirected soon...'} />}
+            { signoutCompleted && <Completed type={'success'} text={'You have been signed out. You will be redirected soon...'} />}
         </Dialog>
   )
 }
