@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 
 // get all questions
 app.get('/questions', async (req, res) => {
-    const qnsRef = db.collection('questions');
+    const qnsRef = db.collection('questions2');
     const snapshot = await qnsRef.get();
 
     var qnsArray = [];

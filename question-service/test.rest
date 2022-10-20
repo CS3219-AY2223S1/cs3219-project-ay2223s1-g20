@@ -1,0 +1,25 @@
+### GET QUESTIONs
+GET http://localhost:8383/questions
+
+### GET EASY QUESTIONs
+GET http://localhost:8383/questions/difficulty/Easy
+
+### GET AN EASY QUESTION
+GET http://localhost:8383/question/difficulty/Easy
+
+### GET MEDIUM QUESTIONs
+GET http://localhost:8383/questions/difficulty/Medium
+
+### GET HARD QUESTIONs
+GET http://localhost:8383/questions/difficulty/Hard
+
+### GET QUESTION
+GET http://localhost:8383/question/id/a03c7bb0-5044-11ed-b245-9bca14f6ea43
+
+
+// Collab API calls
+### GET EASY QUESTIONs
+GET http://localhost:8002/getquestions/Easy
+
+### GET HARD QUESTIONs
+GET http://localhost:8002/getquestions/Hard
