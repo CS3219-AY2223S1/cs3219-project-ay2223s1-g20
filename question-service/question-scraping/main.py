@@ -32,11 +32,6 @@ driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
 # Get upto which problem it is already scraped from track.conf file
 completed_upto = read_tracker("track.conf")
 
-# Load chapters list that stores chapter info
-# Store chapter info
-with open('chapters.pickle', 'rb') as f:
-    chapters = pickle.load(f)
-
 def download(problem_num, url, title, solution_slug):  
     print(Fore.BLACK + Back.CYAN + f"Fetching problem num " + Back.YELLOW + f" {problem_num} " + Back.CYAN + " with url " + Back.YELLOW + f" {url} ")
     n = len(title)

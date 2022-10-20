@@ -48,7 +48,9 @@ const main = async() => {
             
     });
 
-    fs.writeFileSync('data.json', JSON.stringify(results));
+    let wrapResults = {"questions":results};
+
+    fs.writeFileSync('data.json', JSON.stringify(wrapResults));
 };
 
 main();
