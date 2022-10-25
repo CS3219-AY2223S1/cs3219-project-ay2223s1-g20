@@ -2,7 +2,7 @@ const express = require("express");
 const { FieldValue } = require('firebase-admin/firestore');
 
 const app = express()
-const port = 8383
+const port = process.env.port || 8003;
 const { db } = require('./firebase-config.js');
 const { application } = require("express");
 
@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 
 // get all questions
 app.get('/questions', async (req, res) => {
-    const qnsRef = db.collection('questions');
+    const qnsRef = db.collection('questions2');
     const snapshot = await qnsRef.get();
 
     var qnsArray = [];
