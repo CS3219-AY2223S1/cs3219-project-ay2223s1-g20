@@ -32,7 +32,6 @@ instrument(io, {
 })
 
 handleCollaborationEvents(io)
-
 httpServer.listen(8002);
 
 // // Test for session functionalities

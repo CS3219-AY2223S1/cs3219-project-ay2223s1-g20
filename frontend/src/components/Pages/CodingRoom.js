@@ -1,7 +1,7 @@
 import {
   Box
 } from '@mui/material'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import HeaderBar from '../common/HeaderBar'
 import LeaveRoomDialog from '../Dialogs/LeaveRoomDialog'
@@ -9,17 +9,45 @@ import CloseRoomDialog from '../Dialogs/CloseRoomDialog'
 import QuestionDrawer from '../CodingRoomComponents/QuestionDrawer'
 import ChatDrawer from '../CodingRoomComponents/ChatDrawer'
 import Editor from '../CodingRoomComponents/CodeEditor'
-import { getSocket } from '../../api/socketApi'
+import { getCollabSocket, getMatchingSocket } from '../../api/socketApi'
 import { CLOSE_ROOM } from '../../util/constants'
-import { isInRoom, removeMatchId, setMatchId } from '../../api/cookieApi'
+import { isInRoom, removeMatchId, setMatchId, getUsername } from '../../api/cookieApi'
+import { getQuestionFromQuestionNum } from '../../api/questionApi'
+import Loading from '../common/loading'
 
 function CodingRoom () {
   const navigate = useNavigate()
   const location = useLocation()
+  const matchId = location.state.matchID
+  const difficulty = location.state.difficulty
 
   const [showLeaveRoomDialog, setShowLeaveRoomDialog] = useState(false)
   const [showCloseRoomDialog, setShowCloseRoomDialog] = useState(false)
   const [isInPair, setIsInPair] = useState(true)
+  const [questionDataRetrieved, setQuestionDataRetrieved] = useState(false)
+  const [questionData, setQuestionData] = useState({})
+
+  // ------- HANDLE COLLAB START SESSION ------
+  useEffect(() => {
+    startCollabSession()
+  }, [])
+
+  const startCollabSession = () => {
+    const collabSocket = getCollabSocket()
+    collabSocket.emit('startSession', { roomId: matchId, username: getUsername(), difficulty: difficulty })
+    collabSocket.on('sessionSuccess', handleSessionStartSuccess)
+  }
+
+  const handleSessionStartSuccess = useCallback((message) => {
+    const qnNum = message.questionNumber.data
+    const response = getQuestionFromQuestionNum(qnNum)
+    response
+      .then(res => res.json())
+      .then(res => {
+        setQuestionData(res)
+        setQuestionDataRetrieved(true)
+      })
+  }, [])
 
   // ------- HANDLE LEAVE ROOM ------
   useEffect(() => {
@@ -37,7 +65,8 @@ function CodingRoom () {
   const handleLeaveRoom = () => {
     if (isInPair) {
       console.log('emit leave event')
-      getSocket().emit('leave')
+      getMatchingSocket().emit('leave')
+      getCollabSocket().emit('leaveRoom')
     }
     removeMatchId()
     navigate('/landing')
@@ -69,7 +98,7 @@ function CodingRoom () {
   }
 
   useEffect(() => {
-    getSocket().on(CLOSE_ROOM, handleCloseRoom)
+    getMatchingSocket().on(CLOSE_ROOM, handleCloseRoom)
   }, [])
 
   useEffect(() => {
@@ -89,7 +118,7 @@ function CodingRoom () {
   const CodingRoomContent = () => {
     return (
       <Box display={'flex'} flexDirection={'horizontal'}>
-          <QuestionDrawer />
+          <QuestionDrawer questionData={questionData}/>
 
           <Box display={'flex'} justifyContent="center" alignItems="center" width="50vw" sx={{ mt: '65px', height: 'calc(100vh - 65px)' }}>
             <Editor handleOnClick={handleOnClick}/>
@@ -100,14 +129,28 @@ function CodingRoom () {
     )
   }
 
-  return (
-        <Box>
-            <HeaderBar />
-            <CodingRoomContent />
-            {showLeaveRoomDialog && <LeaveRoomDialog open={showLeaveRoomDialog} setOpen={setShowLeaveRoomDialog} handleLeaveRoom={handleLeaveRoom}/>}
-            {showCloseRoomDialog && <CloseRoomDialog open={showCloseRoomDialog} setOpen={setShowCloseRoomDialog} handleLeaveRoom={handleLeaveRoom}/>}
-        </Box>
+  const CodingRoomWrapper = () => {
+    return (<Box>
+      <HeaderBar />
+      <CodingRoomContent />
+      {showLeaveRoomDialog && <LeaveRoomDialog open={showLeaveRoomDialog} setOpen={setShowLeaveRoomDialog} handleLeaveRoom={handleLeaveRoom}/>}
+      {showCloseRoomDialog && <CloseRoomDialog open={showCloseRoomDialog} setOpen={setShowCloseRoomDialog} handleLeaveRoom={handleLeaveRoom}/>}
+    </Box>)
+  }
 
+  const FormattedLoading = () => {
+    return (
+      <Box display={'flex'} justifyContent="center" alignItems="center" sx={{ height: '100vh' }}>
+        <Loading size={100}/>
+      </Box>
+    )
+  }
+
+  return (
+    <>
+      {questionDataRetrieved && <CodingRoomWrapper />}
+      {!questionDataRetrieved && <FormattedLoading />}
+    </>
   )
 }
 

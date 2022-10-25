@@ -1,15 +1,35 @@
-import CodeEditor from '@uiw/react-textarea-code-editor'
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   Box,
   Button,
   Paper
 } from '@mui/material'
+import CodeMirror from '@uiw/react-codemirror'
+import { getCollabSocket } from '../../api/socketApi'
+import { javascript } from '@codemirror/lang-javascript'
 
 function Editor (props) {
-  const [code, setCode] = React.useState(
-    'function add(a, b) {\n  return a + b;\n}'
-  )
+  const [code, setCode] = useState('console.log(\'hello world!\');')
+  useEffect(() => {
+    startCollabSession()
+  }, [])
+
+  const startCollabSession = () => {
+    const collabSocket = getCollabSocket()
+    collabSocket.on('updateChanges', handleUpdateCode)
+  }
+
+  const handleUpdateCode = useCallback((code) => {
+    setCode(code)
+  }, [])
+
+  const onChange = React.useCallback((value, viewUpdate) => {
+    getCollabSocket().emit('sendChanges', value)
+  }, [])
+
+  const onStatistics = React.useCallback((data) => {
+    console.log(data)
+  }, [])
 
   const BottomBar = () => {
     return (
@@ -23,20 +43,15 @@ function Editor (props) {
 
   return (
     <Box height={'100%'} width={'100%'}>
-      <CodeEditor
+      <CodeMirror
+        id={'editor'}
         value={code}
-        language="js"
-        placeholder="Please enter JS code."
-        onChange={(evn) => setCode(evn.target.value)}
-        padding={10}
-        style={{
-          height: '100%',
-          width: '100%',
-          fontSize: 12,
-          backgroundColor: '#f5f5f5',
-          fontFamily: 'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace'
-        }}
+        height="85vh"
+        extensions={[javascript({ jsx: true })]}
+        onChange={onChange}
+        onStatistics={onStatistics}
       />
+
       <BottomBar />
     </Box>
 

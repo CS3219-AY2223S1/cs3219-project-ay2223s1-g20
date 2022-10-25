@@ -14,6 +14,7 @@ import IconButton from '@mui/material/IconButton'
 import ChangePasswordDialog from '../Dialogs/ChangePasswordDialog'
 import DeleteAccountDialog from '../Dialogs/DeleteAccountDialog'
 import SignOutDialog from '../Dialogs/SignOutDialog'
+import { getUsername } from '../../api/cookieApi'
 
 const menu = ['Delete Account', 'Change Password']
 
@@ -72,7 +73,8 @@ function HeaderBar () {
         <AppBar position="fixed" color="inherit" elevation={0} sx={{ borderBottom: 0.5, borderColor: 'lightgray', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Toolbar>
                 <Typography variant={'h1'} sx={{ flexGrow: 1, fontSize: '64', fontFamily: 'Raleway' }}>PeerPrep</Typography>
-                <Box sx={{ flexGrow: 0 }}>
+                <Box display={'flex'} flexDirection={'row'} sx={{ flexGrow: 0 }}>
+                    <Typography class={'source'} sx={{ paddingTop: 1.5 }}>{getUsername()}</Typography>
                     <IconButton
                         size="large"
                         aria-label="account of current user"

@@ -1,6 +1,7 @@
 import { getDifficultyLevelForUser, getMatchSocketId, getSessionId, initSession } from "../model/collaboration-model.js";
 import { checkSessionExists, checkUserExists, deleteSession, deleteUser, getSession } from "../model/repository.js";
-import {fetch} from "node-fetch"
+import fetch from 'node-fetch';
+
 export async function handleCollaborationEvents(io) {
     io.on('connection', (socket) => {
         console.log("[socketIO] Connection established, socketId=", socket.id)
@@ -24,6 +25,7 @@ export async function handleCollaborationEvents(io) {
         socket.on('sendChanges', async (code) => {
             console.log(`[socketIO, sendChanges] socketId=${socket.id}`)
             const sessionId = await getSessionId(socket.id)
+            console.log(sessionId) // returning undefined
             io.to(sessionId).emit('updateChanges', code)
         })
 
@@ -35,7 +37,6 @@ export async function handleCollaborationEvents(io) {
 
         socket.on('changeQuestionRsp', async (result) => {
             console.log(`[socketIO, changeQuestionRsp] socketId=${socket.id} responding to change question`)
-
             const matchSocketId = await getMatchSocketId(socket.id)
             io.sockets.sockets.get(matchSocketId).emit('changeQuestionRes', result)
 
@@ -105,13 +106,11 @@ export async function handleCollaborationEvents(io) {
 }
 
 async function selectQuestion(difficulty) {
-    return fetch('http://localhost:8383/question/difficulty/'+difficulty, { 
+    return fetch('http://localhost:8383/question/difficulty/'+difficulty, {
         method: 'get',
         headers: { 'Content-Type': 'text/plain' },
     }).then(res => res.text())
         .then((response)=>{
-            console.log("fetch from question service")
-            console.log(response)
             return {
                 data: response
             }

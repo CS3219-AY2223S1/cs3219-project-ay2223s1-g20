@@ -180,7 +180,7 @@ export default function ChangePasswordDialog (props) {
         <Dialog open={props.open} onClose={handleClose} sx={{ minWidth: '40vw' }} alignItems="center" justifyContent="center">
             { loading && <Loading /> }
             { (!loading && !completedChangePassword) && ChangePasswordDialogContent()}
-            { completedChangePassword && <Completed text={'Your password has been changed.'} />}
+            { completedChangePassword && <Completed type={'success'} text={'Your password has been changed.'} />}
         </Dialog>
   )
 }
