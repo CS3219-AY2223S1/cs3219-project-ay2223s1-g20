@@ -16,6 +16,5 @@ RUN mkdir -p "$APP_HOME"
 WORKDIR "$APP_HOME"
 
 COPY --from=builder "$APP_HOME"/user_service $APP_HOME
-COPY --from=builder "$APP_HOME"/.env.staging "$APP_HOME"/.env
 EXPOSE 8000
 CMD ["./user_service"]

@@ -24,6 +24,13 @@ services:
     links:
     - mongodb
     - redis
+    environment:
+    - ENV=STAG
+    - PORT=8000
+    - DB_URI=mongodb://mongodb:27017/
+    - DB_NAME=user_service_staging
+    - CACHE_ADDRESS=redis:6379
+    - JWT_SECRET_KEY=staging_secret
   matching-service:
     container_name: matching-service
     build:
@@ -40,6 +47,7 @@ services:
     - redis
     environment:
     - REDIS_URL=redis://redis:6379
+    - URI_QUESTION_SVC=http://question-service:8003
   question-service:
     container_name: question-service
     build:
