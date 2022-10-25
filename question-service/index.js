@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 
 // get all questions
 app.get('/questions', async (req, res) => {
-    const qnsRef = db.collection('questions');
+    const qnsRef = db.collection('questions2');
     const snapshot = await qnsRef.get();
 
     var qnsArray = [];
@@ -27,7 +27,7 @@ app.get('/questions', async (req, res) => {
         // qnsArray.push(doc.data());
         qnsArray.push(doc.id);
     });
-    
+
     res.status(200).send(qnsArray);
 })
 
@@ -37,7 +37,7 @@ app.get('/questions', async (req, res) => {
 //     const qnsRef = db.collection('questions');
 //     const snapshot = await qnsRef.where('title', '==', title).get();
 
-//     if (!title || snapshot.empty) { 
+//     if (!title || snapshot.empty) {
 //         return res.sendStatus(404)
 //     }
 
@@ -63,7 +63,7 @@ app.get('/questions/difficulty/:difficulty', async (req, res) => {
         // qnsArray.push(doc.data());
         qnsArray.push(doc.id);
     });
-    
+
     res.status(200).send(qnsArray);
 })
 
@@ -92,10 +92,11 @@ app.get('/question/difficulty/:difficulty', async (req, res) => {
 // get question with a particular ID
 app.get('/question/id/:id', async (req, res) => {
     const { id } = req.params
+    console.log('[Retrieve by Id] ', id)
     const docRef = db.collection('questions').doc(id);
     const snapshot = await docRef.get();
 
-    if (!id || snapshot.empty) { 
+    if (!id || snapshot.empty) {
         return res.sendStatus(404)
     }
 

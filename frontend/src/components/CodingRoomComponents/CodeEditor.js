@@ -20,16 +20,15 @@ function Editor (props) {
   }
 
   const handleUpdateCode = useCallback((code) => {
-    console.log('code updating...')
-    console.log(code)
-    // update local code
     setCode(code)
   }, [])
 
   const onChange = React.useCallback((value, viewUpdate) => {
-    console.log('value changed, sending event...')
-    // add code to send to collab service here
-    getCollabSocket().emit('sendChanges', code)
+    getCollabSocket().emit('sendChanges', value)
+  }, [])
+
+  const onStatistics = React.useCallback((data) => {
+    console.log(data)
   }, [])
 
   const BottomBar = () => {
@@ -45,10 +44,12 @@ function Editor (props) {
   return (
     <Box height={'100%'} width={'100%'}>
       <CodeMirror
+        id={'editor'}
         value={code}
         height="85vh"
         extensions={[javascript({ jsx: true })]}
         onChange={onChange}
+        onStatistics={onStatistics}
       />
 
       <BottomBar />

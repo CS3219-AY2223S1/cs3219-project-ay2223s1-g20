@@ -106,7 +106,7 @@ export default function DeleteAccountDialog (props) {
         <Dialog open={props.open} onClose={handleClose} sx={{ minWidth: '30vw' }}>
             { loading && <Loading />}
             { (!loading && !deleteCompleted) && <DeleteAccountDialogContent /> }
-            { deleteCompleted && <Completed text={'Your account has been deleted. You will be redirected soon...'} />}
+            { deleteCompleted && <Completed type={'success'} text={'Your account has been deleted. You will be redirected soon...'} />}
         </Dialog>
   )
 }
