@@ -45,7 +45,26 @@ function QuestionDrawer (props) {
     setQuestionTitle(data.questionTitle)
     setDifficulty(data.difficulty)
     setQuestionDescription(data.questionDescription)
-    setQuestionExamples(data.examples)
+
+    const examples = data.examples
+
+    if (examples.constructor.name !== 'Array') {
+      const split = examples.split('\n').filter(e => e !== '')
+      let parsedExamples = []
+      let curr = ''
+      for (let i = 0; i < split.length; i++) {
+        if (split[i].includes('Example')) {
+          parsedExamples.push(curr)
+        } else {
+          const newline = split[i].includes('Output') ? '\n\n' : '\n'
+          curr += split[i] + newline
+        }
+      }
+      parsedExamples = parsedExamples.filter(e => e !== '')
+      setQuestionExamples(parsedExamples)
+    } else {
+      setQuestionExamples(examples)
+    }
   }
 
   const handleNewQuestion = useCallback(({ data }) => {
