@@ -7,6 +7,9 @@ import {
 import CodeMirror from '@uiw/react-codemirror'
 import { getCollabSocket } from '../../api/socketApi'
 import { javascript } from '@codemirror/lang-javascript'
+import { createTheme } from '@mui/material/styles'
+import { ThemeProvider } from '@emotion/react'
+import { grey, blue } from '@mui/material/colors'
 
 function Editor (props) {
   const [code, setCode] = useState('console.log(\'hello world!\');')
@@ -31,11 +34,23 @@ function Editor (props) {
     console.log(data)
   }, [])
 
+  const buttonTheme = createTheme({
+    palette: {
+      primary: {
+        main: blue[500],
+        contrastText: grey[50]
+      }
+    }
+  })
+
   const BottomBar = () => {
     return (
+
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: (theme) => theme.zIndex.drawer - 1 }}>
         <Box display={'flex'} justifyContent="center" alignItems="center" m={1}>
-          <Button variant={'contained'} onClick={props.handleOnClick}>Leave Room</Button>
+          <ThemeProvider theme={buttonTheme}>
+            <Button variant={'contained'} onClick={props.handleOnClick}>Leave Room</Button>
+          </ThemeProvider>
         </Box>
       </Paper>
     )

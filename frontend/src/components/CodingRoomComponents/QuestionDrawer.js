@@ -7,6 +7,9 @@ import {
   Toolbar,
   Typography
 } from '@mui/material'
+import { createTheme } from '@mui/material/styles'
+import { ThemeProvider } from '@emotion/react'
+import { grey, blue } from '@mui/material/colors'
 import ChangeQuestionDialog from '../Dialogs/ChangeQuestionDialog'
 import { getCollabSocket } from '../../api/socketApi'
 import { getQuestionFromQuestionNum } from '../../api/questionApi'
@@ -78,11 +81,22 @@ function QuestionDrawer (props) {
       })
   }, [])
 
+  const buttonTheme = createTheme({
+    palette: {
+      primary: {
+        main: grey[50],
+        contrastText: blue[500]
+      }
+    }
+  })
+
   const BottomBar = () => {
     return (
-        <Box sx={{ position: 'fixed', left: 0, bottom: 0, right: 0 }} bgcolor="white" display={'flex'} justifyContent="center" alignItems="center" m={1} width={'22vw'}>
-          <Button variant={'outlined'} onClick={() => openDialog('request')}>Change Question</Button>
+      <ThemeProvider theme={buttonTheme}>
+        <Box sx={{ position: 'fixed', left: 0, bottom: 0, right: 0 }} bgcolor="transparent" display={'flex'} justifyContent="center" alignItems="center" m={1} width={'22vw'}>
+          <Button variant={'contained'} onClick={() => openDialog('request')}>Change Question</Button>
         </Box>
+      </ThemeProvider>
     )
   }
 
