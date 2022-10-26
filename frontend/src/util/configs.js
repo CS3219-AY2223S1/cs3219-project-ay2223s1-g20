@@ -10,6 +10,9 @@ export const URI_COLLAB_SVC = process.env.URI_COLLAB_SVC || 'http://localhost:80
 export const QUESTION_SVC_PREFIX = '/question'
 export const URI_QUESTION_SVC = process.env.URI_QUESTION_SVC || 'http://localhost:8383'
 
+export const HISTORY_SVC_PREFIX = '/history'
+export const URI_HISTORY_SVC = process.env.URI_HISTORY_SVC || 'http://localhost:8484'
+
 export const REGISTER = '/accounts'
 export const LOG_IN = '/login'
 export const LOG_OUT = '/logout'

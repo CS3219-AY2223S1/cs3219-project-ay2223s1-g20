@@ -49,4 +49,16 @@ module.exports = function (app) {
       }
     })
   )
+  app.use(
+    createProxyMiddleware('/history', {
+      target: 'http://localhost:8484', // History Service
+      changeOrigin: true,
+      pathRewrite: {
+        '^/history': ''
+      },
+      headers: {
+        Connection: 'keep-alive'
+      }
+    })
+  )
 }

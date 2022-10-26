@@ -9,18 +9,25 @@ import {
   TableRow,
   Typography
 } from '@mui/material'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+// import { get } from '../../api/baseApi'
+// import { HISTORY_SVC_PREFIX } from '../../util/configs'
 
 function AttemptedQuestions () {
   function createData (question, difficulty) {
     return { question, difficulty }
   }
 
-  const rows = [
-    createData('Two Sum', 'Easy'),
-    createData('Add Two Numbers', 'Medium'),
-    createData('Median of Two Sorted Arrays', 'Hard')
-  ]
+  const [attemptedQns, setAttemptedQns] = useState([])
+
+  useEffect(() => {
+    // TODO: modify here to call history service API
+    setAttemptedQns([
+      createData('Two Sum', 'Easy'),
+      createData('Add Two Numbers', 'Medium'),
+      createData('Median of Two Sorted Arrays', 'Hard')
+    ])
+  }, [])
 
   const QuestionTable = () => {
     return (
@@ -33,7 +40,7 @@ function AttemptedQuestions () {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {attemptedQns.map((row) => (
               <TableRow
                 key={row.question}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -51,10 +58,10 @@ function AttemptedQuestions () {
   }
 
   return (
-    <Box display={'flex'} flexDirection={'row'} justifyContent="center" alignItems="flex-start" minHeight="80vh" mt={8}>
+    <Box display={'flex'} flexDirection={'row'} justifyContent="center" alignItems="flex-start" mt={8} mb={6}>
         <Box display={'flex'} flexDirection={'column'} justifyContent="center" alignItems="center" width="40vw">
             <Typography variant={'h2'} class={'poppins'}>Attempted Questions</Typography>
-            <QuestionTable />
+            {attemptedQns && <QuestionTable />}
         </Box>
     </Box>
   )

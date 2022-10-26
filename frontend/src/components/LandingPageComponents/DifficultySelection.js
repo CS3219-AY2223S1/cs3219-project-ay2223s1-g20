@@ -43,13 +43,13 @@ function DifficultySelection () {
 
   const DifficultyCards = () => {
     return (
-        <Box display={'flex'} flexDirection={'column'} justifyContent="center" alignItems="center" minHeight="100vh" width="60vw">
+        <Box display={'flex'} flexDirection={'column'} justifyContent="flex-start" alignItems="center" minHeight="50vh" width="100vw">
             <Typography variant={'h1'} class={'poppins'}>Get Matched!</Typography>
             <Typography variant={'h2'} class={'source'} marginBottom={'3rem'}>Choose a difficulty</Typography>
             <Grid container spacing={2} justifyContent="center" sx={{ width: '100%' }}>
-                <Grid item xs={3} sm={3} md={2}>{DifficultyCard('Easy')}</Grid>
-                <Grid item xs={3} sm={3} md={2}>{DifficultyCard('Medium')}</Grid>
-                <Grid item xs={3} sm={3} md={2}>{DifficultyCard('Hard')}</Grid>
+                <Grid item xs={3} sm={3} md={1.5}>{DifficultyCard('Easy')}</Grid>
+                <Grid item xs={3} sm={3} md={1.5}>{DifficultyCard('Medium')}</Grid>
+                <Grid item xs={3} sm={3} md={1.5}>{DifficultyCard('Hard')}</Grid>
             </Grid>
         </Box>
     )
