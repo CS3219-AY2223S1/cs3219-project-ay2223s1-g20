@@ -83,7 +83,7 @@ export default function MatchingDialog (props) {
   useEffect(() => {
     if (matchStatus === MATCH_SUCCESS) {
       setTimeout(() => {
-        navigate('/room', { state: { matchID: matchID, difficulty: props.difficulty } })
+        navigate('/room', { state: { matchID, difficulty: props.difficulty } })
       }, 3000)
     }
   }, [matchStatus])
