@@ -71,5 +71,7 @@ func connectToDB() {
 
 func connectToCache() {
 	cacheAddress := os.Getenv("CACHE_ADDRESS")
-	cache.Connect(cacheAddress)
+	if err := cache.Connect(cacheAddress); err != nil {
+		logs.WithError(err).WithFields(log.Fields{"cache_uri": cacheAddress}).Panicln("failed to connect to cache")
+	}
 }

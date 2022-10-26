@@ -1,0 +1,11 @@
+runtime: go116
+main: ./cmd
+service: user-service
+
+env_variables:
+  ENV: PROD
+  CACHE_ADDRESS: ${CACHE_ADDRESS}
+  DB_URI: ${DB_URI}
+  DB_NAME: user_service_prod
+  JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+  PORT: 8000

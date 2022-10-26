@@ -77,6 +77,28 @@ jobs:
           DB_NAME: "user_service_test"
           CACHE_ADDRESS: "localhost:6379"
 
+      - name: Prepare app.yml
+        uses: mshick/fast-envsubst@v1
+        env:
+          CACHE_ADDRESS: ${{ secrets.CACHE_ADDRESS }}
+          DB_URI: ${{ secrets.USER_SVC_DB_URI }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+        with:
+          in-file: user-service/app.yaml.template
+          out-file: user-service/app.yaml
+
+      - name: Deploy to App Engine
+        id: deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: user-service/app.yaml
+          version: v1
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Test
+        run: curl "${{ steps.deploy.outputs.url }}"
+
   collaboration-service:
     name: Collaboration Service
     runs-on: ubuntu-latest
