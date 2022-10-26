@@ -1,12 +1,11 @@
 // Imports
 const { initializeFirebaseApp, restore } = require('firestore-export-import')
-const firebaseConfig = require('./config.js');
 const serviceAccount = require('./serviceAccount.json');
 
 // JSON To Firestore
 const jsonToFirestore = async () => {
   try {
-    console.log('Initialzing Firebase');
+    console.log('Initializing Firebase');
     await initializeFirebaseApp(serviceAccount);
     console.log('Firebase Initialized');
 
