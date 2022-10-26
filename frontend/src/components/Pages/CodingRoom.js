@@ -34,7 +34,7 @@ function CodingRoom () {
 
   const startCollabSession = () => {
     const collabSocket = getCollabSocket()
-    collabSocket.emit('startSession', { roomId: matchId, username: getUsername(), difficulty: difficulty })
+    collabSocket.emit('startSession', { roomId: matchId, username: getUsername(), difficulty })
     collabSocket.on('sessionSuccess', handleSessionStartSuccess)
   }
 

@@ -13,3 +13,9 @@ export const CLOSE_ROOM = 'closeRoom'
 
 // ---- LOCAL STORAGE KEYS ----
 export const MATCH_ID = 'matchID'
+
+// ---- USER SERVICE BACKEND ERROR MSG ----
+export const ERR_INVALID_TOKEN = 'invalid token'
+export const ERR_INCORRECT_PASSWORD = 'incorrect password'
+export const ERR_UNKNOWN_USERNAME = 'unknown username'
+export const ERR_DUP_USERNAME = 'duplicate username'

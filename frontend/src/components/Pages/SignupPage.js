@@ -3,9 +3,11 @@ import {
   Button,
   Card,
   CardContent,
+  Link,
   TextField,
   Typography
 } from '@mui/material'
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import React, { useState, useEffect } from 'react'
 import { USER_SVC_PREFIX, REGISTER } from '../../util/configs'
 import { STATUS_CODE_CONFLICT, STATUS_CODE_CREATED } from '../../util/constants'
@@ -56,12 +58,13 @@ function SignupPage () {
     const response = post(USER_SVC_PREFIX + REGISTER, json)
 
     response
+      .then(res => res.json())
       .then((res) => {
         if (res.status !== STATUS_CODE_CREATED) {
           handleError(res.status)
         }
+        return res
       })
-      .then(res => res.json())
       .then(res => {
         setJwtAndUsernameCookie(res.data, username)
         navigate('/landing')
@@ -77,6 +80,14 @@ function SignupPage () {
 
             <Card variant="outlined" sx={{ p: 4, width: '30vw' }} >
                 <CardContent>
+
+                    <Link href="/login" underline="none">
+                      <Box display={'flex'} alignItems="center">
+                        <KeyboardArrowLeftIcon />
+                        <Typography variant={'body'} sx={{ fontSize: '1rem', fontFamily: 'Source Sans Pro' }}>Back to Login</Typography>
+                      </Box>
+                    </Link>
+
                     <Box display={'flex'} justifyContent="center" alignItems="center">
                         <Typography variant={'h2'} class={'poppins'}>Welcome to PeerPrep.</Typography>
                     </Box>
