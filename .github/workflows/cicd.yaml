@@ -75,7 +75,7 @@ jobs:
         env:
           DB_URI: "mongodb://localhost:27017"
           DB_NAME: "user_service_test"
-          CACHE_ADDRESS: "localhost:6379"
+          CACHE_ADDRESS: "redis://localhost:6379"
 
       - name: Prepare app.yml
         uses: mshick/fast-envsubst@v1
