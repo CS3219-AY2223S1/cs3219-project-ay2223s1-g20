@@ -1,6 +1,6 @@
 runtime: go116
 main: ./cmd
-service: default
+service: user-service
 
 env_variables:
   ENV: PROD
@@ -9,3 +9,7 @@ env_variables:
   DB_NAME: user_service_prod
   JWT_SECRET_KEY: ${JWT_SECRET_KEY}
   PORT: 8000
+
+network:
+  forwarded_ports:
+    - 8000/tcp
