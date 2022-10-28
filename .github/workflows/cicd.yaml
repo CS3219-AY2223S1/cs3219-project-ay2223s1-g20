@@ -187,6 +187,9 @@ jobs:
           in-file: question-service/app.yaml.template
           out-file: question-service/app.yaml
 
+      - name: Debug app.yaml
+        run: cat question-service/app.yaml
+
       - name: Deploy
         id: question-service-deploy
         uses: google-github-actions/deploy-appengine@v0.2.0
