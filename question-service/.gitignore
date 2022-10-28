@@ -1,5 +1,5 @@
 /node_modules
 package-lock.json
 
-firebase.key
+creds.json
 out.html
