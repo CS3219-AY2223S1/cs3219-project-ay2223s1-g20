@@ -1,0 +1,7 @@
+runtime: nodejs16
+service: collaboration-service
+
+env_variables:
+  PORT: 8080
+  REDIS_URL: ${REDIS_URL}
+  URI_QUESTION_SVC: https://question-service-dot-cs3219g20.as.r.appspot.com
