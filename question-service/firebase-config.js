@@ -3,13 +3,13 @@ const { getFirestore } = require('firebase-admin/firestore')
 const { readFileSync } = require('fs')
 
 const serviceAccount = require('./creds.json')
-const privateKey = readFileSync('firebase.key')
 
+const privateKey = process.env.FIREBASE_KEY || readFileSync('firebase.key').toString()
 
 initializeApp({
     credential: cert({
         ...serviceAccount,
-        privateKey: privateKey.toString()
+        privateKey: privateKey
     })
 })
 
