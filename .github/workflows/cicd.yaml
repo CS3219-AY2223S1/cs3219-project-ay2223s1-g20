@@ -182,7 +182,7 @@ jobs:
       - name: Prepare app.yml
         uses: mshick/fast-envsubst@v1
         env:
-          FIREBASE_KEY: ${{ secrets.QUESTION_SVC_DB_KEY }}
+          FIREBASE_CONFIG: ${{ secrets.QUESTION_SVC_DB_CONFIG }}
         with:
           in-file: question-service/app.yaml.template
           out-file: question-service/app.yaml

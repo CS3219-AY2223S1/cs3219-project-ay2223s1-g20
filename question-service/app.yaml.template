@@ -3,4 +3,4 @@ service: question-service
 
 env_variables:
   PORT: 8080
-  FIREBASE_KEY: ${FIREBASE_KEY}
+  FIREBASE_CONFIG: ${FIREBASE_CONFIG}
