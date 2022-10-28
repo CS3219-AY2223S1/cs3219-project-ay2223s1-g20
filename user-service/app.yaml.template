@@ -8,8 +8,4 @@ env_variables:
   DB_URI: ${DB_URI}
   DB_NAME: user_service_prod
   JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-  PORT: 8000
-
-network:
-  forwarded_ports:
-    - 8000/tcp
+  PORT: 8080
