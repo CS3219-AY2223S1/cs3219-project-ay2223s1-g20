@@ -13,7 +13,7 @@
 .git
 .gitignore
 
-creds.json
+firebase.key
 
 # Node.js dependencies:
 node_modules/
