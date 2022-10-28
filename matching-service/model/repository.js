@@ -4,10 +4,7 @@ import { genMatchId } from "../utils.js";
 import { createPendingMatchModel } from "./pendingmatch-model.js";
 import { Op } from "sequelize";
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database.sqlite'
-});
+const sequelize = new Sequelize('sqlite::memory:');
 
 try {
     await sequelize.authenticate();
