@@ -6,8 +6,10 @@ const service_account = require('./creds.json')
 const key = process.env.FIREBASE_KEY || readFileSync('./firebase.key').toString()
 
 initializeApp({
-    ...service_account,
-    privateKey: key,
+    credential: cert({
+        ...service_account,
+        privateKey: key,
+    })
 })
 
 const db = getFirestore()
