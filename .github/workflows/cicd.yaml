@@ -26,6 +26,18 @@ jobs:
 
       - name: Build
         run: cd frontend && npm run build
+      
+      - name: Deploy
+        id: frontend-deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: frontend/app.yaml
+          version: v1
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Test Deployment
+        run: curl "${{ steps.frontend-deploy.outputs.url }}"
 
   matching-service:
     name: Matching Service
@@ -87,8 +99,8 @@ jobs:
           in-file: user-service/app.yaml.template
           out-file: user-service/app.yaml
 
-      - name: Deploy to App Engine
-        id: deploy
+      - name: Deploy
+        id: user-service-deploy
         uses: google-github-actions/deploy-appengine@v0.2.0
         with:
           deliverables: user-service/app.yaml
@@ -96,8 +108,8 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT }}
           credentials: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Test
-        run: curl "${{ steps.deploy.outputs.url }}"
+      - name: Test Deployment
+        run: curl "${{ steps.user-service-deploy.outputs.url }}"
 
   collaboration-service:
     name: Collaboration Service
