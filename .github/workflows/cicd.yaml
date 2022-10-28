@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js 
         uses: actions/setup-node@v3
         with:
-          node-version: '12.x'
+          node-version: '16.x'
 
       - name: Install dependencies
         run: cd frontend && npm install
@@ -56,6 +56,18 @@ jobs:
 
       - name: Test
         run: cd matching-service && npm run test
+
+      - name: Deploy
+        id: matching-service-deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: matching-service/app.yaml
+          version: v1
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Test Deployment
+        run: curl "${{ steps.matching-service-deploy.outputs.url }}"
 
   user-service:
     name: User Service

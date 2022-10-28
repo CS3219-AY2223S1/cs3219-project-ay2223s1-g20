@@ -1,0 +1,5 @@
+runtime: nodejs16
+service: matching-service
+
+env_variables:
+  PORT: 8080
