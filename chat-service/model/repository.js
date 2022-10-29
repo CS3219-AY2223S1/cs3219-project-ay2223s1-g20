@@ -2,9 +2,9 @@ import { createClient } from 'redis';
 
 // online redis server
 const client = createClient()
-client.on('error', (err) => console.log('Redis Client Error', err));
-client.connect().then(() => console.log('Redis connection established.'))
-    .catch(() => console.log('Redis connection failed.'))
+client.on('error', (err) => console.log('chat-service: redis client error', err));
+client.connect().then(() => console.log('chat-service: redis connection established'))
+    .catch(() => console.log('chat-service: redis connection failed'))
 client.flushAll()
 
 export async function saveChatRequest(roomId, socketId, username) {

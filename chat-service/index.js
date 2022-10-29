@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { createServer } from 'http';
+import { handleChatEvents } from './controller/chat-controller';
 
 const app = express();
 app.use(express.urlencoded({ extended: true }))
@@ -17,5 +18,7 @@ const httpServer = createServer(app)
 instrument(io, {
     auth: false
 })
+
+handleChatEvents(io)
 
 httpServer.listen(8003);
