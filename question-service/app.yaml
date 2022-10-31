@@ -2,5 +2,4 @@ runtime: nodejs16
 service: question-service
 
 env_variables:
-  FIREBASE_KEY: ${FIREBASE_KEY}
   PORT: 8080

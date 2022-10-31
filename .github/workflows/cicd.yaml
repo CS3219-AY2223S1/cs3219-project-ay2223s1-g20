@@ -179,16 +179,10 @@ jobs:
       - name: Test
         run: cd question-service && npm run test
 
-      - name: Prepare app.yml
-        uses: mshick/fast-envsubst@v1
+      - name: Load environment variables
+        run: cd question-service && npm run create-env
         env:
           FIREBASE_KEY: ${{ secrets.QUESTION_SVC_DB_KEY }}
-        with:
-          in-file: question-service/app.yaml.template
-          out-file: question-service/app.yaml
-
-      - name: Debug app.yaml
-        run: cat question-service/app.yaml
 
       - name: Deploy
         id: question-service-deploy

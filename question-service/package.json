@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "echo \"No test specified\""
+    "test": "echo \"No test specified\"",
+    "create-env": "printenv > .env"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "@socket.io/admin-ui": "^0.5.1",
     "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "firebase": "^9.11.0",
     "firebase-admin": "^11.1.0",
