@@ -1,3 +1,9 @@
+console.log(process.env.ENV)
+console.log(process.env.URI_USER_SVC)
+console.log(process.env.URI_MATCHING_SVC)
+console.log(process.env.URI_COLLAB_SVC)
+console.log(process.env.URI_QUESTION_SVC)
+
 export const USER_SVC_PREFIX = process.env.ENV === 'PROD' ? process.env.URI_USER_SVC : '/user'
 export const URI_USER_SVC = process.env.URI_USER_SVC || 'http://localhost:8000'
 
