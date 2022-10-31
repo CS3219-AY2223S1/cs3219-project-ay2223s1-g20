@@ -1,13 +1,6 @@
 runtime: nodejs16
 service: default
 
-env_variables:
-  ENV: PROD
-  URI_USER_SVC: https://user-service-dot-cs3219g20.as.r.appspot.com
-  URI_MATCHING_SVC: https://matching-service-dot-cs3219g20.as.r.appspot.com
-  URI_COLLAB_SVC: https://collaboration-service-dot-cs3219g20.as.r.appspot.com
-  URI_QUESTION_SVC: https://question-service-dot-cs3219g20.as.r.appspot.com
-
 handlers:
   - url: /static
     static_dir: build/static

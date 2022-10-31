@@ -26,6 +26,12 @@ jobs:
 
       - name: Build
         run: cd frontend && npm run build
+        env:
+          ENV: PROD
+          URI_USER_SVC: https://user-service-dot-cs3219g20.as.r.appspot.com
+          URI_MATCHING_SVC: https://matching-service-dot-cs3219g20.as.r.appspot.com
+          URI_COLLAB_SVC: https://collaboration-service-dot-cs3219g20.as.r.appspot.com
+          URI_QUESTION_SVC: https://question-service-dot-cs3219g20.as.r.appspot.com
       
       - name: Deploy
         id: frontend-deploy
