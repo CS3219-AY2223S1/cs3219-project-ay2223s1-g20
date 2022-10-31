@@ -1,5 +1,5 @@
 import { getChatId, initChat } from "../model/chat-model.js"
-import { checkChatExists, deleteChat, deleteUser, getChat } from "../model/repository"
+import { checkChatExists, deleteChat, deleteUser, getChat } from "../model/repository.js"
 
 export async function handleChatEvents(io) {
     io.on('connection', (socket) => {
