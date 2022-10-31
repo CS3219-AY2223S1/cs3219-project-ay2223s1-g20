@@ -179,6 +179,14 @@ jobs:
       - name: Test
         run: cd question-service && npm run test
 
+      - name: Prepare app.yml
+        uses: mshick/fast-envsubst@v1
+        env:
+          FIREBASE_KEY: ${{ secrets.QUESTION_SVC_DB_KEY }}
+        with:
+          in-file: question-service/app.yaml.template
+          out-file: question-service/app.yaml
+
       - name: Deploy
         id: question-service-deploy
         uses: google-github-actions/deploy-appengine@v0.2.0
