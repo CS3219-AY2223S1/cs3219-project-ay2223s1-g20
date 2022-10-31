@@ -1,11 +1,10 @@
 const { credential } = require('firebase-admin')
 const { initializeApp } = require('firebase-admin/app')
 const { getFirestore } = require('firebase-admin/firestore')
-
-require('dotenv').config()
+const { readFileSync } = require('fs')
 
 const serviceAccount = require('./creds.json')
-const privateKey = process.env.FIREBASE_KEY.replace(/\\n/g, '\n')
+const privateKey = readFileSync('./firebase.key').toString()
 
 initializeApp({ credential: credential.cert({ ...serviceAccount, "private_key": privateKey }) })
 
