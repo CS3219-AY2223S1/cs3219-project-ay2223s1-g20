@@ -13,7 +13,6 @@
 .git
 .gitignore
 
-firebase.key
 
 # Node.js dependencies:
 node_modules/
