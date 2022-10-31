@@ -27,7 +27,7 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/collab', {
-      target: 'http://localhost:8002', // Collaboration Service
+      target: process.env.URI_COLLAB_SVC || 'http://localhost:8002', // Collaboration Service
       changeOrigin: true,
       pathRewrite: {
         '^/collab': ''
@@ -39,7 +39,7 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/question', {
-      target: 'http://localhost:8383', // Question Service
+      target: process.env.URI_QUESTION_SVC || 'http://localhost:8003', // Question Service
       changeOrigin: true,
       pathRewrite: {
         '^/question': ''

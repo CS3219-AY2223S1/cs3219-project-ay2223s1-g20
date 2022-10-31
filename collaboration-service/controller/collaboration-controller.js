@@ -106,7 +106,9 @@ export async function handleCollaborationEvents(io) {
 }
 
 async function selectQuestion(difficulty) {
-    return fetch('http://localhost:8383/question/difficulty/'+difficulty, {
+    const uri_question_svc = process.env.URI_QUESTION_SVC || 'http://localhost:8003';
+
+    return fetch(uri_question_svc + '/question/difficulty/' + difficulty, {
         method: 'get',
         headers: { 'Content-Type': 'text/plain' },
     }).then(res => res.text())
