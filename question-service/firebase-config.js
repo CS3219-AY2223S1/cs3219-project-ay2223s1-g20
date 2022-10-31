@@ -1,23 +1,11 @@
-const { initializeApp, cert } = require('firebase-admin/app')
+const { credential } = require('firebase-admin')
+const { initializeApp } = require('firebase-admin/app')
 const { getFirestore } = require('firebase-admin/firestore')
-const { readFileSync } = require('fs')
 
-const service_account = require('./creds.json')
+const serviceAccount = require('./creds.json')
+const privateKey = process.env.FIREBASE_KEY.replace(/\\n/g, '\n')
 
-let key
-
-if (process.env.FIREBASE_KEY != undefined) {
-    key = Buffer.from(process.env.FIREBASE_KEY, 'base64').toString('ascii');
-} else {
-    key = readFileSync('./firebase.key').toString()
-}
-
-initializeApp({
-    credential: cert({
-        ...service_account,
-        privateKey: key,
-    })
-})
+initializeApp({ credential: credential.cert({ ...serviceAccount, "private_key": privateKey }) })
 
 const db = getFirestore()
 
