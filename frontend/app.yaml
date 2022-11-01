@@ -1,9 +1,5 @@
-runtime: nodejs
+runtime: nodejs16
 service: default
-env: flex
-
-network:
-  session_affinity: true
 
 handlers:
   - url: /static

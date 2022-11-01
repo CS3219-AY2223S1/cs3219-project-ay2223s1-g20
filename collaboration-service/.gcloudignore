@@ -13,7 +13,5 @@
 .git
 .gitignore
 
-Dockerfile
-
 # Node.js dependencies:
 node_modules/
