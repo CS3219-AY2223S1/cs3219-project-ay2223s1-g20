@@ -21,7 +21,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 		if r.Method == http.MethodOptions {
 			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-			w.Header().Set("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token, Authorization")
+			w.Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Origin, Origin, Content-Type, X-Auth-Token, Authorization")
 			w.Header().Set("Content-Type", "application/json")
 			return
 		}
