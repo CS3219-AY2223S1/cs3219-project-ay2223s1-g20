@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/handlers"
 	"github.com/joho/godotenv"
-	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/account"
@@ -39,10 +39,12 @@ func main() {
 	port := os.Getenv("PORT")
 
 	router := account.NewRouter()
-	corsRouter := configureCORS().Handler(router)
+	allowedHeaders := handlers.AllowedHeaders([]string{"X-Requested-With"})
+	allowedOrigins := handlers.AllowedOrigins([]string{"*"})
+	allowedMethods := handlers.AllowedMethods([]string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions})
 
 	log.WithFields(log.Fields{"port": port}).Infof("service starting")
-	err := http.ListenAndServe(":"+port, corsRouter)
+	err := http.ListenAndServe(":"+port, handlers.CORS(allowedOrigins, allowedHeaders, allowedMethods)(router))
 	logs.WithError(err).Panic("service crashed")
 }
 
@@ -76,11 +78,4 @@ func connectToCache() {
 	if err := cache.Connect(cacheAddress); err != nil {
 		logs.WithError(err).WithFields(log.Fields{"cache_uri": cacheAddress}).Panicln("failed to connect to cache")
 	}
-}
-
-func configureCORS() *cors.Cors {
-	return cors.New(cors.Options{
-		AllowCredentials: true,
-		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions},
-	})
 }
