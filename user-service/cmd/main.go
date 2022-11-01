@@ -90,6 +90,7 @@ func configureCORS() *cors.Cors {
 	return cors.New(cors.Options{
 		AllowedOrigins:   []string{origin},
 		AllowCredentials: true,
-		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
+		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions},
+		AllowedHeaders:   []string{"Accept", "Accept-Language", "Content-Type"},
 	})
 }
