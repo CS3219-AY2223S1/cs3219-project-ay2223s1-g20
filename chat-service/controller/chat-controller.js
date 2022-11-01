@@ -18,10 +18,11 @@ export async function handleChatEvents(io) {
             }
         })
 
-        socket.on('sendMessage', async (message) => {
+        socket.on('sendMessage', async (req) => {
             console.log(`[socketIO, sendMessage] socketId=${socket.id}`)
+            console.log("[socketIO, sendMessage] req=", req)
             const chatId = await getChatId(socket.id)
-            io.to(chatId).emit('newMessage', message)
+            io.to(chatId).emit('newMessage', req)
         })
 
         socket.on('leaveRoom', async () => {
