@@ -1,4 +1,4 @@
-runtime: nodejs16
+runtime: nodejs
 service: matching-service
 env: flex
 
