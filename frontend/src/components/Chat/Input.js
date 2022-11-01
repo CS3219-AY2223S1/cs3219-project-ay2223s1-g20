@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Button,
   TextField
@@ -19,7 +19,13 @@ const theme = createTheme({
   }
 })
 
-export const TextInput = () => {
+export const TextInput = (props) => {
+  const [message, setMessage] = useState('')
+
+  const handleSubmit = (event) => {
+    props.onSubmit(message)
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <form style={theme.wrapForm} noValidate autoComplete='off'>
@@ -27,8 +33,10 @@ export const TextInput = () => {
           size="small"
           id='standard-text'
           style={theme.wrapText}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
         />
-        <Button variant='text' color='primary'>
+        <Button variant='text' color='primary' onClick={handleSubmit}>
           <SendIcon />
         </Button>
       </form>

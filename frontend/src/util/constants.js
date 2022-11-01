@@ -11,6 +11,11 @@ export const MATCH_PENDING = 'matchPending'
 export const MATCH_FAILED = 'matchFail'
 export const CLOSE_ROOM = 'closeRoom'
 
+// ---- CHAT SERVICE ----
+export const START_CHAT = 'startChat'
+export const SEND_MSG = 'sendMessage'
+export const RCV_MSG = 'newMessage'
+
 // ---- LOCAL STORAGE KEYS ----
 export const MATCH_ID = 'matchID'
 

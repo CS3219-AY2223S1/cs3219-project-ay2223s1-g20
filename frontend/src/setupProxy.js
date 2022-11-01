@@ -50,6 +50,18 @@ module.exports = function (app) {
     })
   )
   app.use(
+    createProxyMiddleware('/chat', {
+      target: 'http://localhost:8003', // Chat Service
+      changeOrigin: true,
+      pathRewrite: {
+        '^/chat': ''
+      },
+      headers: {
+        Connection: 'keep-alive'
+      }
+    })
+  )
+  app.use(
     createProxyMiddleware('/history', {
       target: 'http://localhost:8484', // History Service
       changeOrigin: true,
