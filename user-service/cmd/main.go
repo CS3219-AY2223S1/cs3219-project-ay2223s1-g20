@@ -39,7 +39,8 @@ func main() {
 	port := os.Getenv("PORT")
 
 	router := account.NewRouter()
-	allowedHeaders := handlers.AllowedHeaders([]string{"X-Requested-With"})
+
+	allowedHeaders := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
 	allowedOrigins := handlers.AllowedOrigins([]string{"*"})
 	allowedMethods := handlers.AllowedMethods([]string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions})
 
