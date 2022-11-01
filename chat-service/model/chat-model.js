@@ -45,7 +45,7 @@ export async function getMatchSocketId(socketId) {
     const chatId = userInfo.chatId
     const chatInfo = await getChat(chatId)
     if (chatInfo == null) {
-        console.log(`[getMatchSocketId] ERR: Session does not exist for chatId=${chatId}`)
+        console.log(`[getMatchSocketId] ERR: Chat does not exist for chatId=${chatId}`)
         return null
     }
     const socketId1 = chatInfo.socketId1
