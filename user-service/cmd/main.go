@@ -80,9 +80,7 @@ func connectToCache() {
 
 func configureCORS() *cors.Cors {
 	return cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
 		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions},
-		AllowedHeaders:   []string{"Accept", "Accept-Language", "Content-Type"},
 	})
 }
