@@ -1,5 +1,9 @@
 runtime: nodejs16
 service: collaboration-service
+env: flex
+
+network:
+  session_affinity: true
 
 env_variables:
   PORT: 8080
