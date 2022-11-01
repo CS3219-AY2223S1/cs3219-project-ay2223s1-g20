@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/account"
@@ -12,7 +14,6 @@ import (
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/db"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/jwt"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/logs"
-	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -38,9 +39,10 @@ func main() {
 	port := os.Getenv("PORT")
 
 	router := account.NewRouter()
-	log.WithFields(log.Fields{"port": port}).Infof("service starting")
+	corsRouter := configureCORS().Handler(router)
 
-	err := http.ListenAndServe(":"+port, router)
+	log.WithFields(log.Fields{"port": port}).Infof("service starting")
+	err := http.ListenAndServe(":"+port, corsRouter)
 	logs.WithError(err).Panic("service crashed")
 }
 
@@ -74,4 +76,20 @@ func connectToCache() {
 	if err := cache.Connect(cacheAddress); err != nil {
 		logs.WithError(err).WithFields(log.Fields{"cache_uri": cacheAddress}).Panicln("failed to connect to cache")
 	}
+}
+
+func configureCORS() *cors.Cors {
+	var origin string
+
+	if os.Getenv("ENV") == "PROD" {
+		origin = os.Getenv("URI_FRONTEND_SVC")
+	} else {
+		origin = "http://localhost:3000"
+	}
+
+	return cors.New(cors.Options{
+		AllowedOrigins:   []string{origin},
+		AllowCredentials: true,
+		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete},
+	})
 }
