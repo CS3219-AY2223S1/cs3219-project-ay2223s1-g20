@@ -4,7 +4,6 @@ service: user-service
 
 env_variables:
   ENV: PROD
-  URI_FRONTEND_SVC: https://cs3219g20.as.r.appspot.com
   CACHE_ADDRESS: ${CACHE_ADDRESS}
   DB_URI: ${DB_URI}
   DB_NAME: user_service_prod

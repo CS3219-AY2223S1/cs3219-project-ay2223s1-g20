@@ -79,16 +79,8 @@ func connectToCache() {
 }
 
 func configureCORS() *cors.Cors {
-	var origin string
-
-	if os.Getenv("ENV") == "PROD" {
-		origin = os.Getenv("URI_FRONTEND_SVC")
-	} else {
-		origin = "http://localhost:3000"
-	}
-
 	return cors.New(cors.Options{
-		AllowedOrigins:   []string{origin},
+		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
 		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodOptions},
 		AllowedHeaders:   []string{"Accept", "Accept-Language", "Content-Type"},
