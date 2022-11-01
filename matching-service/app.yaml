@@ -6,4 +6,4 @@ network:
   session_affinity: true
 
 env_variables:
-  PORT: 8080
+  ENV: PROD

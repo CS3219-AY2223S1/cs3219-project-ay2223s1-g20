@@ -13,6 +13,8 @@
 .git
 .gitignore
 
+Dockerfile
+
 firebase.key
 
 # Node.js dependencies:

@@ -33,7 +33,7 @@ instrument(io, {
 
 handleCollaborationEvents(io)
 
-const port = process.env.PORT || 8002;
+const port = process.env.ENV == 'PROD' ? 8080 : 8002;
 
 httpServer.listen(port);
 

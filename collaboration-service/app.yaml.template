@@ -6,6 +6,6 @@ network:
   session_affinity: true
 
 env_variables:
-  PORT: 8080
+  ENV: PROD
   REDIS_URL: ${REDIS_URL}
   URI_QUESTION_SVC: https://question-service-dot-cs3219g20.as.r.appspot.com
