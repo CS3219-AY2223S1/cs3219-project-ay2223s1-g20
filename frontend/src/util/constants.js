@@ -13,6 +13,7 @@ export const CLOSE_ROOM = 'closeRoom'
 
 // ---- CHAT SERVICE ----
 export const START_CHAT = 'startChat'
+export const CHAT_STARTED = 'chatCreated'
 export const SEND_MSG = 'sendMessage'
 export const RCV_MSG = 'newMessage'
 

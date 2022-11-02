@@ -82,9 +82,6 @@ export default function ChangePasswordDialog (props) {
       old_password: oldPassword,
       new_password: newPassword
     })
-
-    console.log(json)
-
     setLoading(true)
     const response = await put(USER_SVC_PREFIX + ACCOUNTS + username, json)
     const data = await response.json()

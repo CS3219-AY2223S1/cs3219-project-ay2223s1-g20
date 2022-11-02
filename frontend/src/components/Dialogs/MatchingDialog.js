@@ -12,7 +12,6 @@ import { getMatchingSocket } from '../../api/socketApi'
 import { useNavigate } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
 import { MATCH_SUCCESS, MATCH_PENDING, MATCH_FAILED } from '../../util/constants'
-// import { setStorageValue } from "../../api/localStorageApi";
 
 export default function MatchingDialog (props) {
   const navigate = useNavigate()
@@ -25,31 +24,23 @@ export default function MatchingDialog (props) {
 
   const handleClose = () => {
     props.setOpen(false)
-    console.log('emit leave event')
     getMatchingSocket().emit('leave')
   }
 
   const handleMatchFail = useCallback((message) => {
     setMatchStatus(MATCH_FAILED)
     setDescription(message)
-    // console.log(MATCH_FAILED + ': ' + message);
   }, [])
 
   const handleMatchPending = useCallback((message) => {
     setMatchStatus(MATCH_PENDING)
     setDescription(message)
-    // console.log(MATCH_PENDING + ': ' + message);
   }, [])
 
   const handleMatchSuccess = useCallback((response) => {
     setMatchStatus(MATCH_SUCCESS)
     setDescription(response.message)
-    // TODO: perform some action to store the room info
-    // setStorageValue(MATCH_ID, response.matchID);
-    // setMatchId(response.matchID);
     setMatchID(response.matchID)
-    console.log(matchID)
-    console.log(MATCH_SUCCESS + ': ' + response.message)
   }, [])
 
   const match = (level) => {

@@ -21,7 +21,6 @@ export const getMatchingSocket = () => {
     socket.connect()
     setMatchingSocket(socket)
   }
-  console.log('matchingsocket: ', matchingSocket)
   return matchingSocket
 }
 
@@ -41,29 +40,8 @@ export const getCollabSocket = () => {
     collabSocket.connect()
     setCollabSocket(collabSocket)
   }
-  console.log('collabsocket: ', collabSocket)
   return collabSocket
 }
-
-// // ----- QUESTION SOCKET -----
-// export const setQuestionSocket = (socket) => {
-//   questionSocket = socket
-// }
-
-// export const haveQuestionSocket = () => {
-//   return questionSocket != null
-// }
-
-// export const getQuestionSocket = () => {
-//   if (!haveQuestionSocket()) {
-//     console.log('questionSocket connecting')
-//     const questionSocket = io(URI_QUESTION_SVC, { transports: ['websocket'] })
-//     questionSocket.connect()
-//     setQuestionSocket(questionSocket)
-//   }
-//   console.log('questionsocket: ', questionSocket)
-//   return questionSocket
-// }
 
 // ----- CHAT SOCKET -----
 export const setChatSocket = (socket) => {
@@ -81,6 +59,5 @@ export const getChatSocket = () => {
     chatSocket.connect()
     setChatSocket(chatSocket)
   }
-  console.log('chatsocket: ', chatSocket)
   return chatSocket
 }

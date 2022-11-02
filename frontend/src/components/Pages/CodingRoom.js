@@ -64,7 +64,6 @@ function CodingRoom () {
 
   const handleLeaveRoom = () => {
     if (isInPair) {
-      console.log('emit leave event')
       getMatchingSocket().emit('leave')
       getCollabSocket().emit('leaveRoom')
     }
@@ -73,7 +72,6 @@ function CodingRoom () {
   }
 
   const handleBackButtonClick = (e) => {
-    console.log('back button pressed')
     e.preventDefault()
     setShowLeaveRoomDialog(true)
   }

@@ -26,7 +26,6 @@ function QuestionDrawer (props) {
   const [showContent, setShowContent] = useState(false)
 
   useEffect(() => {
-    console.log(props.questionData)
     if (props.questionData) {
       updateQuestionStates(props.questionData)
       setShowContent(true)
@@ -123,7 +122,7 @@ function QuestionDrawer (props) {
               <Box key={index}>
                   <Typography variant={'body'} class={'source'} style={{ fontWeight: 600 }}>Example {index + 1}</Typography>
                   <Box component="span" sx={{ display: 'block', bgcolor: 'WhiteSmoke', borderRadius: '2px' }} p={1} my={0.5}>
-                      <Typography style={{ whiteSpace: 'pre-line' }} class={'code'}>
+                      <Typography style={{ whiteSpace: 'pre-line', wordWrap: 'break-word' }} class={'code'}>
                         {example.split('\\n').map((i, key) => {
                           return <div key={key}>{i}{'\n'}</div>
                         })}

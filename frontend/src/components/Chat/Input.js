@@ -22,21 +22,24 @@ const theme = createTheme({
 export const TextInput = (props) => {
   const [message, setMessage] = useState('')
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
     props.onSubmit(message)
   }
 
   return (
     <ThemeProvider theme={theme}>
-      <form style={theme.wrapForm} noValidate autoComplete='off'>
+      <form style={theme.wrapForm} noValidate autoComplete='off' onSubmit={handleSubmit}>
         <TextField
+          key="chatInput"
           size="small"
           id='standard-text'
+          autoFocus="autoFocus"
           style={theme.wrapText}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <Button variant='text' color='primary' onClick={handleSubmit}>
+        <Button variant='text' color='primary' type="submit">
           <SendIcon />
         </Button>
       </form>

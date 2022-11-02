@@ -39,8 +39,6 @@ export default function SignOutDialog (props) {
     }
 
     const json = JSON.stringify(jwtToken)
-    console.log(json)
-
     setLoading(true)
     const response = post(USER_SVC_PREFIX + LOG_OUT, json)
     setLoading(false)
@@ -48,7 +46,6 @@ export default function SignOutDialog (props) {
     response
       .then((res) => {
         if (res.status !== STATUS_CODE_SUCCESS) {
-          console.log('failed to logout')
           setShowErrorMsg(true)
           return
         }

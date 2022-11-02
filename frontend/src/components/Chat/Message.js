@@ -18,9 +18,10 @@ const theme = createTheme({
     marginBottom: '10px',
     padding: '10px',
     backgroundColor: grey[300],
-    width: '60%',
+    maxWidth: '12vw',
     textAlign: 'left',
     font: "400 .9em 'Open Sans', sans-serif",
+    wordWrap: 'break-word',
     borderRadius: '0px 20px 20px 20px',
     '&:after': {
       content: "''",
@@ -52,9 +53,10 @@ const theme = createTheme({
     padding: '10px',
     backgroundColor: blue[500],
     color: grey[50],
-    width: '60%',
+    maxWidth: '12vw',
     textAlign: 'left',
     font: "400 .9em 'Open Sans', sans-serif",
+    wordWrap: 'break-word',
     borderRadius: '20px 20px 0px 20px',
     '&:after': {
       content: "''",

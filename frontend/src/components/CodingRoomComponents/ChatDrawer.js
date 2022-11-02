@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import {
   Box,
   Drawer,
@@ -10,7 +10,7 @@ import { TextInput } from '../Chat/Input'
 import { MessageLeft, MessageRight } from '../Chat/Message'
 import { getMatchId, getUsername } from '../../api/cookieApi'
 import { getChatSocket } from '../../api/socketApi'
-import { START_CHAT, RCV_MSG, SEND_MSG } from '../../util/constants'
+import { START_CHAT, CHAT_STARTED, RCV_MSG, SEND_MSG } from '../../util/constants'
 
 const drawerWidth = '25vw'
 
@@ -42,38 +42,44 @@ const theme = createTheme({
 
 function ChatDrawer () {
   const [messages, setMessages] = useState([])
-
-  useEffect(() => {
-    setMessages([
-      { username: 'hazeltan2', message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta.' },
-      { username: 'hazeltan2', message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta.' },
-      { username: 'hazeltan', message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta.' },
-      { username: 'hazeltan', message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta.' },
-      { username: 'hazeltan', message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta.' },
-      { username: 'hazeltan', message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta.' },
-      { username: 'hazeltan', message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta.' }
-    ])
-  }, [])
+  const [canSendMessage, setCanSendMessage] = useState(false)
+  const messagesEndRef = useRef(null)
 
   useEffect(() => {
     const chatSocket = getChatSocket()
     chatSocket.emit(START_CHAT, { roomId: getMatchId(), username: getUsername() })
     chatSocket.on(RCV_MSG, handleNewMessage)
+    chatSocket.on(CHAT_STARTED, handleChatStart)
+
+    return () => {
+      console.log('chatSocket disconnecting...')
+      chatSocket.disconnect()
+    } // end the connection with the chat closes.
+  }, [])
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
+
+  const handleChatStart = useCallback(() => {
+    setCanSendMessage(true)
   }, [])
 
   const handleNewMessage = useCallback((message) => {
-    // TODO: event not received due to BE error.
-    console.log('handle new message')
-    setMessages([...messages, message])
+    setMessages(oldMessages => [...oldMessages, message])
   }, [])
 
   const sendNewMessage = (message) => {
     getChatSocket().emit(SEND_MSG, { username: getUsername(), message: message })
   }
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView()
+  }
+
   const BottomTextInput = () => {
     return (
-        <Box sx={{ position: 'fixed', left: '76.5vw', bottom: 0, right: 0 }} bgcolor="transparent" display={'flex'} justifyContent="center" alignItems="center" m={1} width={'22vw'}>
+        <Box sx={{ position: 'fixed', left: '76.5vw', bottom: 0, right: 0 }} bgcolor="transparent" display={'flex'} justifyContent="center" alignItems="flex-start" m={1} width={'22vw'}>
           <TextInput onSubmit={sendNewMessage}/>
         </Box>
     )
@@ -83,7 +89,7 @@ function ChatDrawer () {
     return (
       <ThemeProvider theme={theme}>
         <div style={theme.container}>
-          <Paper elevation={0} style={theme.paper} zDepth={2}>
+          <Paper elevation={0} style={theme.paper} zdepth={2}>
             <Paper elevation={0} id='style-1' style={theme.messagesBody}>
               {
                 messages.map((item, index) => {
@@ -102,6 +108,7 @@ function ChatDrawer () {
                   }
                 })
               }
+              <div ref={messagesEndRef} />
             </Paper>
           </Paper>
         </div>
@@ -120,7 +127,7 @@ function ChatDrawer () {
     }}
     >
         <Toolbar />
-        <Chat />
+        { canSendMessage && <Chat /> }
         <BottomTextInput />
     </Drawer>
   )
