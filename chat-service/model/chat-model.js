@@ -20,6 +20,7 @@ export async function initChat(socketId, roomId, username) {
     } else {
         await saveChatRequest(roomId, socketId, username)
         res.isChatReqExist = false
+        console.log("[initChat] chatReq saved")
     }
     release()
     return res
@@ -27,6 +28,7 @@ export async function initChat(socketId, roomId, username) {
 
 export async function getChatId(socketId) {
     const userInfo = await getUser(socketId)
+    console.log("[getChatId]userInfo=", userInfo)
     if (userInfo != null) {
         return userInfo.sessionId
     } else {
@@ -44,7 +46,7 @@ export async function getMatchSocketId(socketId) {
     const chatId = userInfo.chatId
     const chatInfo = await getChat(chatId)
     if (chatInfo == null) {
-        console.log(`[getMatchSocketId] ERR: Session does not exist for chatId=${chatId}`)
+        console.log(`[getMatchSocketId] ERR: Chat does not exist for chatId=${chatId}`)
         return null
     }
     const socketId1 = chatInfo.socketId1
@@ -57,5 +59,7 @@ export async function getMatchSocketId(socketId) {
 }
 
 export function generateChatId(socketId1, socketId2) {
-    return "ChatId_" + socketId1 + "_" + socketId2
+    const chatId = "ChatId_" + socketId1 + "_" + socketId2
+    console.log(chatId)
+    return chatId
 }

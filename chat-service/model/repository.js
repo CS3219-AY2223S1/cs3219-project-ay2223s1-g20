@@ -1,9 +1,11 @@
 import { createClient } from 'redis';
+import * as dotenv from 'dotenv'
+
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` })
 
 // online redis server
-const client = createClient({
-    url: 'redis://localhost:6379'
-})
+const client = createClient({url: process.env.CACHE_URI})
+//const client = createClient()
 client.on('error', (err) => console.log('chat-service: redis client error', err));
 client.connect().then(() => console.log('chat-service: redis connection established'))
     .catch(() => console.log('chat-service: redis connection failed'))
@@ -35,8 +37,8 @@ export async function checkChatReqExists(roomId) {
     }
 }
 
-export async function saveUser(socketId, sessionId, username) {
-    await client.hSet(`SocketId:${socketId}`, {sessionId, username})
+export async function saveUser(socketId, chatId, username) {
+    await client.hSet(`SocketId:${socketId}`, {chatId, username})
 }
 
 export async function getUser(socketId) {
@@ -85,4 +87,12 @@ export async function checkChatExists(chatId) {
     } else {
         return false
     }
+}
+
+export function clearCache() {
+    client.flushAll().then(() => console.log('chat-service: redis cache cleared'))
+}
+
+export function closeCacheConnection() {
+    client.quit().then(() => console.log('chat-service: redis connection closed'))
 }

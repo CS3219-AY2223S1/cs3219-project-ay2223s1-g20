@@ -6,6 +6,7 @@ export async function handleChatEvents(io) {
         console.log("[socketIO] Connection established, socketId=", socket.id)
 
         socket.on('startChat', async (req) => {
+            console.log(`[socketIO, startChat] socketId=${socket.id}`)
             const roomId = req.roomId
             const username = req.username
             const res = await initChat(socket.id, roomId, username)
@@ -13,14 +14,14 @@ export async function handleChatEvents(io) {
                 socket.join(res.chatId)
                 io.sockets.sockets.get(res.matchSocketId).join(res.chatId)
                 io.to(res.chatId).emit('chatCreated')
+                console.log(`Chat created for chatId=${res.chatId}, skt1=${socket.id}, skt2=${res.matchSocketId}`)
             }
         })
 
         socket.on('sendMessage', async (req) => {
             console.log(`[socketIO, sendMessage] socketId=${socket.id}`)
-            console.log(req)
+            console.log("[socketIO, sendMessage] req=", req)
             const chatId = await getChatId(socket.id)
-            console.log('chatId: ', chatId)
             io.to(chatId).emit('newMessage', req)
         })
 
