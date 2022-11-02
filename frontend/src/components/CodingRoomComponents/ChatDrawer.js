@@ -50,11 +50,6 @@ function ChatDrawer () {
     chatSocket.emit(START_CHAT, { roomId: getMatchId(), username: getUsername() })
     chatSocket.on(RCV_MSG, handleNewMessage)
     chatSocket.on(CHAT_STARTED, handleChatStart)
-
-    return () => {
-      console.log('chatSocket disconnecting...')
-      chatSocket.disconnect()
-    } // end the connection with the chat closes.
   }, [])
 
   useEffect(() => {

@@ -31,7 +31,7 @@ function Editor (props) {
   }, [])
 
   const onStatistics = React.useCallback((data) => {
-    console.log(data)
+    // console.log(data)
   }, [])
 
   const buttonTheme = createTheme({
