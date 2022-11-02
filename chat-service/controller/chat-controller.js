@@ -20,9 +20,8 @@ export async function handleChatEvents(io) {
 
         socket.on('sendMessage', async (req) => {
             console.log(`[socketIO, sendMessage] socketId=${socket.id}`)
-            console.log(req)
+            console.log("[socketIO, sendMessage] req=", req)
             const chatId = await getChatId(socket.id)
-            console.log('chatId: ', chatId)
             io.to(chatId).emit('newMessage', req)
         })
 
