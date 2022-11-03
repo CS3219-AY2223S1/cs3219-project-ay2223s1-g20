@@ -840,7 +840,9 @@ func setup() (func() error, error) {
 	}
 
 	cacheAddress := os.Getenv("CACHE_ADDRESS")
-	cache.Connect(cacheAddress)
+	if err := cache.Connect(cacheAddress); err != nil {
+		return nil, err
+	}
 
 	jwt.SetKey([]byte("test_secret"))
 

@@ -67,6 +67,6 @@ instrument(io, {
     auth: false
 })
 
-const port = process.env.PORT || 8001
+const port = process.env.ENV == 'PROD' ? 8080 : 8001;
 
 httpServer.listen(port);
