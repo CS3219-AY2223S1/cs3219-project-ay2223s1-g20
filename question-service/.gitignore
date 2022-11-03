@@ -1,6 +1,5 @@
 /node_modules
 package-lock.json
-service-account.json
-out.html
-firebase.key
 
+firebase.key
+out.html

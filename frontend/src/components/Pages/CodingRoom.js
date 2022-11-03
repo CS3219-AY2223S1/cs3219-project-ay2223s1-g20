@@ -131,7 +131,7 @@ function CodingRoom () {
 
   const CodingRoomWrapper = () => {
     return (<Box>
-      <HeaderBar />
+      <HeaderBar showUserActions={false}/>
       <CodingRoomContent />
       {showLeaveRoomDialog && <LeaveRoomDialog open={showLeaveRoomDialog} setOpen={setShowLeaveRoomDialog} handleLeaveRoom={handleLeaveRoom}/>}
       {showCloseRoomDialog && <CloseRoomDialog open={showCloseRoomDialog} setOpen={setShowCloseRoomDialog} handleLeaveRoom={handleLeaveRoom}/>}
