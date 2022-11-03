@@ -13,6 +13,8 @@ import { grey, blue } from '@mui/material/colors'
 import ChangeQuestionDialog from '../Dialogs/ChangeQuestionDialog'
 import { getCollabSocket } from '../../api/socketApi'
 import { getQuestionFromQuestionNum } from '../../api/questionApi'
+import { postQuestionIdByUsername } from '../../api/historyApi'
+import { getUsername } from '../../api/cookieApi'
 
 function QuestionDrawer (props) {
   const drawerWidth = '25vw'
@@ -78,6 +80,7 @@ function QuestionDrawer (props) {
         updateQuestionStates(res)
         setOpenQuestionDialog(false)
       })
+    postQuestionIdByUsername(getUsername(), qnNum)
   }, [])
 
   const buttonTheme = createTheme({

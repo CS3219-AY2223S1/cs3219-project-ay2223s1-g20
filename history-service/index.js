@@ -12,7 +12,10 @@ app.get('/', (req, res) => {
 });
 
 app.post('/history', async (req, res) => {
-    const { username, questionID } = req.body
+    const data = req.body
+    const username = data.username
+    const questionID = data.questionId
+    console.log('[Post by username] ', username)
     const userRef = db.collection('history').doc(username)
     const res2 = await userRef.set({
         "questionID" : FieldValue.arrayUnion(questionID)
@@ -26,10 +29,10 @@ app.get('/history/:username', async (req, res) => {
     const docRef = db.collection('history').doc(username);
     const snapshot = await docRef.get();
 
-    if (!username || snapshot.empty) {
-        return res.sendStatus(404)
+    if (!username || !snapshot.data()) {
+        return res.status(200).send([])
     }
-    
+
     questionIdHistory = snapshot.data().questionID;
 
     var qnsArray = [];
@@ -37,13 +40,13 @@ app.get('/history/:username', async (req, res) => {
     for (const id of questionIdHistory) {
         const questionsRef = db.collection('questions').doc(id);
         const snapshot2 = await questionsRef.get();
-        
+
         if (snapshot2.data() != undefined) {
             qnsArray.push([snapshot2.data()?.questionTitle, snapshot2.data()?.difficulty]);
         }
     }
+    return res.status(200).send(qnsArray);
 
-    res.status(200).send(qnsArray);
 })
 
 app.listen(port, () => console.log(`Server has started on port: ${port}`));

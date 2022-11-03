@@ -13,6 +13,7 @@ import { getCollabSocket, getMatchingSocket } from '../../api/socketApi'
 import { CLOSE_ROOM } from '../../util/constants'
 import { isInRoom, removeMatchId, setMatchId, getUsername } from '../../api/cookieApi'
 import { getQuestionFromQuestionNum } from '../../api/questionApi'
+import { postQuestionIdByUsername } from '../../api/historyApi'
 import Loading from '../common/loading'
 
 function CodingRoom () {
@@ -47,6 +48,7 @@ function CodingRoom () {
         setQuestionData(res)
         setQuestionDataRetrieved(true)
       })
+    postQuestionIdByUsername(getUsername(), qnNum)
   }, [])
 
   // ------- HANDLE LEAVE ROOM ------
