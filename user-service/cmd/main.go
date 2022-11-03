@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/account"
@@ -12,8 +13,22 @@ import (
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/db"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/jwt"
 	"github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g20/user-service/internal/logs"
-	"github.com/joho/godotenv"
 )
+
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Origin, Origin, Content-Type, X-Auth-Token, Authorization")
+		w.Header().Set("Content-Type", "application/json")
+
+		if r.Method == http.MethodOptions {
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
 
 func main() {
 	envString, ok := os.LookupEnv("ENV")
@@ -38,9 +53,9 @@ func main() {
 	port := os.Getenv("PORT")
 
 	router := account.NewRouter()
-	log.WithFields(log.Fields{"port": port}).Infof("service starting")
 
-	err := http.ListenAndServe(":"+port, router)
+	log.WithFields(log.Fields{"port": port}).Infof("service starting")
+	err := http.ListenAndServe(":"+port, corsMiddleware(router))
 	logs.WithError(err).Panic("service crashed")
 }
 
@@ -71,5 +86,7 @@ func connectToDB() {
 
 func connectToCache() {
 	cacheAddress := os.Getenv("CACHE_ADDRESS")
-	cache.Connect(cacheAddress)
+	if err := cache.Connect(cacheAddress); err != nil {
+		logs.WithError(err).WithFields(log.Fields{"cache_uri": cacheAddress}).Panicln("failed to connect to cache")
+	}
 }

@@ -10,11 +10,6 @@ services:
     - matching-service
     - collaboration-service
     - question-service
-    environment:
-    - URI_USER_SVC=http://user-service:8000
-    - URI_MATCHING_SVC=http://matching-service:8001
-    - URI_COLLAB_SVC=http://collaboration-service:8002
-    - URI_QUESTION_SVC=http://question-service:8003
   user-service:
     container_name: user-service
     build:
@@ -29,7 +24,7 @@ services:
     - PORT=8000
     - DB_URI=mongodb://mongodb:27017/
     - DB_NAME=user_service_staging
-    - CACHE_ADDRESS=redis:6379
+    - CACHE_ADDRESS=redis://redis:6379
     - JWT_SECRET_KEY=staging_secret
   matching-service:
     container_name: matching-service
