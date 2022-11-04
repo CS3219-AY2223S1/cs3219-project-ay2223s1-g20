@@ -4,10 +4,7 @@ import { genMatchId } from "../utils.js";
 import { createPendingMatchModel } from "./pendingmatch-model.js";
 import { Op } from "sequelize";
 
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database.sqlite'
-});
+const sequelize = new Sequelize('sqlite::memory:');
 
 try {
     await sequelize.authenticate();
@@ -127,4 +124,19 @@ export async function findMatchFromUserID(userID) {
         }
     });
     return match;
+}
+
+export async function clearAllTables() {
+    await Match.destroy({
+        where: {},
+        truncate: true
+    })
+    await PendingMatch.destroy({
+        where: {},
+        truncate: true
+    })
+}
+
+export async function closeConnection() {
+    sequelize.close()
 }
