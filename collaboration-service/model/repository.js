@@ -1,6 +1,9 @@
 import { createClient } from 'redis';
+import * as dotenv from 'dotenv'
 
-const client = createClient()
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` })
+
+const client = createClient({url: process.env.CACHE_URI})
 client.on('error', (err) => console.log('Redis Client Error', err));
 client.connect().then(() => console.log('Redis connection established.'))
     .catch(() => console.log('Redis connection failed.'))
@@ -82,4 +85,12 @@ export async function checkSessionExists(sessionId) {
     } else {
         return false
     }
+}
+
+export function clearCache() {
+    client.flushAll().then(() => console.log('collaboration-service: redis cache cleared'))
+}
+
+export function closeCacheConnection() {
+    client.quit().then(() => console.log('collaboration-service: redis connection closed'))
 }
