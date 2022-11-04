@@ -51,7 +51,7 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/chat', {
-      target: 'http://localhost:8003', // Chat Service
+      target: process.env.REACT_APP_URI_CHAT_SVC || 'http://localhost:8004', // Chat Service
       changeOrigin: true,
       pathRewrite: {
         '^/chat': ''
@@ -63,7 +63,7 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/history', {
-      target: 'http://localhost:8484', // History Service
+      target: process.env.REACT_APP_URI_HISTORY_SVC || 'http://localhost:8005', // History Service
       changeOrigin: true,
       pathRewrite: {
         '^/history': ''

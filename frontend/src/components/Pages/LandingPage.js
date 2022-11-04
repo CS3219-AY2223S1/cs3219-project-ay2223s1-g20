@@ -11,11 +11,10 @@ function LandingPage () {
   return (
         <Box>
             <HeaderBar showUserActions={true}/>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} direction="column" sx={{ mt: 10 }}>
                 <Grid item xs={6}><DifficultySelection /></Grid>
                 <Grid item xs={6}><AttemptedQuestions /></Grid>
             </Grid>
-
         </Box>
   )
 }

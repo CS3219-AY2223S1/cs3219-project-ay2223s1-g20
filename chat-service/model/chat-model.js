@@ -30,7 +30,7 @@ export async function getChatId(socketId) {
     const userInfo = await getUser(socketId)
     console.log("[getChatId]userInfo=", userInfo)
     if (userInfo != null) {
-        return userInfo.sessionId
+        return userInfo.chatId
     } else {
         console.log(`[getChatId] ERR: User does not exist for socketId=${socketId}`)
         return null
