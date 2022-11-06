@@ -1,11 +1,11 @@
 {
-    "type": "service_account",
-    "project_id": "peerprep-c8520",
-    "private_key_id": "e11486ca6e76ed6b44e5881b38486512d822395a",
-    "client_email": "firebase-adminsdk-w09ed@peerprep-c8520.iam.gserviceaccount.com",
-    "client_id": "103061844924119213511",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-w09ed%40peerprep-c8520.iam.gserviceaccount.com"
-  }
+  "type": "service_account",
+  "project_id": "peerprep-c8520",
+  "private_key_id": "c1bc59f0f4aff71533edb69d826e463c73ebdd64",
+  "client_email": "firebase-adminsdk-w09ed@peerprep-c8520.iam.gserviceaccount.com",
+  "client_id": "103061844924119213511",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-w09ed%40peerprep-c8520.iam.gserviceaccount.com"
+}
