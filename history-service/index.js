@@ -2,7 +2,6 @@ const express = require("express");
 const { FieldValue } = require('firebase-admin/firestore');
 
 const app = express()
-const port = 8005
 const { db } = require('./firebase-config.js');
 
 app.use(express.json())
@@ -48,5 +47,7 @@ app.get('/history/:username', async (req, res) => {
     return res.status(200).send(qnsArray);
 
 })
+
+const port = process.env.PORT || 8005
 
 app.listen(port, () => console.log(`Server has started on port: ${port}`));

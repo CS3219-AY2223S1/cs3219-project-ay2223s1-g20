@@ -1,11 +1,3 @@
-console.log(process.env.REACT_APP_ENV)
-console.log(process.env.REACT_APP_URI_USER_SVC)
-console.log(process.env.REACT_APP_URI_MATCHING_SVC)
-console.log(process.env.REACT_APP_URI_COLLAB_SVC)
-console.log(process.env.REACT_APP_URI_QUESTION_SVC)
-console.log(process.env.REACT_APP_URI_CHAT_SVC)
-console.log(process.env.REACT_APP_URI_HISTORY_SVC)
-
 export const USER_SVC_PREFIX = process.env.REACT_APP_ENV === 'PROD' ? process.env.REACT_APP_URI_USER_SVC : '/user'
 export const URI_USER_SVC = process.env.REACT_APP_URI_USER_SVC || 'http://localhost:8000'
 

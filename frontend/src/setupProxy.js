@@ -3,7 +3,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware')
 module.exports = function (app) {
   app.use(
     createProxyMiddleware('/user', {
-      target: process.env.REACT_APP_URI_USER_SVC || 'http://localhost:8000', // User Service
+      target: process.env.URI_USER_SVC || 'http://localhost:8000', // User Service
       changeOrigin: true,
       pathRewrite: {
         '^/user': ''
@@ -15,7 +15,7 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/matching', {
-      target: process.env.REACT_APP_URI_MATCHING_SVC || 'http://localhost:8001', // Matching Service
+      target: process.env.URI_MATCHING_SVC || 'http://localhost:8001', // Matching Service
       changeOrigin: true,
       pathRewrite: {
         '^/matching': ''
@@ -27,7 +27,7 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/collab', {
-      target: process.env.REACT_APP_URI_COLLAB_SVC || 'http://localhost:8002', // Collaboration Service
+      target: process.env.URI_COLLAB_SVC || 'http://localhost:8002', // Collaboration Service
       changeOrigin: true,
       pathRewrite: {
         '^/collab': ''
@@ -39,7 +39,7 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/question', {
-      target: process.env.REACT_APP_URI_QUESTION_SVC || 'http://localhost:8003', // Question Service
+      target: process.env.URI_QUESTION_SVC || 'http://localhost:8003', // Question Service
       changeOrigin: true,
       pathRewrite: {
         '^/question': ''
@@ -51,7 +51,7 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/chat', {
-      target: process.env.REACT_APP_URI_CHAT_SVC || 'http://localhost:8004', // Chat Service
+      target: process.env.URI_CHAT_SVC || 'http://localhost:8004', // Chat Service
       changeOrigin: true,
       pathRewrite: {
         '^/chat': ''
@@ -63,7 +63,7 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/history', {
-      target: process.env.REACT_APP_URI_HISTORY_SVC || 'http://localhost:8005', // History Service
+      target: process.env.URI_HISTORY_SVC || 'http://localhost:8005', // History Service
       changeOrigin: true,
       pathRewrite: {
         '^/history': ''
