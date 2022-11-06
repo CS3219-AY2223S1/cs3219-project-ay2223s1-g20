@@ -34,7 +34,6 @@ function HeaderBar (props) {
   }
 
   const handleMenuAction = (action) => {
-    console.log(action + ' has been clicked')
     if (action === menu[1]) {
       setOpenChangePasswordDialog(true)
     } else {

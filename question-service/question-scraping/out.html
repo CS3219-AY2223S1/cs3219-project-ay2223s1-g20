@@ -1,0 +1,672 @@
+<style>pre{white-space:pre-wrap;background:#f7f9fa;padding:10px 15px;color:#263238;line-height:1.6;font-size:13px;border-radius:3px margin-top: 0;margin-bottom:1em;overflow:auto}b,strong{font-weight:bolder}#title{font-size:16px;color:#212121;font-weight:600;margin-bottom:10px}hr{height:10px;border:0;box-shadow:0 10px 10px -10px #8c8b8b inset}</style>******************************<div id="title">Angle Between Hands of a Clock</div>
+******************************<br><div class="css-dcmtd5" diff="medium">Medium</div><br><div class="content__u3I1 question-content__JfgR"><div><p>Given two numbers, <code>hour</code> and <code>minutes</code>, return <em>the smaller angle (in degrees) formed between the </em><code>hour</code><em> and the </em><code>minute</code><em> hand</em>.</p>
+<p>Answers within <code>10<sup>-5</sup></code> of the actual value will be accepted as correct.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<img alt="" src="https://assets.leetcode.com/uploads/2019/12/26/sample_1_1673.png" style="width: 300px; height: 296px;"/>
+<pre><strong>Input:</strong> hour = 12, minutes = 30
+<strong>Output:</strong> 165
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<img alt="" src="https://assets.leetcode.com/uploads/2019/12/26/sample_2_1673.png" style="width: 300px; height: 301px;"/>
+<pre><strong>Input:</strong> hour = 3, minutes = 30
+<strong>Output:</strong> 75
+</pre>
+<p><strong class="example">Example 3:</strong></p>
+<img alt="" src="https://assets.leetcode.com/uploads/2019/12/26/sample_3_1673.png" style="width: 300px; height: 301px;"/>
+<pre><strong>Input:</strong> hour = 3, minutes = 15
+<strong>Output:</strong> 7.5
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= hour &lt;= 12</code></li>
+<li><code>0 &lt;= minutes &lt;= 59</code></li>
+</ul>
+</div></div><br><br><hr><br>*****************************************************************************<div id="title">Number of Sub-arrays of Size K and Average Greater than or Equal to Threshold</div>
+*****************************************************************************<br><div class="css-dcmtd5" diff="medium">Medium</div><br><div class="content__u3I1 question-content__JfgR"><div><p>Given an array of integers <code>arr</code> and two integers <code>k</code> and <code>threshold</code>, return <em>the number of sub-arrays of size </em><code>k</code><em> and average greater than or equal to </em><code>threshold</code>.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> arr = [2,2,2,2,5,5,5,8], k = 3, threshold = 4
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> Sub-arrays [2,5,5],[5,5,5] and [5,5,8] have averages 4, 5 and 6 respectively. All other sub-arrays of size 3 have averages less than 4 (the threshold).
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> arr = [11,13,17,23,29,31,7,5,2,3], k = 3, threshold = 5
+<strong>Output:</strong> 6
+<strong>Explanation:</strong> The first 6 sub-arrays of size 3 have averages greater than 5. Note that averages are not integers.
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= arr.length &lt;= 10<sup>5</sup></code></li>
+<li><code>1 &lt;= arr[i] &lt;= 10<sup>4</sup></code></li>
+<li><code>1 &lt;= k &lt;= arr.length</code></li>
+<li><code>0 &lt;= threshold &lt;= 10<sup>4</sup></code></li>
+</ul>
+</div></div><br><br><hr><br>******************************************<div id="title">Number of Steps to Reduce a Number to Zero</div>
+******************************************<br><div class="css-14oi08n" diff="easy">Easy</div><br><div class="content__u3I1 question-content__JfgR"><div><p>Given an integer <code>num</code>, return <em>the number of steps to reduce it to zero</em>.</p>
+<p>In one step, if the current number is even, you have to divide it by <code>2</code>, otherwise, you have to subtract <code>1</code> from it.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> num = 14
+<strong>Output:</strong> 6
+<strong>Explanation:</strong> 
+Step 1) 14 is even; divide by 2 and obtain 7. 
+Step 2) 7 is odd; subtract 1 and obtain 6.
+Step 3) 6 is even; divide by 2 and obtain 3. 
+Step 4) 3 is odd; subtract 1 and obtain 2. 
+Step 5) 2 is even; divide by 2 and obtain 1. 
+Step 6) 1 is odd; subtract 1 and obtain 0.
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> num = 8
+<strong>Output:</strong> 4
+<strong>Explanation:</strong> 
+Step 1) 8 is even; divide by 2 and obtain 4. 
+Step 2) 4 is even; divide by 2 and obtain 2. 
+Step 3) 2 is even; divide by 2 and obtain 1. 
+Step 4) 1 is odd; subtract 1 and obtain 0.
+</pre>
+<p><strong class="example">Example 3:</strong></p>
+<pre><strong>Input:</strong> num = 123
+<strong>Output:</strong> 12
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>0 &lt;= num &lt;= 10<sup>6</sup></code></li>
+</ul>
+</div></div><br><br><hr><br>*************************************************<div id="title">Minimum Distance to Type a Word Using Two Fingers</div>
+*************************************************<br><div class="css-t42afm" diff="hard">Hard</div><br><div class="content__u3I1 question-content__JfgR"><div><img alt="" src="https://assets.leetcode.com/uploads/2020/01/02/leetcode_keyboard.png" style="width: 349px; height: 209px;"/>
+<p>You have a keyboard layout as shown above in the <strong>X-Y</strong> plane, where each English uppercase letter is located at some coordinate.</p>
+<ul>
+<li>For example, the letter <code>'A'</code> is located at coordinate <code>(0, 0)</code>, the letter <code>'B'</code> is located at coordinate <code>(0, 1)</code>, the letter <code>'P'</code> is located at coordinate <code>(2, 3)</code> and the letter <code>'Z'</code> is located at coordinate <code>(4, 1)</code>.</li>
+</ul>
+<p>Given the string <code>word</code>, return <em>the minimum total <strong>distance</strong> to type such string using only two fingers</em>.</p>
+<p>The <strong>distance</strong> between coordinates <code>(x<sub>1</sub>, y<sub>1</sub>)</code> and <code>(x<sub>2</sub>, y<sub>2</sub>)</code> is <code>|x<sub>1</sub> - x<sub>2</sub>| + |y<sub>1</sub> - y<sub>2</sub>|</code>.</p>
+<p><strong>Note</strong> that the initial positions of your two fingers are considered free so do not count towards your total distance, also your two fingers do not have to start at the first letter or the first two letters.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> word = "CAKE"
+<strong>Output:</strong> 3
+<strong>Explanation:</strong> Using two fingers, one optimal way to type "CAKE" is: 
+Finger 1 on letter 'C' -&gt; cost = 0 
+Finger 1 on letter 'A' -&gt; cost = Distance from letter 'C' to letter 'A' = 2 
+Finger 2 on letter 'K' -&gt; cost = 0 
+Finger 2 on letter 'E' -&gt; cost = Distance from letter 'K' to letter 'E' = 1 
+Total distance = 3
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> word = "HAPPY"
+<strong>Output:</strong> 6
+<strong>Explanation:</strong> Using two fingers, one optimal way to type "HAPPY" is:
+Finger 1 on letter 'H' -&gt; cost = 0
+Finger 1 on letter 'A' -&gt; cost = Distance from letter 'H' to letter 'A' = 2
+Finger 2 on letter 'P' -&gt; cost = 0
+Finger 2 on letter 'P' -&gt; cost = Distance from letter 'P' to letter 'P' = 0
+Finger 1 on letter 'Y' -&gt; cost = Distance from letter 'A' to letter 'Y' = 4
+Total distance = 6
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>2 &lt;= word.length &lt;= 300</code></li>
+<li><code>word</code> consists of uppercase English letters.</li>
+</ul>
+</div></div><br><br><hr><br>**********************************************<div id="title">Number of Operations to Make Network Connected</div>
+**********************************************<br><div class="css-dcmtd5" diff="medium">Medium</div><br><div class="content__u3I1 question-content__JfgR"><div><p>There are <code>n</code> computers numbered from <code>0</code> to <code>n - 1</code> connected by ethernet cables <code>connections</code> forming a network where <code>connections[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> represents a connection between computers <code>a<sub>i</sub></code> and <code>b<sub>i</sub></code>. Any computer can reach any other computer directly or indirectly through the network.</p>
+<p>You are given an initial computer network <code>connections</code>. You can extract certain cables between two directly connected computers, and place them between any pair of disconnected computers to make them directly connected.</p>
+<p>Return <em>the minimum number of times you need to do this in order to make all the computers connected</em>. If it is not possible, return <code>-1</code>.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<img alt="" src="https://assets.leetcode.com/uploads/2020/01/02/sample_1_1677.png" style="width: 500px; height: 148px;"/>
+<pre><strong>Input:</strong> n = 4, connections = [[0,1],[0,2],[1,2]]
+<strong>Output:</strong> 1
+<strong>Explanation:</strong> Remove cable between computer 1 and 2 and place between computers 1 and 3.
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<img alt="" src="https://assets.leetcode.com/uploads/2020/01/02/sample_2_1677.png" style="width: 500px; height: 129px;"/>
+<pre><strong>Input:</strong> n = 6, connections = [[0,1],[0,2],[0,3],[1,2],[1,3]]
+<strong>Output:</strong> 2
+</pre>
+<p><strong class="example">Example 3:</strong></p>
+<pre><strong>Input:</strong> n = 6, connections = [[0,1],[0,2],[0,3],[1,2]]
+<strong>Output:</strong> -1
+<strong>Explanation:</strong> There are not enough cables.
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= n &lt;= 10<sup>5</sup></code></li>
+<li><code>1 &lt;= connections.length &lt;= min(n * (n - 1) / 2, 10<sup>5</sup>)</code></li>
+<li><code>connections[i].length == 2</code></li>
+<li><code>0 &lt;= a<sub>i</sub>, b<sub>i</sub> &lt; n</code></li>
+<li><code>a<sub>i</sub> != b<sub>i</sub></code></li>
+<li>There are no repeated connections.</li>
+<li>No two computers are connected by more than one cable.</li>
+</ul>
+</div></div><br><br><hr><br>***************************************<div id="title">Minimum Flips to Make a OR b Equal to c</div>
+***************************************<br><div class="css-dcmtd5" diff="medium">Medium</div><br><div class="content__u3I1 question-content__JfgR"><div><p>Given 3 positives numbers <code>a</code>, <code>b</code> and <code>c</code>. Return the minimum flips required in some bits of <code>a</code> and <code>b</code> to make ( <code>a</code> OR <code>b</code> == <code>c</code> ). (bitwise OR operation).<br/>
+Flip operation consists of change <strong>any</strong> single bit 1 to 0 or change the bit 0 to 1 in their binary representation.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<p><img alt="" src="https://assets.leetcode.com/uploads/2020/01/06/sample_3_1676.png" style="width: 260px; height: 87px;"/></p>
+<pre><strong>Input:</strong> a = 2, b = 6, c = 5
+<strong>Output:</strong> 3
+<strong>Explanation: </strong>After flips a = 1 , b = 4 , c = 5 such that (<code>a</code> OR <code>b</code> == <code>c</code>)</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> a = 4, b = 2, c = 7
+<strong>Output:</strong> 1
+</pre>
+<p><strong class="example">Example 3:</strong></p>
+<pre><strong>Input:</strong> a = 1, b = 2, c = 3
+<strong>Output:</strong> 0
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= a &lt;= 10^9</code></li>
+<li><code>1 &lt;= b &lt;= 10^9</code></li>
+<li><code>1 &lt;= c &lt;= 10^9</code></li>
+</ul></div></div><br><br><hr><br>**************************************************<div id="title">Convert Integer to the Sum of Two No-Zero Integers</div>
+**************************************************<br><div class="css-14oi08n" diff="easy">Easy</div><br><div class="content__u3I1 question-content__JfgR"><div><p><strong>No-Zero integer</strong> is a positive integer that <strong>does not contain any <code>0</code></strong> in its decimal representation.</p>
+<p>Given an integer <code>n</code>, return <em>a list of two integers</em> <code>[A, B]</code> <em>where</em>:</p>
+<ul>
+<li><code>A</code> and <code>B</code> are <strong>No-Zero integers</strong>.</li>
+<li><code>A + B = n</code></li>
+</ul>
+<p>The test cases are generated so that there is at least one valid solution. If there are many valid solutions you can return any of them.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> n = 2
+<strong>Output:</strong> [1,1]
+<strong>Explanation:</strong> A = 1, B = 1. A + B = n and both A and B do not contain any 0 in their decimal representation.
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> n = 11
+<strong>Output:</strong> [2,9]
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>2 &lt;= n &lt;= 10<sup>4</sup></code></li>
+</ul>
+</div></div><br><br><hr><br>***************************************************<div id="title">Minimum Insertion Steps to Make a String Palindrome</div>
+***************************************************<br><div class="css-t42afm" diff="hard">Hard</div><br><div class="content__u3I1 question-content__JfgR"><div><p>Given a string <code>s</code>. In one step you can insert any character at any index of the string.</p>
+<p>Return <em>the minimum number of steps</em> to make <code>s</code> palindrome.</p>
+<p>A <b>Palindrome String</b> is one that reads the same backward as well as forward.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> s = "zzazz"
+<strong>Output:</strong> 0
+<strong>Explanation:</strong> The string "zzazz" is already palindrome we do not need any insertions.
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> s = "mbadm"
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> String can be "mbdadbm" or "mdbabdm".
+</pre>
+<p><strong class="example">Example 3:</strong></p>
+<pre><strong>Input:</strong> s = "leetcode"
+<strong>Output:</strong> 5
+<strong>Explanation:</strong> Inserting 5 characters the string becomes "leetcodocteel".
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= s.length &lt;= 500</code></li>
+<li><code>s</code> consists of lowercase English letters.</li>
+</ul>
+</div></div><br><br><hr><br>**********************************<div id="title">Get Watched Videos by Your Friends</div>
+**********************************<br><div class="css-dcmtd5" diff="medium">Medium</div><br><div class="content__u3I1 question-content__JfgR"><div><p>There are <code>n</code> people, each person has a unique <em>id</em> between <code>0</code> and <code>n-1</code>. Given the arrays <code>watchedVideos</code> and <code>friends</code>, where <code>watchedVideos[i]</code> and <code>friends[i]</code> contain the list of watched videos and the list of friends respectively for the person with <code>id = i</code>.</p>
+<p>Level <strong>1</strong> of videos are all watched videos by your friends, level <strong>2</strong> of videos are all watched videos by the friends of your friends and so on. In general, the level <code>k</code> of videos are all watched videos by people with the shortest path <strong>exactly</strong> equal to <code>k</code> with you. Given your <code>id</code> and the <code>level</code> of videos, return the list of videos ordered by their frequencies (increasing). For videos with the same frequency order them alphabetically from least to greatest. </p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<p><strong><img alt="" src="https://assets.leetcode.com/uploads/2020/01/02/leetcode_friends_1.png" style="width: 144px; height: 200px;"/></strong></p>
+<pre><strong>Input:</strong> watchedVideos = [["A","B"],["C"],["B","C"],["D"]], friends = [[1,2],[0,3],[0,3],[1,2]], id = 0, level = 1
+<strong>Output:</strong> ["B","C"] 
+<strong>Explanation:</strong> 
+You have id = 0 (green color in the figure) and your friends are (yellow color in the figure):
+Person with id = 1 -&gt; watchedVideos = ["C"] 
+Person with id = 2 -&gt; watchedVideos = ["B","C"] 
+The frequencies of watchedVideos by your friends are: 
+B -&gt; 1 
+C -&gt; 2
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<p><strong><img alt="" src="https://assets.leetcode.com/uploads/2020/01/02/leetcode_friends_2.png" style="width: 144px; height: 200px;"/></strong></p>
+<pre><strong>Input:</strong> watchedVideos = [["A","B"],["C"],["B","C"],["D"]], friends = [[1,2],[0,3],[0,3],[1,2]], id = 0, level = 2
+<strong>Output:</strong> ["D"]
+<strong>Explanation:</strong> 
+You have id = 0 (green color in the figure) and the only friend of your friends is the person with id = 3 (yellow color in the figure).
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>n == watchedVideos.length == friends.length</code></li>
+<li><code>2 &lt;= n &lt;= 100</code></li>
+<li><code>1 &lt;= watchedVideos[i].length &lt;= 100</code></li>
+<li><code>1 &lt;= watchedVideos[i][j].length &lt;= 8</code></li>
+<li><code>0 &lt;= friends[i].length &lt; n</code></li>
+<li><code>0 &lt;= friends[i][j] &lt; n</code></li>
+<li><code>0 &lt;= id &lt; n</code></li>
+<li><code>1 &lt;= level &lt; n</code></li>
+<li>if <code>friends[i]</code> contains <code>j</code>, then <code>friends[j]</code> contains <code>i</code></li>
+</ul>
+</div></div><br><br><hr><br>*************************<div id="title">XOR Queries of a Subarray</div>
+*************************<br><div class="css-dcmtd5" diff="medium">Medium</div><br><div class="content__u3I1 question-content__JfgR"><div><p>You are given an array <code>arr</code> of positive integers. You are also given the array <code>queries</code> where <code>queries[i] = [left<sub>i, </sub>right<sub>i</sub>]</code>.</p>
+<p>For each query <code>i</code> compute the <strong>XOR</strong> of elements from <code>left<sub>i</sub></code> to <code>right<sub>i</sub></code> (that is, <code>arr[left<sub>i</sub>] XOR arr[left<sub>i</sub> + 1] XOR ... XOR arr[right<sub>i</sub>]</code> ).</p>
+<p>Return an array <code>answer</code> where <code>answer[i]</code> is the answer to the <code>i<sup>th</sup></code> query.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> arr = [1,3,4,8], queries = [[0,1],[1,2],[0,3],[3,3]]
+<strong>Output:</strong> [2,7,14,8] 
+<strong>Explanation:</strong> 
+The binary representation of the elements in the array are:
+1 = 0001 
+3 = 0011 
+4 = 0100 
+8 = 1000 
+The XOR values for queries are:
+[0,1] = 1 xor 3 = 2 
+[1,2] = 3 xor 4 = 7 
+[0,3] = 1 xor 3 xor 4 xor 8 = 14 
+[3,3] = 8
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> arr = [4,8,2,10], queries = [[2,3],[1,3],[0,0],[0,3]]
+<strong>Output:</strong> [8,0,4,4]
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= arr.length, queries.length &lt;= 3 * 10<sup>4</sup></code></li>
+<li><code>1 &lt;= arr[i] &lt;= 10<sup>9</sup></code></li>
+<li><code>queries[i].length == 2</code></li>
+<li><code>0 &lt;= left<sub>i</sub> &lt;= right<sub>i</sub> &lt; arr.length</code></li>
+</ul>
+</div></div><br><br><hr><br>***********************************************<div id="title">Decrypt String from Alphabet to Integer Mapping</div>
+***********************************************<br><div class="css-14oi08n" diff="easy">Easy</div><br><div class="content__u3I1 question-content__JfgR"><div><p>You are given a string <code>s</code> formed by digits and <code>'#'</code>. We want to map <code>s</code> to English lowercase characters as follows:</p>
+<ul>
+<li>Characters (<code>'a'</code> to <code>'i'</code>) are represented by (<code>'1'</code> to <code>'9'</code>) respectively.</li>
+<li>Characters (<code>'j'</code> to <code>'z'</code>) are represented by (<code>'10#'</code> to <code>'26#'</code>) respectively.</li>
+</ul>
+<p>Return <em>the string formed after mapping</em>.</p>
+<p>The test cases are generated so that a unique mapping will always exist.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> s = "10#11#12"
+<strong>Output:</strong> "jkab"
+<strong>Explanation:</strong> "j" -&gt; "10#" , "k" -&gt; "11#" , "a" -&gt; "1" , "b" -&gt; "2".
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> s = "1326#"
+<strong>Output:</strong> "acz"
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= s.length &lt;= 1000</code></li>
+<li><code>s</code> consists of digits and the <code>'#'</code> letter.</li>
+<li><code>s</code> will be a valid string such that mapping is always possible.</li>
+</ul>
+</div></div><br><br><hr><br>***************************<div id="title">Encrypt and Decrypt Strings</div>
+***************************<br><div class="css-t42afm" diff="hard">Hard</div><br><div class="content__u3I1 question-content__JfgR"><div><p>You are given a character array <code>keys</code> containing <strong>unique</strong> characters and a string array <code>values</code> containing strings of length 2. You are also given another string array <code>dictionary</code> that contains all permitted original strings after decryption. You should implement a data structure that can encrypt or decrypt a <strong>0-indexed</strong> string.</p>
+<p>A string is <strong>encrypted</strong> with the following process:</p>
+<ol>
+<li>For each character <code>c</code> in the string, we find the index <code>i</code> satisfying <code>keys[i] == c</code> in <code>keys</code>.</li>
+<li>Replace <code>c</code> with <code>values[i]</code> in the string.</li>
+</ol>
+<p>Note that in case a character of the string is <strong>not present</strong> in <code>keys</code>, the encryption process cannot be carried out, and an empty string <code>""</code> is returned.</p>
+<p>A string is <strong>decrypted</strong> with the following process:</p>
+<ol>
+<li>For each substring <code>s</code> of length 2 occurring at an even index in the string, we find an <code>i</code> such that <code>values[i] == s</code>. If there are multiple valid <code>i</code>, we choose <strong>any</strong> one of them. This means a string could have multiple possible strings it can decrypt to.</li>
+<li>Replace <code>s</code> with <code>keys[i]</code> in the string.</li>
+</ol>
+<p>Implement the <code>Encrypter</code> class:</p>
+<ul>
+<li><code>Encrypter(char[] keys, String[] values, String[] dictionary)</code> Initializes the <code>Encrypter</code> class with <code>keys, values</code>, and <code>dictionary</code>.</li>
+<li><code>String encrypt(String word1)</code> Encrypts <code>word1</code> with the encryption process described above and returns the encrypted string.</li>
+<li><code>int decrypt(String word2)</code> Returns the number of possible strings <code>word2</code> could decrypt to that also appear in <code>dictionary</code>.</li>
+</ul>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input</strong>
+["Encrypter", "encrypt", "decrypt"]
+[[['a', 'b', 'c', 'd'], ["ei", "zf", "ei", "am"], ["abcd", "acbd", "adbc", "badc", "dacb", "cadb", "cbda", "abad"]], ["abcd"], ["eizfeiam"]]
+<strong>Output</strong>
+[null, "eizfeiam", 2]
+
+<strong>Explanation</strong>
+Encrypter encrypter = new Encrypter([['a', 'b', 'c', 'd'], ["ei", "zf", "ei", "am"], ["abcd", "acbd", "adbc", "badc", "dacb", "cadb", "cbda", "abad"]);
+encrypter.encrypt("abcd"); // return "eizfeiam". 
+                           // 'a' maps to "ei", 'b' maps to "zf", 'c' maps to "ei", and 'd' maps to "am".
+encrypter.decrypt("eizfeiam"); // return 2. 
+                              // "ei" can map to 'a' or 'c', "zf" maps to 'b', and "am" maps to 'd'. 
+                              // Thus, the possible strings after decryption are "abad", "cbad", "abcd", and "cbcd". 
+                              // 2 of those strings, "abad" and "abcd", appear in dictionary, so the answer is 2.
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= keys.length == values.length &lt;= 26</code></li>
+<li><code>values[i].length == 2</code></li>
+<li><code>1 &lt;= dictionary.length &lt;= 100</code></li>
+<li><code>1 &lt;= dictionary[i].length &lt;= 100</code></li>
+<li>All <code>keys[i]</code> and <code>dictionary[i]</code> are <strong>unique</strong>.</li>
+<li><code>1 &lt;= word1.length &lt;= 2000</code></li>
+<li><code>1 &lt;= word2.length &lt;= 200</code></li>
+<li>All <code>word1[i]</code> appear in <code>keys</code>.</li>
+<li><code>word2.length</code> is even.</li>
+<li><code>keys</code>, <code>values[i]</code>, <code>dictionary[i]</code>, <code>word1</code>, and <code>word2</code> only contain lowercase English letters.</li>
+<li>At most <code>200</code> calls will be made to <code>encrypt</code> and <code>decrypt</code> <strong>in total</strong>.</li>
+</ul>
+</div></div><br><br><hr><br>***************************************************<div id="title">All Ancestors of a Node in a Directed Acyclic Graph</div>
+***************************************************<br><div class="css-dcmtd5" diff="medium">Medium</div><br><div class="content__u3I1 question-content__JfgR"><div><p>You are given a positive integer <code>n</code> representing the number of nodes of a <strong>Directed Acyclic Graph</strong> (DAG). The nodes are numbered from <code>0</code> to <code>n - 1</code> (<strong>inclusive</strong>).</p>
+<p>You are also given a 2D integer array <code>edges</code>, where <code>edges[i] = [from<sub>i</sub>, to<sub>i</sub>]</code> denotes that there is a <strong>unidirectional</strong> edge from <code>from<sub>i</sub></code> to <code>to<sub>i</sub></code> in the graph.</p>
+<p>Return <em>a list</em> <code>answer</code><em>, where </em><code>answer[i]</code><em> is the <strong>list of ancestors</strong> of the</em> <code>i<sup>th</sup></code> <em>node, sorted in <strong>ascending order</strong></em>.</p>
+<p>A node <code>u</code> is an <strong>ancestor</strong> of another node <code>v</code> if <code>u</code> can reach <code>v</code> via a set of edges.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<img alt="" src="https://assets.leetcode.com/uploads/2019/12/12/e1.png" style="width: 322px; height: 265px;"/>
+<pre><strong>Input:</strong> n = 8, edgeList = [[0,3],[0,4],[1,3],[2,4],[2,7],[3,5],[3,6],[3,7],[4,6]]
+<strong>Output:</strong> [[],[],[],[0,1],[0,2],[0,1,3],[0,1,2,3,4],[0,1,2,3]]
+<strong>Explanation:</strong>
+The above diagram represents the input graph.
+- Nodes 0, 1, and 2 do not have any ancestors.
+- Node 3 has two ancestors 0 and 1.
+- Node 4 has two ancestors 0 and 2.
+- Node 5 has three ancestors 0, 1, and 3.
+- Node 6 has five ancestors 0, 1, 2, 3, and 4.
+- Node 7 has four ancestors 0, 1, 2, and 3.
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<img alt="" src="https://assets.leetcode.com/uploads/2019/12/12/e2.png" style="width: 343px; height: 299px;"/>
+<pre><strong>Input:</strong> n = 5, edgeList = [[0,1],[0,2],[0,3],[0,4],[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]
+<strong>Output:</strong> [[],[0],[0,1],[0,1,2],[0,1,2,3]]
+<strong>Explanation:</strong>
+The above diagram represents the input graph.
+- Node 0 does not have any ancestor.
+- Node 1 has one ancestor 0.
+- Node 2 has two ancestors 0 and 1.
+- Node 3 has three ancestors 0, 1, and 2.
+- Node 4 has four ancestors 0, 1, 2, and 3.
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= n &lt;= 1000</code></li>
+<li><code>0 &lt;= edges.length &lt;= min(2000, n * (n - 1) / 2)</code></li>
+<li><code>edges[i].length == 2</code></li>
+<li><code>0 &lt;= from<sub>i</sub>, to<sub>i</sub> &lt;= n - 1</code></li>
+<li><code>from<sub>i</sub> != to<sub>i</sub></code></li>
+<li>There are no duplicate edges.</li>
+<li>The graph is <strong>directed</strong> and <strong>acyclic</strong>.</li>
+</ul>
+</div></div><br><br><hr><br>*****************************<div id="title">Find the K-Beauty of a Number</div>
+*****************************<br><div class="css-14oi08n" diff="easy">Easy</div><br><div class="content__u3I1 question-content__JfgR"><div><p>The <strong>k-beauty</strong> of an integer <code>num</code> is defined as the number of <strong>substrings</strong> of <code>num</code> when it is read as a string that meet the following conditions:</p>
+<ul>
+<li>It has a length of <code>k</code>.</li>
+<li>It is a divisor of <code>num</code>.</li>
+</ul>
+<p>Given integers <code>num</code> and <code>k</code>, return <em>the k-beauty of </em><code>num</code>.</p>
+<p>Note:</p>
+<ul>
+<li><strong>Leading zeros</strong> are allowed.</li>
+<li><code>0</code> is not a divisor of any value.</li>
+</ul>
+<p>A <strong>substring</strong> is a contiguous sequence of characters in a string.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> num = 240, k = 2
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> The following are the substrings of num of length k:
+- "24" from "<strong><u>24</u></strong>0": 24 is a divisor of 240.
+- "40" from "2<u><strong>40</strong></u>": 40 is a divisor of 240.
+Therefore, the k-beauty is 2.
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> num = 430043, k = 2
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> The following are the substrings of num of length k:
+- "43" from "<u><strong>43</strong></u>0043": 43 is a divisor of 430043.
+- "30" from "4<u><strong>30</strong></u>043": 30 is not a divisor of 430043.
+- "00" from "43<u><strong>00</strong></u>43": 0 is not a divisor of 430043.
+- "04" from "430<u><strong>04</strong></u>3": 4 is not a divisor of 430043.
+- "43" from "4300<u><strong>43</strong></u>": 43 is a divisor of 430043.
+Therefore, the k-beauty is 2.
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= num &lt;= 10<sup>9</sup></code></li>
+<li><code>1 &lt;= k &lt;= num.length</code> (taking <code>num</code> as a string)</li>
+</ul>
+</div></div><br><br><hr><br>************************<div id="title">Verbal Arithmetic Puzzle</div>
+************************<br><div class="css-t42afm" diff="hard">Hard</div><br><div class="content__u3I1 question-content__JfgR"><div><p>Given an equation, represented by <code>words</code> on the left side and the <code>result</code> on the right side.</p>
+<p>You need to check if the equation is solvable under the following rules:</p>
+<ul>
+<li>Each character is decoded as one digit (0 - 9).</li>
+<li>No two characters can map to the same digit.</li>
+<li>Each <code>words[i]</code> and <code>result</code> are decoded as one number <strong>without</strong> leading zeros.</li>
+<li>Sum of numbers on the left side (<code>words</code>) will equal to the number on the right side (<code>result</code>).</li>
+</ul>
+<p>Return <code>true</code> <em>if the equation is solvable, otherwise return</em> <code>false</code>.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> words = ["SEND","MORE"], result = "MONEY"
+<strong>Output:</strong> true
+<strong>Explanation:</strong> Map 'S'-&gt; 9, 'E'-&gt;5, 'N'-&gt;6, 'D'-&gt;7, 'M'-&gt;1, 'O'-&gt;0, 'R'-&gt;8, 'Y'-&gt;'2'
+Such that: "SEND" + "MORE" = "MONEY" ,  9567 + 1085 = 10652</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> words = ["SIX","SEVEN","SEVEN"], result = "TWENTY"
+<strong>Output:</strong> true
+<strong>Explanation:</strong> Map 'S'-&gt; 6, 'I'-&gt;5, 'X'-&gt;0, 'E'-&gt;8, 'V'-&gt;7, 'N'-&gt;2, 'T'-&gt;1, 'W'-&gt;'3', 'Y'-&gt;4
+Such that: "SIX" + "SEVEN" + "SEVEN" = "TWENTY" ,  650 + 68782 + 68782 = 138214</pre>
+<p><strong class="example">Example 3:</strong></p>
+<pre><strong>Input:</strong> words = ["LEET","CODE"], result = "POINT"
+<strong>Output:</strong> false
+<strong>Explanation:</strong> There is no possible mapping to satisfy the equation, so we return false.
+Note that two different characters cannot map to the same digit.
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>2 &lt;= words.length &lt;= 5</code></li>
+<li><code>1 &lt;= words[i].length, result.length &lt;= 7</code></li>
+<li><code>words[i], result</code> contain only uppercase English letters.</li>
+<li>The number of different characters used in the expression is at most <code>10</code>.</li>
+</ul>
+</div></div><br><br><hr><br>*************<div id="title">Jump Game III</div>
+*************<br><div class="css-dcmtd5" diff="medium">Medium</div><br><div class="content__u3I1 question-content__JfgR"><div><p>Given an array of non-negative integers <code>arr</code>, you are initially positioned at <code>start</code> index of the array. When you are at index <code>i</code>, you can jump to <code>i + arr[i]</code> or <code>i - arr[i]</code>, check if you can reach to <strong>any</strong> index with value 0.</p>
+<p>Notice that you can not jump outside of the array at any time.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> arr = [4,2,3,0,3,1,2], start = 5
+<strong>Output:</strong> true
+<strong>Explanation:</strong> 
+All possible ways to reach at index 3 with value 0 are: 
+index 5 -&gt; index 4 -&gt; index 1 -&gt; index 3 
+index 5 -&gt; index 6 -&gt; index 4 -&gt; index 1 -&gt; index 3 
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> arr = [4,2,3,0,3,1,2], start = 0
+<strong>Output:</strong> true 
+<strong>Explanation: 
+</strong>One possible way to reach at index 3 with value 0 is: 
+index 0 -&gt; index 4 -&gt; index 1 -&gt; index 3
+</pre>
+<p><strong class="example">Example 3:</strong></p>
+<pre><strong>Input:</strong> arr = [3,0,2,1,2], start = 2
+<strong>Output:</strong> false
+<strong>Explanation: </strong>There is no way to reach at index 1 with value 0.
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= arr.length &lt;= 5 * 10<sup>4</sup></code></li>
+<li><code>0 &lt;= arr[i] &lt; arr.length</code></li>
+<li><code>0 &lt;= start &lt; arr.length</code></li>
+</ul>
+</div></div><br><br><hr><br>***************************************<div id="title">All Elements in Two Binary Search Trees</div>
+***************************************<br><div class="css-dcmtd5" diff="medium">Medium</div><br><div class="content__u3I1 question-content__JfgR"><div><p>Given two binary search trees <code>root1</code> and <code>root2</code>, return <em>a list containing all the integers from both trees sorted in <strong>ascending</strong> order</em>.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<img alt="" src="https://assets.leetcode.com/uploads/2019/12/18/q2-e1.png" style="width: 457px; height: 207px;"/>
+<pre><strong>Input:</strong> root1 = [2,1,4], root2 = [1,0,3]
+<strong>Output:</strong> [0,1,1,2,3,4]
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<img alt="" src="https://assets.leetcode.com/uploads/2019/12/18/q2-e5-.png" style="width: 352px; height: 197px;"/>
+<pre><strong>Input:</strong> root1 = [1,null,8], root2 = [8,1]
+<strong>Output:</strong> [1,1,8,8]
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li>The number of nodes in each tree is in the range <code>[0, 5000]</code>.</li>
+<li><code>-10<sup>5</sup> &lt;= Node.val &lt;= 10<sup>5</sup></code></li>
+</ul>
+</div></div><br><br><hr><br>*************************************<div id="title">Find N Unique Integers Sum up to Zero</div>
+*************************************<br><div class="css-14oi08n" diff="easy">Easy</div><br><div class="content__u3I1 question-content__JfgR"><div><p>Given an integer <code>n</code>, return <strong>any</strong> array containing <code>n</code> <strong>unique</strong> integers such that they add up to <code>0</code>.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> n = 5
+<strong>Output:</strong> [-7,-1,1,3,4]
+<strong>Explanation:</strong> These arrays also are accepted [-5,-1,1,2,3] , [-3,-1,2,-2,4].
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> n = 3
+<strong>Output:</strong> [-1,0,1]
+</pre>
+<p><strong class="example">Example 3:</strong></p>
+<pre><strong>Input:</strong> n = 1
+<strong>Output:</strong> [0]
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= n &lt;= 1000</code></li>
+</ul>
+</div></div><br><br><hr><br><style>pre{white-space:pre-wrap;background:#f7f9fa;padding:10px 15px;color:#263238;line-height:1.6;font-size:13px;border-radius:3px margin-top: 0;margin-bottom:1em;overflow:auto}b,strong{font-weight:bolder}#title{font-size:16px;color:#212121;font-weight:600;margin-bottom:10px}hr{height:10px;border:0;box-shadow:0 10px 10px -10px #8c8b8b inset}</style>**************************************<div id="title">Maximum Candies You Can Get from Boxes</div>
+**************************************<br><div class="css-t42afm" diff="hard">Hard</div><br><div class="content__u3I1 question-content__JfgR"><div><p>You have <code>n</code> boxes labeled from <code>0</code> to <code>n - 1</code>. You are given four arrays: <code>status</code>, <code>candies</code>, <code>keys</code>, and <code>containedBoxes</code> where:</p>
+<ul>
+<li><code>status[i]</code> is <code>1</code> if the <code>i<sup>th</sup></code> box is open and <code>0</code> if the <code>i<sup>th</sup></code> box is closed,</li>
+<li><code>candies[i]</code> is the number of candies in the <code>i<sup>th</sup></code> box,</li>
+<li><code>keys[i]</code> is a list of the labels of the boxes you can open after opening the <code>i<sup>th</sup></code> box.</li>
+<li><code>containedBoxes[i]</code> is a list of the boxes you found inside the <code>i<sup>th</sup></code> box.</li>
+</ul>
+<p>You are given an integer array <code>initialBoxes</code> that contains the labels of the boxes you initially have. You can take all the candies in <strong>any open box</strong> and you can use the keys in it to open new boxes and you also can use the boxes you find in it.</p>
+<p>Return <em>the maximum number of candies you can get following the rules above</em>.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> status = [1,0,1,0], candies = [7,5,4,100], keys = [[],[],[1],[]], containedBoxes = [[1,2],[3],[],[]], initialBoxes = [0]
+<strong>Output:</strong> 16
+<strong>Explanation:</strong> You will be initially given box 0. You will find 7 candies in it and boxes 1 and 2.
+Box 1 is closed and you do not have a key for it so you will open box 2. You will find 4 candies and a key to box 1 in box 2.
+In box 1, you will find 5 candies and box 3 but you will not find a key to box 3 so box 3 will remain closed.
+Total number of candies collected = 7 + 4 + 5 = 16 candy.
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> status = [1,0,0,0,0,0], candies = [1,1,1,1,1,1], keys = [[1,2,3,4,5],[],[],[],[],[]], containedBoxes = [[1,2,3,4,5],[],[],[],[],[]], initialBoxes = [0]
+<strong>Output:</strong> 6
+<strong>Explanation:</strong> You have initially box 0. Opening it you can find boxes 1,2,3,4 and 5 and their keys.
+The total number of candies will be 6.
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>n == status.length == candies.length == keys.length == containedBoxes.length</code></li>
+<li><code>1 &lt;= n &lt;= 1000</code></li>
+<li><code>status[i]</code> is either <code>0</code> or <code>1</code>.</li>
+<li><code>1 &lt;= candies[i] &lt;= 1000</code></li>
+<li><code>0 &lt;= keys[i].length &lt;= n</code></li>
+<li><code>0 &lt;= keys[i][j] &lt; n</code></li>
+<li>All values of <code>keys[i]</code> are <strong>unique</strong>.</li>
+<li><code>0 &lt;= containedBoxes[i].length &lt;= n</code></li>
+<li><code>0 &lt;= containedBoxes[i][j] &lt; n</code></li>
+<li>All values of <code>containedBoxes[i]</code> are unique.</li>
+<li>Each box is contained in one box at most.</li>
+<li><code>0 &lt;= initialBoxes.length &lt;= n</code></li>
+<li><code>0 &lt;= initialBoxes[i] &lt; n</code></li>
+</ul>
+</div></div><br><br><hr><br>********************************************<div id="title">Maximum Number of Occurrences of a Substring</div>
+********************************************<br><div class="css-dcmtd5" diff="medium">Medium</div><br><div class="content__u3I1 question-content__JfgR"><div><p>Given a string <code>s</code>, return the maximum number of ocurrences of <strong>any</strong> substring under the following rules:</p>
+<ul>
+<li>The number of unique characters in the substring must be less than or equal to <code>maxLetters</code>.</li>
+<li>The substring size must be between <code>minSize</code> and <code>maxSize</code> inclusive.</li>
+</ul>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> s = "aababcaab", maxLetters = 2, minSize = 3, maxSize = 4
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> Substring "aab" has 2 ocurrences in the original string.
+It satisfies the conditions, 2 unique letters and size 3 (between minSize and maxSize).
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> s = "aaaa", maxLetters = 1, minSize = 3, maxSize = 3
+<strong>Output:</strong> 2
+<strong>Explanation:</strong> Substring "aaa" occur 2 times in the string. It can overlap.
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= s.length &lt;= 10<sup>5</sup></code></li>
+<li><code>1 &lt;= maxLetters &lt;= 26</code></li>
+<li><code>1 &lt;= minSize &lt;= maxSize &lt;= min(26, s.length)</code></li>
+<li><code>s</code> consists of only lowercase English letters.</li>
+</ul>
+</div></div><br><br><hr><br>*********************************************<div id="title">Divide Array in Sets of K Consecutive Numbers</div>
+*********************************************<br><div class="css-dcmtd5" diff="medium">Medium</div><br><div class="content__u3I1 question-content__JfgR"><div><p>Given an array of integers <code>nums</code> and a positive integer <code>k</code>, check whether it is possible to divide this array into sets of <code>k</code> consecutive numbers.</p>
+<p>Return <code>true</code> <em>if it is possible</em>.<strong> </strong>Otherwise, return <code>false</code>.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> nums = [1,2,3,3,4,4,5,6], k = 4
+<strong>Output:</strong> true
+<strong>Explanation:</strong> Array can be divided into [1,2,3,4] and [3,4,5,6].
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> nums = [3,2,1,2,3,4,3,4,5,9,10,11], k = 3
+<strong>Output:</strong> true
+<strong>Explanation:</strong> Array can be divided into [1,2,3] , [2,3,4] , [3,4,5] and [9,10,11].
+</pre>
+<p><strong class="example">Example 3:</strong></p>
+<pre><strong>Input:</strong> nums = [1,2,3,4], k = 3
+<strong>Output:</strong> false
+<strong>Explanation:</strong> Each array should be divided in subarrays of size 3.
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= k &lt;= nums.length &lt;= 10<sup>5</sup></code></li>
+<li><code>1 &lt;= nums[i] &lt;= 10<sup>9</sup></code></li>
+</ul>
+<p> </p>
+<strong>Note:</strong> This question is the same as 846: <a href="https://leetcode.com/problems/hand-of-straights/" target="_blank">https://leetcode.com/problems/hand-of-straights/</a></div></div><br><br><hr><br>***************************************<div id="title">Find Numbers with Even Number of Digits</div>
+***************************************<br><div class="css-14oi08n" diff="easy">Easy</div><br><div class="content__u3I1 question-content__JfgR"><div><p>Given an array <code>nums</code> of integers, return how many of them contain an <strong>even number</strong> of digits.</p>
+<p> </p>
+<p><strong class="example">Example 1:</strong></p>
+<pre><strong>Input:</strong> nums = [12,345,2,6,7896]
+<strong>Output:</strong> 2
+<strong>Explanation: 
+</strong>12 contains 2 digits (even number of digits). 
+345 contains 3 digits (odd number of digits). 
+2 contains 1 digit (odd number of digits). 
+6 contains 1 digit (odd number of digits). 
+7896 contains 4 digits (even number of digits). 
+Therefore only 12 and 7896 contain an even number of digits.
+</pre>
+<p><strong class="example">Example 2:</strong></p>
+<pre><strong>Input:</strong> nums = [555,901,482,1771]
+<strong>Output:</strong> 1 
+<strong>Explanation: </strong>
+Only 1771 contains an even number of digits.
+</pre>
+<p> </p>
+<p><strong>Constraints:</strong></p>
+<ul>
+<li><code>1 &lt;= nums.length &lt;= 500</code></li>
+<li><code>1 &lt;= nums[i] &lt;= 10<sup>5</sup></code></li>
+</ul>
+</div></div><br><br><hr><br>

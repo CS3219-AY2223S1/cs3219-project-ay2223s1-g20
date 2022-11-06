@@ -49,4 +49,28 @@ module.exports = function (app) {
       }
     })
   )
+  app.use(
+    createProxyMiddleware('/chat', {
+      target: process.env.REACT_APP_URI_CHAT_SVC || 'http://localhost:8004', // Chat Service
+      changeOrigin: true,
+      pathRewrite: {
+        '^/chat': ''
+      },
+      headers: {
+        Connection: 'keep-alive'
+      }
+    })
+  )
+  app.use(
+    createProxyMiddleware('/history', {
+      target: process.env.REACT_APP_URI_HISTORY_SVC || 'http://localhost:8005', // History Service
+      changeOrigin: true,
+      pathRewrite: {
+        '^/history': ''
+      },
+      headers: {
+        Connection: 'keep-alive'
+      }
+    })
+  )
 }
