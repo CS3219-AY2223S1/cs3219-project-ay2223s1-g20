@@ -19,6 +19,6 @@ const io = new Server(httpServer)
 
 handleChatEvents(io)
 
-const port = process.env.PORT || 8004;
+const port = process.env.ENV == 'PROD' ? 8080 : 8004;
 
 httpServer.listen(port);

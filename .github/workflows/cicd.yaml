@@ -32,6 +32,8 @@ jobs:
           REACT_APP_URI_MATCHING_SVC: https://matching-service-dot-cs3219g20.as.r.appspot.com
           REACT_APP_URI_COLLAB_SVC: https://collaboration-service-dot-cs3219g20.as.r.appspot.com
           REACT_APP_URI_QUESTION_SVC: https://question-service-dot-cs3219g20.as.r.appspot.com
+          REACT_APP_URI_CHAT_SVC: https://chat-service-dot-cs3219g20.as.r.appspot.com
+          REACT_APP_URI_HISTORY_SVC: https://history-service-dot-cs3219g20.as.r.appspot.com
 
       - name: Deploy
         id: frontend-deploy
@@ -228,6 +230,26 @@ jobs:
       - name: Test
         run: cd chat-service && npm run test
 
+      - name: Prepare app.yml
+        uses: mshick/fast-envsubst@v1
+        env:
+          REDIS_URL: ${{ secrets.CHAT_SVC_DB_URI }}
+        with:
+          in-file: chat-service/app.yaml.template
+          out-file: chat-service/app.yaml
+
+      - name: Deploy
+        id: chat-service-deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: chat-service/app.yaml
+          version: v1
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Test Deployment
+        run: curl "${{ steps.chat-service-deploy.outputs.url }}"
+
   history-service:
     name: History Service
     runs-on: ubuntu-latest
@@ -245,4 +267,24 @@ jobs:
 
       - name: Test
         run: cd history-service && npm run test
+
+      - name: Prepare app.yml
+        uses: mshick/fast-envsubst@v1
+        env:
+          FIREBASE_KEY: ${{ secrets.QUESTION_SVC_DB_KEY }}
+        with:
+          in-file: history-service/app.yaml.template
+          out-file: history-service/app.yaml
+
+      - name: Deploy
+        id: history-service-deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: history-service/app.yaml
+          version: v1
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Test Deployment
+        run: curl "${{ steps.history-service-deploy.outputs.url }}"
 
