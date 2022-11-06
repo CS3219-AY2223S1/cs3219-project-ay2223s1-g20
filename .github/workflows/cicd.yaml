@@ -204,3 +204,45 @@ jobs:
 
       - name: Test Deployment
         run: curl "${{ steps.question-service-deploy.outputs.url }}"
+
+  chat-service:
+    name: Chat Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: cd chat-service && npm install
+      
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.4.0
+        with:
+          redis-version: '6.0'
+
+      - name: Test
+        run: cd chat-service && npm run test
+
+  history-service:
+    name: History Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: cd history-service && npm install
+
+      - name: Test
+        run: cd history-service && npm run test
+
