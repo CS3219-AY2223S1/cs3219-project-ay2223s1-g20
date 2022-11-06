@@ -1,7 +1,7 @@
 {
   "type": "service_account",
   "project_id": "peerprep-c8520",
-  "private_key_id": "75e2fa41c2bfba444b417d88fad9db81fca2844a",
+  "private_key_id": "e11486ca6e76ed6b44e5881b38486512d822395a",
   "client_email": "firebase-adminsdk-w09ed@peerprep-c8520.iam.gserviceaccount.com",
   "client_id": "103061844924119213511",
   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
