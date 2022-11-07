@@ -51,7 +51,7 @@ async function chatTearDown(io, socketId) {
         await deleteChat(chatId)
 
         const isChatClosed = await verifyChatClosed(chatId, chatInfo.socketId1, chatInfo.socketId2)
-        if (isChatClosed == true) {
+        if (isChatClosed) {
             console.log(`[chatTearDown] Chat closed successfully for sid=${chatId}`)
         } else {
             console.log(`[chatTearDown] ERR: Chat close failed for sid=${chatId}`)

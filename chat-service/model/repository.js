@@ -1,11 +1,10 @@
 import { createClient } from 'redis';
-import * as dotenv from 'dotenv'
-
-dotenv.config({ path: `.env.${process.env.NODE_ENV}` })
 
 // online redis server
-const client = createClient({url: process.env.CACHE_URI})
-//const client = createClient()
+const client = createClient({
+    url: process.env.REDIS_URL || "redis://localhost:6379"
+})
+
 client.on('error', (err) => console.log('chat-service: redis client error', err));
 client.connect().then(() => console.log('chat-service: redis connection established'))
     .catch(() => console.log('chat-service: redis connection failed'))
