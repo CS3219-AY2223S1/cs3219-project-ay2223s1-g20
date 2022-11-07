@@ -9,7 +9,7 @@ import CloseRoomDialog from '../Dialogs/CloseRoomDialog'
 import QuestionDrawer from '../CodingRoomComponents/QuestionDrawer'
 import ChatDrawer from '../CodingRoomComponents/ChatDrawer'
 import Editor from '../CodingRoomComponents/CodeEditor'
-import { getCollabSocket, getMatchingSocket } from '../../api/socketApi'
+import { getChatSocket, getCollabSocket, getMatchingSocket } from '../../api/socketApi'
 import { CLOSE_ROOM } from '../../util/constants'
 import { isInRoom, removeMatchId, setMatchId, getUsername } from '../../api/cookieApi'
 import { getQuestionFromQuestionNum } from '../../api/questionApi'
@@ -68,6 +68,7 @@ function CodingRoom () {
     if (isInPair) {
       getMatchingSocket().emit('leave')
       getCollabSocket().emit('leaveRoom')
+      getChatSocket().emit('leaveRoom')
     }
     removeMatchId()
     navigate('/landing')
