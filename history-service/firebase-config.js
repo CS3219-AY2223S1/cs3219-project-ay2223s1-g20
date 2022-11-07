@@ -8,7 +8,7 @@ const serviceAccount = require('./creds.json')
 let privateKey
 
 if (process.env.ENV === "PROD") {
-    privateKey = process.env.FIREBASE_KEY.replace(/\\n/g, 'n')
+    privateKey = process.env.FIREBASE_KEY.replace(/\\n/g, '\n')
 } else {
     privateKey = readFileSync('./firebase.key').toString()
 }
