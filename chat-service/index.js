@@ -19,4 +19,6 @@ const io = new Server(httpServer)
 
 handleChatEvents(io)
 
-httpServer.listen(8004);
+const port = process.env.PORT || 8004;
+
+httpServer.listen(port);
