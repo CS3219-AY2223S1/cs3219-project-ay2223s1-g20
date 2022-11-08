@@ -19,13 +19,33 @@ jobs:
       - name: Set up Node.js 
         uses: actions/setup-node@v3
         with:
-          node-version: '12.x'
+          node-version: '16.x'
 
       - name: Install dependencies
         run: cd frontend && npm install
 
       - name: Build
         run: cd frontend && npm run build
+        env:
+          REACT_APP_ENV: PROD
+          REACT_APP_URI_USER_SVC: https://user-service-dot-cs3219g20.as.r.appspot.com
+          REACT_APP_URI_MATCHING_SVC: https://matching-service-dot-cs3219g20.as.r.appspot.com
+          REACT_APP_URI_COLLAB_SVC: https://collaboration-service-dot-cs3219g20.as.r.appspot.com
+          REACT_APP_URI_QUESTION_SVC: https://question-service-dot-cs3219g20.as.r.appspot.com
+          REACT_APP_URI_CHAT_SVC: https://chat-service-dot-cs3219g20.as.r.appspot.com
+          REACT_APP_URI_HISTORY_SVC: https://history-service-dot-cs3219g20.as.r.appspot.com
+
+      - name: Deploy
+        id: frontend-deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: frontend/app.yaml
+          version: v1
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Test Deployment
+        run: curl "${{ steps.frontend-deploy.outputs.url }}"
 
   matching-service:
     name: Matching Service
@@ -44,6 +64,18 @@ jobs:
 
       - name: Test
         run: cd matching-service && npm run test
+
+      - name: Deploy
+        id: matching-service-deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: matching-service/app.yaml
+          version: v1
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Test Deployment
+        run: curl "${{ steps.matching-service-deploy.outputs.url }}"
 
   user-service:
     name: User Service
@@ -75,7 +107,29 @@ jobs:
         env:
           DB_URI: "mongodb://localhost:27017"
           DB_NAME: "user_service_test"
-          CACHE_ADDRESS: "localhost:6379"
+          CACHE_ADDRESS: "redis://localhost:6379"
+
+      - name: Prepare app.yml
+        uses: mshick/fast-envsubst@v1
+        env:
+          CACHE_ADDRESS: ${{ secrets.CACHE_ADDRESS }}
+          DB_URI: ${{ secrets.USER_SVC_DB_URI }}
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+        with:
+          in-file: user-service/app.yaml.template
+          out-file: user-service/app.yaml
+
+      - name: Deploy
+        id: user-service-deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: user-service/app.yaml
+          version: v1
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Test Deployment
+        run: curl "${{ steps.user-service-deploy.outputs.url }}"
 
   collaboration-service:
     name: Collaboration Service
@@ -94,3 +148,143 @@ jobs:
 
       - name: Test
         run: cd collaboration-service && npm run test
+
+      - name: Prepare app.yml
+        uses: mshick/fast-envsubst@v1
+        env:
+          REDIS_URL: ${{ secrets.CACHE_ADDRESS }}
+        with:
+          in-file: collaboration-service/app.yaml.template
+          out-file: collaboration-service/app.yaml
+
+      - name: Deploy
+        id: collaboration-service-deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: collaboration-service/app.yaml
+          version: v1
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Test Deployment
+        run: curl "${{ steps.collaboration-service-deploy.outputs.url }}"
+
+  question-service:
+    name: Question Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: cd question-service && npm install
+
+      - name: Test
+        run: cd question-service && npm run test
+
+      - name: Prepare app.yml
+        uses: mshick/fast-envsubst@v1
+        env:
+          FIREBASE_KEY: ${{ secrets.QUESTION_SVC_DB_KEY }}
+        with:
+          in-file: question-service/app.yaml.template
+          out-file: question-service/app.yaml
+
+      - name: Deploy
+        id: question-service-deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: question-service/app.yaml
+          version: v1
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Test Deployment
+        run: curl "${{ steps.question-service-deploy.outputs.url }}"
+
+  chat-service:
+    name: Chat Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: cd chat-service && npm install
+      
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.4.0
+        with:
+          redis-version: '6.0'
+
+      - name: Test
+        run: cd chat-service && npm run test
+
+      - name: Prepare app.yml
+        uses: mshick/fast-envsubst@v1
+        env:
+          REDIS_URL: ${{ secrets.CHAT_SVC_DB_URI }}
+        with:
+          in-file: chat-service/app.yaml.template
+          out-file: chat-service/app.yaml
+
+      - name: Deploy
+        id: chat-service-deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: chat-service/app.yaml
+          version: v1
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Test Deployment
+        run: curl "${{ steps.chat-service-deploy.outputs.url }}"
+
+  history-service:
+    name: History Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js 
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: cd history-service && npm install
+
+      - name: Test
+        run: cd history-service && npm run test
+
+      - name: Prepare app.yml
+        uses: mshick/fast-envsubst@v1
+        env:
+          FIREBASE_KEY: ${{ secrets.QUESTION_SVC_DB_KEY }}
+        with:
+          in-file: history-service/app.yaml.template
+          out-file: history-service/app.yaml
+
+      - name: Deploy
+        id: history-service-deploy
+        uses: google-github-actions/deploy-appengine@v0.2.0
+        with:
+          deliverables: history-service/app.yaml
+          version: v1
+          project_id: ${{ secrets.GCP_PROJECT }}
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Test Deployment
+        run: curl "${{ steps.history-service-deploy.outputs.url }}"
+

@@ -27,7 +27,7 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/collab', {
-      target: 'http://localhost:8002', // Collaboration Service
+      target: process.env.URI_COLLAB_SVC || 'http://localhost:8002', // Collaboration Service
       changeOrigin: true,
       pathRewrite: {
         '^/collab': ''
@@ -39,10 +39,34 @@ module.exports = function (app) {
   )
   app.use(
     createProxyMiddleware('/question', {
-      target: 'http://localhost:8383', // Question Service
+      target: process.env.URI_QUESTION_SVC || 'http://localhost:8003', // Question Service
       changeOrigin: true,
       pathRewrite: {
         '^/question': ''
+      },
+      headers: {
+        Connection: 'keep-alive'
+      }
+    })
+  )
+  app.use(
+    createProxyMiddleware('/chat', {
+      target: process.env.URI_CHAT_SVC || 'http://localhost:8004', // Chat Service
+      changeOrigin: true,
+      pathRewrite: {
+        '^/chat': ''
+      },
+      headers: {
+        Connection: 'keep-alive'
+      }
+    })
+  )
+  app.use(
+    createProxyMiddleware('/history', {
+      target: process.env.URI_HISTORY_SVC || 'http://localhost:8005', // History Service
+      changeOrigin: true,
+      pathRewrite: {
+        '^/history': ''
       },
       headers: {
         Connection: 'keep-alive'

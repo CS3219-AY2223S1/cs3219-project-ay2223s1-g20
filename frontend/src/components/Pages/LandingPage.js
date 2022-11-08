@@ -10,12 +10,11 @@ import AttemptedQuestions from '../LandingPageComponents/AttemptedQuestions'
 function LandingPage () {
   return (
         <Box>
-            <HeaderBar />
-            <Grid container spacing={2}>
+            <HeaderBar showUserActions={true}/>
+            <Grid container spacing={2} direction="column" sx={{ mt: 10 }}>
                 <Grid item xs={6}><DifficultySelection /></Grid>
                 <Grid item xs={6}><AttemptedQuestions /></Grid>
             </Grid>
-
         </Box>
   )
 }

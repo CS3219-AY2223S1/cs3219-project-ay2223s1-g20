@@ -7,7 +7,6 @@ import (
 
 func Write(w http.ResponseWriter, resp map[string]interface{}, httpStatus int) {
 	w.WriteHeader(httpStatus)
-	w.Header().Set("Content-Type", "application/json")
 	jsonResp, _ := json.Marshal(resp)
 	w.Write(jsonResp)
 }

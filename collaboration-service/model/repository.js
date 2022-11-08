@@ -1,9 +1,9 @@
 import { createClient } from 'redis';
 import * as dotenv from 'dotenv'
 
-dotenv.config({ path: `.env.${process.env.NODE_ENV}` })
-
-const client = createClient({url: process.env.CACHE_URI})
+const client = createClient({
+    url: process.env.REDIS_URL || "redis://localhost:6379"
+})
 client.on('error', (err) => console.log('Redis Client Error', err));
 client.connect().then(() => console.log('Redis connection established.'))
     .catch(() => console.log('Redis connection failed.'))

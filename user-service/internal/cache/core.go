@@ -11,15 +11,19 @@ import (
 var rdb *redis.Client
 var c *cache.Cache
 
-func Connect(address string) {
-	rdb = redis.NewClient(&redis.Options{
-		Addr: address,
-	})
+func Connect(url string) error {
+	opt, err := redis.ParseURL(url)
+	if err != nil {
+		return err
+	}
+	rdb = redis.NewClient(opt)
 
 	c = cache.New(&cache.Options{
 		Redis:      rdb,
 		LocalCache: cache.NewTinyLFU(1000, time.Minute),
 	})
+
+	return nil
 }
 
 func Close() {

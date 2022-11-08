@@ -24,7 +24,6 @@ export default function ChangeQuestionDialog (props) {
   }, [])
 
   useEffect(() => {
-    console.log(dialogToShow)
     if (dialogToShow === 'rejected') {
       setTimeout(() => {
         setDialogToShow('request')
@@ -41,24 +40,20 @@ export default function ChangeQuestionDialog (props) {
   }
 
   const requestQuestionChange = () => {
-    console.log('requested question change')
     getCollabSocket().emit('changeQuestion')
     setDialogToShow('waitingPartner')
   }
 
   const handleResponse = useCallback((rsp) => {
-    console.log('Response from second user: ', rsp)
     setDialogToShow(rsp ? 'waitingQuestion' : 'rejected')
   }, [])
 
   const rejectQuestionChange = () => {
-    console.log('question change rejected')
     getCollabSocket().emit('changeQuestionRsp', false)
     handleClose()
   }
 
   const acceptQuestionChange = () => {
-    console.log('accept question change')
     getCollabSocket().emit('changeQuestionRsp', true)
     setDialogToShow('waitingQuestion')
   }
@@ -130,7 +125,6 @@ export default function ChangeQuestionDialog (props) {
   }
 
   const AwaitingResponseDialogContent = (text) => {
-    console.log(text)
     return (
       <Box display={'flex'} justifyContent="center" alignItems="center" flexDirection="column" sx={{ width: '35vw', height: '23vh' }}>
         <DialogContent sx={{ width: '30vw', height: '20vh' }}>

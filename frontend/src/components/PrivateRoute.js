@@ -5,9 +5,6 @@ import { isAuthenticated } from '../api/cookieApi'
 export const PrivateRoute = () => {
   const auth = isAuthenticated()
 
-  // If authorized, return an outlet that will render child elements
-  // If not, return element that will navigate to login page
-
   if (!auth) {
     return <Navigate to="/login" />
   } else {

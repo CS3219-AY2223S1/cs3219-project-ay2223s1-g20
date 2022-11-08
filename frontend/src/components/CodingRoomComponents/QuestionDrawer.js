@@ -7,9 +7,14 @@ import {
   Toolbar,
   Typography
 } from '@mui/material'
+import { createTheme } from '@mui/material/styles'
+import { ThemeProvider } from '@emotion/react'
+import { grey, blue } from '@mui/material/colors'
 import ChangeQuestionDialog from '../Dialogs/ChangeQuestionDialog'
 import { getCollabSocket } from '../../api/socketApi'
 import { getQuestionFromQuestionNum } from '../../api/questionApi'
+import { postQuestionIdByUsername } from '../../api/historyApi'
+import { getUsername } from '../../api/cookieApi'
 
 function QuestionDrawer (props) {
   const drawerWidth = '25vw'
@@ -23,7 +28,6 @@ function QuestionDrawer (props) {
   const [showContent, setShowContent] = useState(false)
 
   useEffect(() => {
-    console.log(props.questionData)
     if (props.questionData) {
       updateQuestionStates(props.questionData)
       setShowContent(true)
@@ -76,13 +80,25 @@ function QuestionDrawer (props) {
         updateQuestionStates(res)
         setOpenQuestionDialog(false)
       })
+    postQuestionIdByUsername(getUsername(), qnNum)
   }, [])
+
+  const buttonTheme = createTheme({
+    palette: {
+      primary: {
+        main: grey[50],
+        contrastText: blue[500]
+      }
+    }
+  })
 
   const BottomBar = () => {
     return (
-        <Box sx={{ position: 'fixed', left: 0, bottom: 0, right: 0 }} bgcolor="white" display={'flex'} justifyContent="center" alignItems="center" m={1} width={'22vw'}>
-          <Button variant={'outlined'} onClick={() => openDialog('request')}>Change Question</Button>
+      <ThemeProvider theme={buttonTheme}>
+        <Box sx={{ position: 'fixed', left: 0, bottom: 0, right: 0 }} bgcolor="transparent" display={'flex'} justifyContent="center" alignItems="center" m={1} width={'22vw'}>
+          <Button variant={'contained'} onClick={() => openDialog('request')}>Change Question</Button>
         </Box>
+      </ThemeProvider>
     )
   }
 
@@ -109,7 +125,7 @@ function QuestionDrawer (props) {
               <Box key={index}>
                   <Typography variant={'body'} class={'source'} style={{ fontWeight: 600 }}>Example {index + 1}</Typography>
                   <Box component="span" sx={{ display: 'block', bgcolor: 'WhiteSmoke', borderRadius: '2px' }} p={1} my={0.5}>
-                      <Typography style={{ whiteSpace: 'pre-line' }} class={'code'}>
+                      <Typography style={{ whiteSpace: 'pre-line', wordWrap: 'break-word' }} class={'code'}>
                         {example.split('\\n').map((i, key) => {
                           return <div key={key}>{i}{'\n'}</div>
                         })}

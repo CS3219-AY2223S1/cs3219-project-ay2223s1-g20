@@ -1,9 +1,9 @@
-import { URI_MATCHING_SVC, URI_COLLAB_SVC, URI_QUESTION_SVC } from '../util/configs'
+import { URI_MATCHING_SVC, URI_COLLAB_SVC, URI_CHAT_SVC } from '../util/configs'
 import io from 'socket.io-client'
 
 export let matchingSocket = null
 export let collabSocket = null
-export let questionSocket = null
+export let chatSocket = null
 
 // ----- MATCHING SOCKET -----
 export const setMatchingSocket = (socket) => {
@@ -21,7 +21,6 @@ export const getMatchingSocket = () => {
     socket.connect()
     setMatchingSocket(socket)
   }
-  console.log('matchingsocket: ', matchingSocket)
   return matchingSocket
 }
 
@@ -41,26 +40,24 @@ export const getCollabSocket = () => {
     collabSocket.connect()
     setCollabSocket(collabSocket)
   }
-  console.log('collabsocket: ', collabSocket)
   return collabSocket
 }
 
-// ----- QUESTION SOCKET -----
-export const setQuestionSocket = (socket) => {
-  questionSocket = socket
+// ----- CHAT SOCKET -----
+export const setChatSocket = (socket) => {
+  chatSocket = socket
 }
 
-export const haveQuestionSocket = () => {
-  return questionSocket != null
+export const haveChatSocket = () => {
+  return chatSocket != null
 }
 
-export const getQuestionSocket = () => {
-  if (!haveQuestionSocket()) {
-    console.log('questionSocket connecting')
-    const questionSocket = io(URI_QUESTION_SVC, { transports: ['websocket'] })
-    questionSocket.connect()
-    setQuestionSocket(questionSocket)
+export const getChatSocket = () => {
+  if (!haveChatSocket()) {
+    console.log('chatSocket connecting')
+    const chatSocket = io(URI_CHAT_SVC, { transports: ['websocket'] })
+    chatSocket.connect()
+    setChatSocket(chatSocket)
   }
-  console.log('questionsocket: ', questionSocket)
-  return questionSocket
+  return chatSocket
 }

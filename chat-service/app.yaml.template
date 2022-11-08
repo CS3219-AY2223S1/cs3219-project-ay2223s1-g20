@@ -1,0 +1,13 @@
+runtime: custom
+service: chat-service
+env: flex
+
+manual_scaling:
+  instances: 1
+
+network:
+  session_affinity: true
+
+env_variables:
+  ENV: PROD
+  REDIS_URL: ${REDIS_URL}

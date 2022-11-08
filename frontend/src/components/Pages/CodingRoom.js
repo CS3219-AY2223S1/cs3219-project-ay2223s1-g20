@@ -9,10 +9,11 @@ import CloseRoomDialog from '../Dialogs/CloseRoomDialog'
 import QuestionDrawer from '../CodingRoomComponents/QuestionDrawer'
 import ChatDrawer from '../CodingRoomComponents/ChatDrawer'
 import Editor from '../CodingRoomComponents/CodeEditor'
-import { getCollabSocket, getMatchingSocket } from '../../api/socketApi'
+import { getChatSocket, getCollabSocket, getMatchingSocket } from '../../api/socketApi'
 import { CLOSE_ROOM } from '../../util/constants'
 import { isInRoom, removeMatchId, setMatchId, getUsername } from '../../api/cookieApi'
 import { getQuestionFromQuestionNum } from '../../api/questionApi'
+import { postQuestionIdByUsername } from '../../api/historyApi'
 import Loading from '../common/loading'
 
 function CodingRoom () {
@@ -47,6 +48,7 @@ function CodingRoom () {
         setQuestionData(res)
         setQuestionDataRetrieved(true)
       })
+    postQuestionIdByUsername(getUsername(), qnNum)
   }, [])
 
   // ------- HANDLE LEAVE ROOM ------
@@ -64,16 +66,15 @@ function CodingRoom () {
 
   const handleLeaveRoom = () => {
     if (isInPair) {
-      console.log('emit leave event')
       getMatchingSocket().emit('leave')
       getCollabSocket().emit('leaveRoom')
+      getChatSocket().emit('leaveRoom')
     }
     removeMatchId()
     navigate('/landing')
   }
 
   const handleBackButtonClick = (e) => {
-    console.log('back button pressed')
     e.preventDefault()
     setShowLeaveRoomDialog(true)
   }
@@ -131,7 +132,7 @@ function CodingRoom () {
 
   const CodingRoomWrapper = () => {
     return (<Box>
-      <HeaderBar />
+      <HeaderBar showUserActions={false}/>
       <CodingRoomContent />
       {showLeaveRoomDialog && <LeaveRoomDialog open={showLeaveRoomDialog} setOpen={setShowLeaveRoomDialog} handleLeaveRoom={handleLeaveRoom}/>}
       {showCloseRoomDialog && <CloseRoomDialog open={showCloseRoomDialog} setOpen={setShowCloseRoomDialog} handleLeaveRoom={handleLeaveRoom}/>}

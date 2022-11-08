@@ -1,0 +1,7 @@
+runtime: nodejs16
+service: history-service
+
+env_variables:
+  ENV: PROD
+  PORT: 8080
+  FIREBASE_KEY: ${FIREBASE_KEY}

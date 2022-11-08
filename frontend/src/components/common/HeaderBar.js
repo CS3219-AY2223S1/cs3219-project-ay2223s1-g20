@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   AppBar,
   Box,
@@ -18,18 +18,22 @@ import { getUsername } from '../../api/cookieApi'
 
 const menu = ['Delete Account', 'Change Password']
 
-function HeaderBar () {
+function HeaderBar (props) {
   const [anchorElUser, setAnchorElUser] = useState(null)
   const [openChangePasswordDialog, setOpenChangePasswordDialog] = useState(false)
   const [openDeleteAccountDialog, setOpenDeleteAccountDialog] = useState(false)
   const [openSignOutDialog, setOpenSignOutDialog] = useState(false)
+  const [showUserActions, setShowUserActions] = useState(false)
+
+  useEffect(() => {
+    setShowUserActions(props.showUserActions)
+  }, [])
 
   const handleMenu = (event) => {
     setAnchorElUser(event.currentTarget)
   }
 
   const handleMenuAction = (action) => {
-    console.log(action + ' has been clicked')
     if (action === menu[1]) {
       setOpenChangePasswordDialog(true)
     } else {
@@ -75,7 +79,7 @@ function HeaderBar () {
                 <Typography variant={'h1'} sx={{ flexGrow: 1, fontSize: '64', fontFamily: 'Raleway' }}>PeerPrep</Typography>
                 <Box display={'flex'} flexDirection={'row'} sx={{ flexGrow: 0 }}>
                     <Typography class={'source'} sx={{ paddingTop: 1.5 }}>{getUsername()}</Typography>
-                    <IconButton
+                    {showUserActions && <IconButton
                         size="large"
                         aria-label="account of current user"
                         aria-controls="menu-appbar"
@@ -84,10 +88,10 @@ function HeaderBar () {
                         color="inherit"
                     >
                         <AccountCircle />
-                    </IconButton>
+                    </IconButton>}
                     <MenuDropdown />
                 </Box>
-                <Button variant={'outlined'} onClick={e => setOpenSignOutDialog(true)}>Sign Out</Button>
+                {showUserActions && <Button variant={'outlined'} onClick={e => setOpenSignOutDialog(true)}>Sign Out</Button>}
             </Toolbar>
             {openChangePasswordDialog &&
                 <ChangePasswordDialog

@@ -1,12 +1,11 @@
 const express = require("express");
-const { FieldValue } = require('firebase-admin/firestore');
+const cors = require('cors');
+const { db } = require('./firebase-config.js');
 
 const app = express()
-const port = 8383
-const { db } = require('./firebase-config.js');
-const { application } = require("express");
-
 app.use(express.json())
+app.use(cors())
+app.options('*', cors())
 
 app.get('/', (req, res) => {
     res.send('Hello World question-service');
@@ -102,5 +101,7 @@ app.get('/question/id/:id', async (req, res) => {
 
     res.status(200).send(snapshot.data());
 })
+
+const port = process.env.PORT || 8003;
 
 app.listen(port, () => console.log(`Server has started on port: ${port}`));
