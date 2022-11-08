@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "jest"
+    "test": "jest",
+    "benchmark": "node benchmark_client.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
   "devDependencies": {
     "jest": "^29.2.1",
     "nodemon": "^2.0.19",
+    "socket.io-client": "^4.5.3",
     "supertest": "^6.3.0"
   },
   "dependencies": {
