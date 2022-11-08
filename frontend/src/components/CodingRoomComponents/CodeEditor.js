@@ -28,7 +28,6 @@ function Editor (props) {
   }, [])
 
   const changeHandler = (value) => {
-    console.log('hi: ', value)
     getCollabSocket().emit('sendChanges', value)
   }
 
