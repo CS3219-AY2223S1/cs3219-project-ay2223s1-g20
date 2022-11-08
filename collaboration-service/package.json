@@ -18,6 +18,8 @@
     "supertest": "^6.3.0"
   },
   "dependencies": {
+    "@codemirror/collab": "^6.0.0",
+    "@codemirror/state": "^6.1.2",
     "@socket.io/admin-ui": "^0.4.0",
     "async-mutex": "^0.4.0",
     "cors": "^2.8.5",
