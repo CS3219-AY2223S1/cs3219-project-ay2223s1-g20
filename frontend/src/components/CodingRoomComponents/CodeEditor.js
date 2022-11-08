@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import {
   Box,
   Button,
@@ -10,6 +10,7 @@ import { javascript } from '@codemirror/lang-javascript'
 import { createTheme } from '@mui/material/styles'
 import { ThemeProvider } from '@emotion/react'
 import { grey, blue } from '@mui/material/colors'
+import debounce from 'lodash.debounce';
 
 function Editor (props) {
   const [code, setCode] = useState('console.log(\'hello world!\');')
@@ -26,13 +27,24 @@ function Editor (props) {
     setCode(code)
   }, [])
 
-  const onChange = React.useCallback((value, viewUpdate) => {
+  const changeHandler = (value) => {
+    console.log('hi: ', value)
     getCollabSocket().emit('sendChanges', value)
-  }, [])
+  }
 
-  const onStatistics = React.useCallback((data) => {
+  const debouncedChangeHandler = useMemo(() => {
+    return debounce(changeHandler, 300);
+  }, []);
+
+  const onStatistics = useCallback((data) => {
     // console.log(data)
   }, [])
+
+  useEffect(() => {
+    return () => {
+      debouncedChangeHandler.cancel();
+    }
+  }, []);
 
   const buttonTheme = createTheme({
     palette: {
@@ -63,7 +75,7 @@ function Editor (props) {
         value={code}
         height="85vh"
         extensions={[javascript({ jsx: true })]}
-        onChange={onChange}
+        onChange={debouncedChangeHandler}
         onStatistics={onStatistics}
       />
 
