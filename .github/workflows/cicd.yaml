@@ -157,7 +157,7 @@ jobs:
       - name: Prepare app.yml
         uses: mshick/fast-envsubst@v1
         env:
-          REDIS_URL: ${{ secrets.CACHE_ADDRESS }}
+          REDIS_URL: ${{ secrets.COLLAB_REDIS_ADDRESS }}
         with:
           in-file: collaboration-service/app.yaml.template
           out-file: collaboration-service/app.yaml
