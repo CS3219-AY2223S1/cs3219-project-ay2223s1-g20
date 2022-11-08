@@ -13,7 +13,9 @@ if (process.env.ENV === "PROD") {
     privateKey = readFileSync('./firebase.key').toString()
 }
 
-initializeApp({ credential: credential.cert({ ...serviceAccount, "private_key": privateKey }) })
+initializeApp({
+    credential: credential.cert({ ...serviceAccount, "private_key": privateKey })
+})
 
 const db = getFirestore()
 

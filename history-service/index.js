@@ -1,10 +1,12 @@
 const express = require("express");
+const cors = require('cors');
 const { FieldValue } = require('firebase-admin/firestore');
-
-const app = express()
 const { db } = require('./firebase-config.js');
 
+const app = express()
 app.use(express.json())
+app.use(cors())
+app.options('*', cors())
 
 app.get('/', (req, res) => {
     res.send('Hello World history-service');
