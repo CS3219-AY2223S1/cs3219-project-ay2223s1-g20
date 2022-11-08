@@ -33,7 +33,7 @@ function Editor (props) {
   }
 
   const debouncedChangeHandler = useMemo(() => {
-    return debounce(changeHandler, 300);
+    return debounce(changeHandler, 50);
   }, []);
 
   const onStatistics = useCallback((data) => {
