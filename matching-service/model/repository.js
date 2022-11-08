@@ -125,3 +125,18 @@ export async function findMatchFromUserID(userID) {
     });
     return match;
 }
+
+export async function clearAllTables() {
+    await Match.destroy({
+        where: {},
+        truncate: true
+    })
+    await PendingMatch.destroy({
+        where: {},
+        truncate: true
+    })
+}
+
+export async function closeConnection() {
+    sequelize.close()
+}

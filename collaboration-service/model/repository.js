@@ -85,3 +85,11 @@ export async function checkSessionExists(sessionId) {
         return false
     }
 }
+
+export function clearCache() {
+    client.flushAll().then(() => console.log('collaboration-service: redis cache cleared'))
+}
+
+export function closeCacheConnection() {
+    client.quit().then(() => console.log('collaboration-service: redis connection closed'))
+}
