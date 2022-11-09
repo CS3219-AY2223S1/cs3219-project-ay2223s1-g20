@@ -19,32 +19,15 @@ app.get('/questions', async (req, res) => {
     var qnsArray = [];
     if (snapshot.empty) {
         console.log('No matching documents.');
-        return res.sendStatus(400);
+        return res.sendStatus(404);
     }
     snapshot.forEach(doc => {
-        // console.log(doc.id, '=>', doc.data());
-        // qnsArray.push(doc.data());
         qnsArray.push(doc.id);
     });
 
     res.status(200).send(qnsArray);
 })
 
-// get question with a particular title
-// app.get('/questions/:title', async (req, res) => {
-//     const { title } = req.params
-//     const qnsRef = db.collection('questions');
-//     const snapshot = await qnsRef.where('title', '==', title).get();
-
-//     if (!title || snapshot.empty) {
-//         return res.sendStatus(404)
-//     }
-
-//     snapshot.forEach(doc => {
-//         console.log(doc.id, '=>', doc.data());
-//         res.status(200).send(doc.data());
-//     });
-// })
 
 // get all questions of given difficulty
 app.get('/questions/difficulty/:difficulty', async (req, res) => {
@@ -55,11 +38,9 @@ app.get('/questions/difficulty/:difficulty', async (req, res) => {
     var qnsArray = [];
     if (snapshot.empty) {
         console.log('No matching documents.');
-        return res.sendStatus(400);
+        return res.sendStatus(404);
     }
     snapshot.forEach(doc => {
-        // console.log(doc.id, '=>', doc.data());
-        // qnsArray.push(doc.data());
         qnsArray.push(doc.id);
     });
 
@@ -75,11 +56,9 @@ app.get('/question/difficulty/:difficulty', async (req, res) => {
     var qnsArray = [];
     if (snapshot.empty) {
         console.log('No matching documents.');
-        return res.sendStatus(400);
+        return res.sendStatus(404);
     }
     snapshot.forEach(doc => {
-        // console.log(doc.id, '=>', doc.data());
-        // qnsArray.push(doc.data());
         qnsArray.push(doc.id);
     });
 
