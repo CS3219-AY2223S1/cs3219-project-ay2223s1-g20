@@ -50,10 +50,10 @@ function Editor (props) {
   }
 
   const handleUpdateCode = useCallback((payload) => {
-    // console.log('payload: ', payload)
-    // console.log('version: ', version)
     // console.log('test: ', moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
     if (payload.version >= version && payload.value != code) {
+      console.log('payload: ', payload)
+      console.log('version: ', version)
       setCode(payload.value)
       setVersion(payload.version)
     }
@@ -61,9 +61,9 @@ function Editor (props) {
 
   const changeHandler = (value) => {
     const currentVersion = moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS')
-    // console.log('currentVersion: ', currentVersion)
-    // console.log('oldVersion: ', version)
-    // console.log(currentVersion > version)
+    console.log('currentVersion: ', currentVersion)
+    console.log('oldVersion: ', version)
+    console.log(currentVersion > version)
     if (currentVersion > version) {
       setVersion(currentVersion)
       getCollabSocket().emit('sendChanges', {version: currentVersion, value: value})
