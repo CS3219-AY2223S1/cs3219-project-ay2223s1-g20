@@ -21,6 +21,8 @@ app.post('/history', async (req, res) => {
     const res2 = await userRef.set({
         "questionID" : FieldValue.arrayUnion(questionID)
     }, { merge: true });
+
+    return res.sendStatus(200)
 })
 
 // get questions history for a particular username
@@ -31,7 +33,7 @@ app.get('/history/:username', async (req, res) => {
     const snapshot = await docRef.get();
 
     if (!username || !snapshot.data()) {
-        return res.status(200).send([])
+        return res.sendStatus(404)
     }
 
     questionIdHistory = snapshot.data().questionID;
