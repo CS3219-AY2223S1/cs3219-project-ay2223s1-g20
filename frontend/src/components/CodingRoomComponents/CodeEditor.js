@@ -17,7 +17,7 @@ import { getUsername } from '../../api/cookieApi'
 function Editor (props) {
   const [code, setCode] = useState('console.log(\'hello world!\');')
   const [version, setVersion] = useState(moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
-  const [lastPayloadCode, setLastPayloadCode] = useState('')
+  const [lastPayloadCode, setLastPayloadCode] = useState('console.log(\'hello world!\');')
 
   const buttonTheme = createTheme({
     palette: {
@@ -53,15 +53,16 @@ function Editor (props) {
 
   useEffect(() => {
     console.log('last: ', lastPayloadCode)
+    setCode(lastPayloadCode)
+    console.log('changed code')
   }, [lastPayloadCode])
 
   const handleUpdateCode = useCallback((payload) => {
-    if (payload.version >= version) {
-      console.log('updating..')
+    const checkNotSameString = new String(payload.value).valueOf() !== new String(code).valueOf()
+    if (payload.version >= version && checkNotSameString) {
+      console.log('here')
       const payloadCode = payload.value
-      console.log(payload.value)
       setLastPayloadCode(payloadCode)
-      setCode(payload.value)
       setVersion(payload.version)
     }
   }, [])
@@ -76,9 +77,15 @@ function Editor (props) {
   }
 
   const changeHandler = (value) => {
-    if (lastPayloadCode !== code) {
-      console.log(lastPayloadCode)
-      console.log(code)
+    console.log('lastPayloadCode')
+    console.log(lastPayloadCode)
+    console.log('value')
+    console.log(value)
+    // console.log('here1: ', lastPayloadCode !== value)
+    console.log('here2: ', new String(lastPayloadCode).valueOf() == new String(value).valueOf())
+    if (new String(lastPayloadCode).valueOf() !== new String(value).valueOf()) {
+      // console.log(lastPayloadCode)
+      // console.log(value)
       sendUpdate(value)
     }
   }
