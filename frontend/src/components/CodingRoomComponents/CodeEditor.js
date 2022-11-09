@@ -17,7 +17,6 @@ import { getUsername } from '../../api/cookieApi'
 function Editor (props) {
   const [code, setCode] = useState('console.log(\'hello world!\');')
   const [version, setVersion] = useState(moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
-  const [lastPayloadCode, setLastPayloadCode] = useState('console.log(\'hello world!\');')
 
   const buttonTheme = createTheme({
     palette: {
@@ -51,18 +50,10 @@ function Editor (props) {
     collabSocket.on('updateChanges', handleUpdateCode)
   }
 
-  useEffect(() => {
-    console.log('last: ', lastPayloadCode)
-    setCode(lastPayloadCode)
-    console.log('changed code')
-  }, [lastPayloadCode])
-
   const handleUpdateCode = useCallback((payload) => {
-    const checkNotSameString = new String(payload.value).valueOf() !== new String(code).valueOf()
-    if (payload.version >= version && checkNotSameString) {
-      console.log('here')
-      const payloadCode = payload.value
-      setLastPayloadCode(payloadCode)
+    // const checkNotSameCode = new String(payload.value).valueOf() !== new String(code).valueOf()
+    if (payload.version >= version) {
+      setCode(payload.value)
       setVersion(payload.version)
     }
   }, [])
@@ -70,28 +61,24 @@ function Editor (props) {
   const sendUpdate = (value) => {
     const currentVersion = moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS')
     if (currentVersion > version) {
-      console.log('bigger version and code different, sending event...')
+      console.log('new version and different code, sending event...')
       setVersion(currentVersion)
       getCollabSocket().emit('sendChanges', {version: currentVersion, value: value, username: getUsername()})
     }
   }
 
   const changeHandler = (value) => {
-    console.log('lastPayloadCode')
-    console.log(lastPayloadCode)
-    console.log('value')
     console.log(value)
-    // console.log('here1: ', lastPayloadCode !== value)
-    console.log('here2: ', new String(lastPayloadCode).valueOf() == new String(value).valueOf())
-    if (new String(lastPayloadCode).valueOf() !== new String(value).valueOf()) {
-      // console.log(lastPayloadCode)
-      // console.log(value)
+    console.log(code)
+    if (new String(code).valueOf() !== new String(value).valueOf()) {
+      setCode(value)
+      console.log('change detected')
       sendUpdate(value)
     }
   }
 
   const debouncedChangeHandler = useMemo(() => {
-    return debounce(changeHandler, 50);
+    return debounce(changeHandler, 100);
   }, []);
 
   const onStatistics = useCallback((data) => {
