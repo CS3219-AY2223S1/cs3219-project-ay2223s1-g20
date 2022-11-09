@@ -24,12 +24,12 @@ export async function handleCollaborationEvents(io) {
             }
         })
 
-        // socket.on('sendChanges', async (code) => {
-        //     console.log(`[socketIO, sendChanges] socketId=${socket.id}`)
-        //     const sessionId = await getSessionId(socket.id)
-        //     console.log(sessionId) // returning undefined
-        //     io.to(sessionId).emit('updateChanges', code)
-        // })
+        socket.on('sendChanges', async (payload) => {
+            console.log(`[socketIO, sendChanges] socketId=${socket.id}`)
+            const sessionId = await getSessionId(socket.id)
+            // console.log(sessionId)
+            io.to(sessionId).emit('updateChanges', payload)
+        })
 
         socket.on('pullUpdates', async (version) => {
             const sessionId = await getSessionId(socket.id)
@@ -61,7 +61,7 @@ export async function handleCollaborationEvents(io) {
                 }
                 socket.emit('pushUpdateResponse', true)
 
-                while (pending.length > 0) {
+                while (pending.length > 0) {p
                     const f = pending.shift()
                     f(updates, version, socket)
                     savePending(sessionId, pending)
@@ -157,7 +157,10 @@ async function selectQuestion(difficulty) {
                 data: response
             }
         }).catch((error) => {
-            throw new Error("Unable to retrieve question")
+            // throw new Error("Unable to retrieve question")
+            return {
+                data: 'help'
+            }
         })
 }
 
