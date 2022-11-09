@@ -5,17 +5,27 @@ import {
   Paper
 } from '@mui/material'
 import CodeMirror from '@uiw/react-codemirror'
-import { getCollabSocket } from '../../api/socketApi'
-import { javascript } from '@codemirror/lang-javascript'
+import { getCollabSocket, setCollabSocket } from '../../api/socketApi'
+import { javascript, localCompletionSource } from '@codemirror/lang-javascript'
 import { createTheme } from '@mui/material/styles'
 import { ThemeProvider } from '@emotion/react'
 import { grey, blue } from '@mui/material/colors'
 import debounce from 'lodash.debounce'
 import moment from 'moment-timezone'
+import { getUsername } from '../../api/cookieApi'
 
 function Editor (props) {
-  const [code, setCode] = useState('console.log(\'hello world!\');')
+  const [lastVersion, setLastVersion] = useState('')
+  const [store, setStore] = useState('//code here')
+  const [oldCode, setOldCode] = useState('//code here')
+  const [code, setCode] = useState('//code here')
   const [version, setVersion] = useState(moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
+  const [block, setBlock] = useState(false)
+  const [userChanged, setUserChanged] = useState(true)
+
+  const sleep = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
 
   const buttonTheme = createTheme({
     palette: {
@@ -49,33 +59,21 @@ function Editor (props) {
     collabSocket.on('updateChanges', handleUpdateCode)
   }
 
-  const handleUpdateCode = useCallback((payload) => {
-    // console.log('test: ', moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
-    if (payload.version >= version && payload.value != code) {
-      console.log('payload: ', payload)
-      console.log('version: ', version)
-      setCode(payload.value)
-      setVersion(payload.version)
-    }
+  const handleUpdateCode = useCallback((code) => {
+    setCode(code)
   }, [])
 
   const changeHandler = (value) => {
-    const currentVersion = moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS')
-    console.log('currentVersion: ', currentVersion)
-    console.log('oldVersion: ', version)
-    console.log(currentVersion > version)
-    if (currentVersion > version) {
-      setVersion(currentVersion)
-      getCollabSocket().emit('sendChanges', {version: currentVersion, value: value})
-    }
+    // console.log('hi: ', value)
+    getCollabSocket().emit('sendChanges', value)
   }
 
   const debouncedChangeHandler = useMemo(() => {
-    return debounce(changeHandler, 50);
+    return debounce(changeHandler, 500);
   }, []);
 
   const onStatistics = useCallback((data) => {
-    // console.log(data)
+    //console.log(data)
   }, [])
 
   useEffect(() => {
