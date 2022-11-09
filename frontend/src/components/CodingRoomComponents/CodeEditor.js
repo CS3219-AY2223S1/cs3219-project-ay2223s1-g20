@@ -15,7 +15,8 @@ import moment from 'moment-timezone'
 import { getUsername } from '../../api/cookieApi'
 
 function Editor (props) {
-  const [code, setCode] = useState('console.log(\'hello world!\');')
+  const [store, setStore] = useState('')
+  const [code, setCode] = useState('//code here')
   const [version, setVersion] = useState(moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
 
   const buttonTheme = createTheme({
@@ -51,30 +52,34 @@ function Editor (props) {
   }
 
   const handleUpdateCode = useCallback((payload) => {
-    // const checkNotSameCode = new String(payload.value).valueOf() !== new String(code).valueOf()
-    if (payload.version >= version) {
+    // only update code if current code not the same as payload code
+    console.log(code, payload.value)
+    console.log((new String(code).valueOf() !== new String(payload.value).valueOf()))
+    console.log(payload.version, version)
+    console.log(payload.version > version)
+    if ((new String(code).valueOf() !== new String(payload.value).valueOf()) && payload.version > version) {
       setCode(payload.value)
       setVersion(payload.version)
     }
   }, [])
 
+  useEffect(() => {
+    // console.log(store)
+  }, [store])
+
   const sendUpdate = (value) => {
     const currentVersion = moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS')
     if (currentVersion > version) {
-      console.log('new version and different code, sending event...')
+      console.log('new version, sending event...')
       setVersion(currentVersion)
       getCollabSocket().emit('sendChanges', {version: currentVersion, value: value, username: getUsername()})
     }
   }
 
   const changeHandler = (value) => {
-    console.log(value)
-    console.log(code)
-    if (new String(code).valueOf() !== new String(value).valueOf()) {
-      setCode(value)
-      console.log('change detected')
-      sendUpdate(value)
-    }
+    setStore(value)
+    sendUpdate(value)
+    setCode(value)
   }
 
   const debouncedChangeHandler = useMemo(() => {
@@ -82,7 +87,7 @@ function Editor (props) {
   }, []);
 
   const onStatistics = useCallback((data) => {
-    // console.log(data)
+    //console.log(data)
   }, [])
 
   useEffect(() => {
