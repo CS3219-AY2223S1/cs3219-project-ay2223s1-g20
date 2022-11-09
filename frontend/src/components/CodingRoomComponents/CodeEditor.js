@@ -12,11 +12,12 @@ import { ThemeProvider } from '@emotion/react'
 import { grey, blue } from '@mui/material/colors'
 import debounce from 'lodash.debounce'
 import moment from 'moment-timezone'
+import { getUsername } from '../../api/cookieApi'
 
 function Editor (props) {
-  const [oldCode, setOldCode] = useState('')
   const [code, setCode] = useState('console.log(\'hello world!\');')
   const [version, setVersion] = useState(moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
+  const [lastPayloadCode, setLastPayloadCode] = useState('')
 
   const buttonTheme = createTheme({
     palette: {
@@ -50,27 +51,35 @@ function Editor (props) {
     collabSocket.on('updateChanges', handleUpdateCode)
   }
 
+  useEffect(() => {
+    console.log('last: ', lastPayloadCode)
+  }, [lastPayloadCode])
+
   const handleUpdateCode = useCallback((payload) => {
-    // console.log('test: ', moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
-    console.log('payload same as current code: ', payload.value === code)
-    if (payload.version >= version && payload.value !== code) {
-      // console.log('payload: ', payload.value)
-      // console.log('code: ', code)
-      setOldCode(code)
+    if (payload.version >= version) {
+      console.log('updating..')
+      const payloadCode = payload.value
+      console.log(payload.value)
+      setLastPayloadCode(payloadCode)
       setCode(payload.value)
       setVersion(payload.version)
     }
   }, [])
 
-  const changeHandler = (value) => {
+  const sendUpdate = (value) => {
     const currentVersion = moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS')
-    // console.log('currentVersion: ', currentVersion)
-    // console.log('oldVersion: ', version)
-    // console.log(currentVersion > version)
-    if (currentVersion > version && code !== oldCode) {
+    if (currentVersion > version) {
       console.log('bigger version and code different, sending event...')
       setVersion(currentVersion)
-      getCollabSocket().emit('sendChanges', {version: currentVersion, value: value})
+      getCollabSocket().emit('sendChanges', {version: currentVersion, value: value, username: getUsername()})
+    }
+  }
+
+  const changeHandler = (value) => {
+    if (lastPayloadCode !== code) {
+      console.log(lastPayloadCode)
+      console.log(code)
+      sendUpdate(value)
     }
   }
 
