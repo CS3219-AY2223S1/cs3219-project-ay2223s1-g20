@@ -31,7 +31,7 @@ app.get('/history/:username', async (req, res) => {
     const snapshot = await docRef.get();
 
     if (!username || !snapshot.data()) {
-        return res.status(200).send([])
+        return res.status(400).send([])
     }
 
     questionIdHistory = snapshot.data().questionID;
