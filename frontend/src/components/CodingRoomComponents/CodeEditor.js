@@ -14,6 +14,7 @@ import debounce from 'lodash.debounce'
 import moment from 'moment-timezone'
 
 function Editor (props) {
+  const [oldCode, setOldCode] = useState('')
   const [code, setCode] = useState('console.log(\'hello world!\');')
   const [version, setVersion] = useState(moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
 
@@ -51,9 +52,11 @@ function Editor (props) {
 
   const handleUpdateCode = useCallback((payload) => {
     // console.log('test: ', moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
-    if (payload.version >= version && payload.value != code) {
-      console.log('payload: ', payload)
-      console.log('version: ', version)
+    console.log('payload same as current code: ', payload.value === code)
+    if (payload.version >= version && payload.value !== code) {
+      // console.log('payload: ', payload.value)
+      // console.log('code: ', code)
+      setOldCode(code)
       setCode(payload.value)
       setVersion(payload.version)
     }
@@ -61,10 +64,11 @@ function Editor (props) {
 
   const changeHandler = (value) => {
     const currentVersion = moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS')
-    console.log('currentVersion: ', currentVersion)
-    console.log('oldVersion: ', version)
-    console.log(currentVersion > version)
-    if (currentVersion > version) {
+    // console.log('currentVersion: ', currentVersion)
+    // console.log('oldVersion: ', version)
+    // console.log(currentVersion > version)
+    if (currentVersion > version && code !== oldCode) {
+      console.log('bigger version and code different, sending event...')
       setVersion(currentVersion)
       getCollabSocket().emit('sendChanges', {version: currentVersion, value: value})
     }
