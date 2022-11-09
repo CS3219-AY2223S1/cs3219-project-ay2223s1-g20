@@ -1,0 +1,14 @@
+runtime: custom
+service: collaboration-service
+env: flex
+
+manual_scaling:
+  instances: 1
+
+network:
+  session_affinity: true
+
+env_variables:
+  ENV: PROD
+  REDIS_URL: ${REDIS_URL}
+  URI_QUESTION_SVC: https://question-service-dot-cs3219g20.as.r.appspot.com

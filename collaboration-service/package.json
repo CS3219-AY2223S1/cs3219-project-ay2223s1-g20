@@ -1,0 +1,29 @@
+{
+  "name": "collaboration-service",
+  "version": "1.0.0",
+  "description": "\"\"",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "mocha --recursive --exit"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  },
+  "dependencies": {
+    "@codemirror/collab": "^6.0.0",
+    "@codemirror/state": "^6.1.2",
+    "@socket.io/admin-ui": "^0.4.0",
+    "async-mutex": "^0.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "mocha": "^10.1.0",
+    "node-fetch": "^3.2.10",
+    "redis": "^4.3.1",
+    "socket.io": "^4.5.1"
+  }
+}

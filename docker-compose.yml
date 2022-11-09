@@ -1,0 +1,96 @@
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    ports:
+      - 3000:3000
+    links:
+    - user-service
+    - matching-service
+    - collaboration-service
+    - question-service
+    - chat-service
+    - history-service
+    environment:
+    - URI_USER_SVC=http://user-service:8000
+    - URI_MATCHING_SVC=http://matching-service:8001
+    - URI_COLLAB_SVC=http://collaboration-service:8002
+    - URI_QUESTION_SVC=http://question-service:8003
+    - URI_CHAT_SVC=http://chat-service:8004
+    - URI_HISTORY_SVC=http://history-service:8005
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user-service
+    ports:
+      - 8000:8000
+    links:
+    - mongodb
+    - redis
+    environment:
+    - ENV=STAG
+    - PORT=8000
+    - DB_URI=mongodb://mongodb:27017/
+    - DB_NAME=user_service_staging
+    - CACHE_ADDRESS=redis://redis:6379
+    - JWT_SECRET_KEY=staging_secret
+  matching-service:
+    container_name: matching-service
+    build:
+      context: ./matching-service
+    ports:
+      - 8001:8001
+  collaboration-service:
+    container_name: collaboration-service
+    build:
+      context: ./collaboration-service
+    ports:
+      - 8002:8002
+    links:
+    - question-service
+    - redis
+    environment:
+    - REDIS_URL=redis://redis:6379
+    - URI_QUESTION_SVC=http://question-service:8003
+  question-service:
+    container_name: question-service
+    build:
+      context: ./question-service
+    ports:
+      - 8003:8003
+  chat-service:
+    container_name: chat-service
+    build:
+      context: ./chat-service
+    ports:
+      - 8004:8004
+    links:
+    - redis
+    environment:
+    - REDIS_URL=redis://redis:6379
+  history-service:
+    container_name: history-service
+    build:
+      context: ./history-service
+    ports:
+      - 8005:8005
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    ports:
+    - 27017:27017
+    volumes:
+    - mongo:/data/db
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+    ports:
+    - 6379:6379
+    volumes:
+    - redis:/data
+    - ./user-service/config/redis.conf:/usr/local/etc/redis/redis.conf
+
+volumes:
+  mongo:
+  redis:

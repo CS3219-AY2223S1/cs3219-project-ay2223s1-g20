@@ -1,0 +1,8 @@
+/node_modules
+config.js
+service-account.json
+out.html
+data.json
+processed-data.json
+/driver/chromedriver
+/leetcode-html/*
