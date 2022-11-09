@@ -5,7 +5,7 @@ import {
   Paper
 } from '@mui/material'
 import CodeMirror from '@uiw/react-codemirror'
-import { getCollabSocket } from '../../api/socketApi'
+import { getCollabSocket, setCollabSocket } from '../../api/socketApi'
 import { javascript } from '@codemirror/lang-javascript'
 import { createTheme } from '@mui/material/styles'
 import { ThemeProvider } from '@emotion/react'
@@ -15,9 +15,16 @@ import moment from 'moment-timezone'
 import { getUsername } from '../../api/cookieApi'
 
 function Editor (props) {
+  const [lastVersion, setLastVersion] = useState('')
   const [store, setStore] = useState('')
   const [code, setCode] = useState('//code here')
   const [version, setVersion] = useState(moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
+  const [block, setBlock] = useState(false)
+  const [userChanged, setUserChanged] = useState(true)
+
+  const sleep = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
 
   const buttonTheme = createTheme({
     palette: {
@@ -52,38 +59,30 @@ function Editor (props) {
   }
 
   const handleUpdateCode = useCallback((payload) => {
-    // only update code if current code not the same as payload code
-    console.log(code, payload.value)
-    console.log((new String(code).valueOf() !== new String(payload.value).valueOf()))
-    console.log(payload.version, version)
-    console.log(payload.version > version)
-    if ((new String(code).valueOf() !== new String(payload.value).valueOf()) && payload.version > version) {
-      setCode(payload.value)
+    // console.log(payload)
+    setLastVersion(payload.version)
+    if (payload.username !== getUsername()) {
+      console.log(payload.code)
+      setCode(payload.code)
+      setStore(payload.code)
       setVersion(payload.version)
+      setUserChanged(false)
     }
   }, [])
 
-  useEffect(() => {
-    // console.log(store)
-  }, [store])
-
-  const sendUpdate = (value) => {
-    const currentVersion = moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS')
-    if (currentVersion > version) {
-      console.log('new version, sending event...')
-      setVersion(currentVersion)
-      getCollabSocket().emit('sendChanges', {version: currentVersion, value: value, username: getUsername()})
+  const changeHandler = (value) => {
+    sleep(1000)
+    console.log('hi: ', value)
+    console.log(store)
+    const currVersion = moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS')
+    if (value !== store && currVersion > lastVersion) {
+      console.log('sending to backend')
+      getCollabSocket().emit('sendChanges', {version: currVersion, code: value, username: getUsername()})
     }
   }
 
-  const changeHandler = (value) => {
-    setStore(value)
-    sendUpdate(value)
-    setCode(value)
-  }
-
   const debouncedChangeHandler = useMemo(() => {
-    return debounce(changeHandler, 100);
+    return debounce(changeHandler, 300);
   }, []);
 
   const onStatistics = useCallback((data) => {
