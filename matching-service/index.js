@@ -61,6 +61,10 @@ io.on('connection', (socket) => {
     socket.on("disconnect", () => {
         console.log(`[socketIO] userID=${socket.id} disconnected.`);
     })
+
+    socket.on("ping", (callback) => {
+        callback();
+    })
 })
 
 instrument(io, {

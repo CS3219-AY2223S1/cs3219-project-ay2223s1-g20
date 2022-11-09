@@ -143,6 +143,10 @@ export async function handleCollaborationEvents(io) {
         socket.on('disconnect', () => {
             console.log(`[socketIO] socketId=${socket.id} disconnected`)
         })
+
+        socket.on("ping", (callback) => {
+            callback();
+        })
     })
 }
 

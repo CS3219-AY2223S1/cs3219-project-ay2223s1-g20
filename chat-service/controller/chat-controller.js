@@ -38,6 +38,10 @@ export async function handleChatEvents(io) {
         socket.on('disconnect', () => {
             console.log(`[socketIO] socketId=${socket.id} disconnected`)
         })
+
+        socket.on("ping", (callback) => {
+            callback();
+        })
     })
 }
 
