@@ -20,6 +20,7 @@
     "http-proxy-middleware": "^2.0.6",
     "lodash.debounce": "^4.0.8",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.38",
     "monaco-editor-webpack-plugin": "^7.0.1",
     "node-notifier": "^8.0.2",
     "npm": "^8.18.0",
