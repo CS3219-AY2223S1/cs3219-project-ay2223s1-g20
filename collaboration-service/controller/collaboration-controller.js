@@ -26,8 +26,9 @@ export async function handleCollaborationEvents(io) {
 
         socket.on('sendChanges', async (payload) => {
             console.log(`[socketIO, sendChanges] socketId=${socket.id}`)
+            // console.log(payload)
             const sessionId = await getSessionId(socket.id)
-            // console.log(sessionId)
+            console.log(sessionId)
             io.to(sessionId).emit('updateChanges', payload)
         })
 

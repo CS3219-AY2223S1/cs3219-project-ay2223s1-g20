@@ -11,11 +11,11 @@ import { createTheme } from '@mui/material/styles'
 import { ThemeProvider } from '@emotion/react'
 import { grey, blue } from '@mui/material/colors'
 import debounce from 'lodash.debounce'
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 function Editor (props) {
   const [code, setCode] = useState('console.log(\'hello world!\');')
-  const [version, setVersion] = useState(moment().valueOf())
+  const [version, setVersion] = useState(moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
 
   const buttonTheme = createTheme({
     palette: {
@@ -41,6 +41,7 @@ function Editor (props) {
 
   useEffect(() => {
     startCollabSession()
+    setVersion(moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
   }, [])
 
   const startCollabSession = () => {
@@ -49,16 +50,23 @@ function Editor (props) {
   }
 
   const handleUpdateCode = useCallback((payload) => {
-    if (payload.version >= version) {
+    // console.log('payload: ', payload)
+    // console.log('version: ', version)
+    // console.log('test: ', moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
+    if (payload.version >= version && payload.value != code) {
       setCode(payload.value)
       setVersion(payload.version)
     }
   }, [])
 
   const changeHandler = (value) => {
-    if (moment().valueOf() > version) {
-      setVersion(moment().valueOf())
-      getCollabSocket().emit('sendChanges', {version: version, value: value})
+    const currentVersion = moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS')
+    // console.log('currentVersion: ', currentVersion)
+    // console.log('oldVersion: ', version)
+    // console.log(currentVersion > version)
+    if (currentVersion > version) {
+      setVersion(currentVersion)
+      getCollabSocket().emit('sendChanges', {version: currentVersion, value: value})
     }
   }
 
