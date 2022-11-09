@@ -10,40 +10,12 @@ import { javascript } from '@codemirror/lang-javascript'
 import { createTheme } from '@mui/material/styles'
 import { ThemeProvider } from '@emotion/react'
 import { grey, blue } from '@mui/material/colors'
-import debounce from 'lodash.debounce';
+import debounce from 'lodash.debounce'
+import moment from 'moment-timezone'
 
 function Editor (props) {
   const [code, setCode] = useState('console.log(\'hello world!\');')
-  useEffect(() => {
-    startCollabSession()
-  }, [])
-
-  const startCollabSession = () => {
-    const collabSocket = getCollabSocket()
-    collabSocket.on('updateChanges', handleUpdateCode)
-  }
-
-  const handleUpdateCode = useCallback((code) => {
-    setCode(code)
-  }, [])
-
-  const changeHandler = (value) => {
-    getCollabSocket().emit('sendChanges', value)
-  }
-
-  const debouncedChangeHandler = useMemo(() => {
-    return debounce(changeHandler, 50);
-  }, []);
-
-  const onStatistics = useCallback((data) => {
-    // console.log(data)
-  }, [])
-
-  useEffect(() => {
-    return () => {
-      debouncedChangeHandler.cancel();
-    }
-  }, []);
+  const [version, setVersion] = useState(moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
 
   const buttonTheme = createTheme({
     palette: {
@@ -66,6 +38,51 @@ function Editor (props) {
       </Paper>
     )
   }
+
+  useEffect(() => {
+    startCollabSession()
+    setVersion(moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
+  }, [])
+
+  const startCollabSession = () => {
+    const collabSocket = getCollabSocket()
+    collabSocket.on('updateChanges', handleUpdateCode)
+  }
+
+  const handleUpdateCode = useCallback((payload) => {
+    // console.log('payload: ', payload)
+    // console.log('version: ', version)
+    // console.log('test: ', moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS'))
+    if (payload.version >= version && payload.value != code) {
+      setCode(payload.value)
+      setVersion(payload.version)
+    }
+  }, [])
+
+  const changeHandler = (value) => {
+    const currentVersion = moment().tz('Asia/Singapore').format('MM/DD/YYYY h:mm:ss:SSS')
+    // console.log('currentVersion: ', currentVersion)
+    // console.log('oldVersion: ', version)
+    // console.log(currentVersion > version)
+    if (currentVersion > version) {
+      setVersion(currentVersion)
+      getCollabSocket().emit('sendChanges', {version: currentVersion, value: value})
+    }
+  }
+
+  const debouncedChangeHandler = useMemo(() => {
+    return debounce(changeHandler, 50);
+  }, []);
+
+  const onStatistics = useCallback((data) => {
+    // console.log(data)
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      debouncedChangeHandler.cancel();
+    }
+  }, []);
 
   return (
     <Box height={'100%'} width={'100%'}>

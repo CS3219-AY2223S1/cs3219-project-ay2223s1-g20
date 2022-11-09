@@ -1,6 +1,8 @@
 import { getDifficultyLevelForUser, getMatchSocketId, getSessionId, initSession } from "../model/collaboration-model.js";
-import { checkSessionExists, checkUserExists, deleteSession, deleteUser, getSession } from "../model/repository.js";
+import { checkSessionExists, checkUserExists, deleteSession, deleteUser, getPending, getSession, getUpdate, savePending, saveUpdate } from "../model/repository.js";
 import fetch from 'node-fetch';
+import { ChangeSet } from "@codemirror/state";
+
 
 export async function handleCollaborationEvents(io) {
     io.on('connection', (socket) => {
@@ -22,11 +24,50 @@ export async function handleCollaborationEvents(io) {
             }
         })
 
-        socket.on('sendChanges', async (code) => {
+        socket.on('sendChanges', async (payload) => {
             console.log(`[socketIO, sendChanges] socketId=${socket.id}`)
+            // console.log(payload)
             const sessionId = await getSessionId(socket.id)
-            console.log(sessionId) // returning undefined
-            io.to(sessionId).emit('updateChanges', code)
+            console.log(sessionId)
+            io.to(sessionId).emit('updateChanges', payload)
+        })
+
+        socket.on('pullUpdates', async (version) => {
+            const sessionId = await getSessionId(socket.id)
+            var updates = getUpdate(sessionId)
+            if (version < updates.length) {
+                socket.emit("pullUpdateResponse", JSON.stringify(updates.slice(version)))
+            } else {
+                var pending = getPending(sessionId)
+                pending.push((updates, ver, skt) => {
+                    skt.emit("pullUpdateResponse", JSON.stringify(updates.slice(ver)))
+                })
+                savePending(sessionId, pending)
+            }
+        })
+
+        socket.on('pushUpdates', async (version, docUpdates) => {
+            const sessionId = await getSessionId(socket.id)
+            var pending = getPending(sessionId)
+            var updates = getUpdate(sessionId)
+            var docUpdates = JSON.parse(docUpdates)
+
+            if (version != updates.length) {
+                socket.emit('pushUpdateResponse', false)
+            } else {
+                for (let update of docUpdates) {
+                    let changes = ChangeSet.fromJSON(update.changes)
+                    updates.push({changes, clientID: update.clientID})
+                    saveUpdate(sessionId, updates)
+                }
+                socket.emit('pushUpdateResponse', true)
+
+                while (pending.length > 0) {p
+                    const f = pending.shift()
+                    f(updates, version, socket)
+                    savePending(sessionId, pending)
+                }
+            }
         })
 
         socket.on('changeQuestion', async () => {
@@ -117,7 +158,10 @@ async function selectQuestion(difficulty) {
                 data: response
             }
         }).catch((error) => {
-            throw new Error("Unable to retrieve question")
+            // throw new Error("Unable to retrieve question")
+            return {
+                data: 'help'
+            }
         })
 }
 

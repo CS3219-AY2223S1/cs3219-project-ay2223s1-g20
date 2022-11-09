@@ -28,7 +28,8 @@ function QuestionDrawer (props) {
   const [showContent, setShowContent] = useState(false)
 
   useEffect(() => {
-    if (props.questionData) {
+    let isEmpty = Object.keys(props.questionData).length == 0
+    if (props.questionData && !isEmpty) {
       updateQuestionStates(props.questionData)
       setShowContent(true)
     }

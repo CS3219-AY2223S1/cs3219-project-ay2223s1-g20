@@ -8,6 +8,35 @@ client.connect().then(() => console.log('Redis connection established.'))
     .catch(() => console.log('Redis connection failed.'))
 client.flushAll()
 
+const updateData = {}
+const pendingData = {}
+
+export function saveUpdate(sessionId, updates) {
+    updateData[sessionId] = updates
+}
+
+export function getUpdate(sessionId) {
+    const data = updateData[sessionId]
+    return [...data]
+}
+
+export function removeUpdate(sessionId) {
+    updateData.delete(sessionId)
+}
+
+export function savePending(sessionId, pending) {
+    pendingData[sessionId] = pending
+}
+
+export function getPending(sessionId) {
+    const data = pendingData[sessionId]
+    return [...data]
+}
+
+export function removePending(sessionId) {
+    pendingData.delete(sessionId)
+}
+
 export async function saveSessionRequest(roomId, socketId, username) {
     await client.hSet(`RoomId:${roomId}`, {socketId, username})
 }
